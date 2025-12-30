@@ -41,11 +41,25 @@ html {
   scroll-behavior: auto;
 }
 
+/* Lenis helpers */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth body {
+  overscroll-behavior: none;
+}
+
 body {
   margin: 0;
   background-color: var(--bg-main);
   color: var(--text-dark);
   font-family: var(--font-sans);
+  overflow-x: hidden;
 
   /* Rendering polish */
   -webkit-font-smoothing: antialiased;
@@ -169,6 +183,7 @@ li {
    -------------------------------------------------------------------------- */
 section {
   padding-block: 5rem;
+  scroll-margin-top: 110px;
 }
 
 .section-alt {

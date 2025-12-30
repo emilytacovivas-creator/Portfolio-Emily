@@ -1,108 +1,80 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP Animations (ScrollTrigger + ScrollTo)
+   GSAP + Lenis smooth scroll
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Plugins + Settings
+   1. Plugins + Reduced Motion
    -------------------------------------------------------------------------- */
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-// Respect user preference: reduced motion
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
-if (prefersReducedMotion) {
-  // Disable ScrollTrigger-driven animations
-  ScrollTrigger.disable();
-  // Keep content visible
-  gsap.set(".gsap-reveal", { opacity: 1, y: 0, clearProps: "transform" });
-}
-
 /* --------------------------------------------------------------------------
-   1.5 Smooth Scroll (Lenis) - full page inertia
+   2. Lenis (smooth scroll)
+   - Evitamos "duration" alta que provoca lag + tirón
+   - Usamos "lerp" para un smooth estable (tipo spwn)
    -------------------------------------------------------------------------- */
 let lenis = null;
 
-if (!prefersReducedMotion) {
+if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis = new Lenis({
-    duration: 1.05, // inercia (más alto = más suave)
+    lerp: 0.1, // 0.08–0.12 = suave sin “latigazo”
     smoothWheel: true,
-    smoothTouch: false, // si quieres también en móvil, pon true
-    wheelMultiplier: 0.9,
+    smoothTouch: false, // pon true si quieres también inercia en móvil
+    wheelMultiplier: 1.0,
   });
 
-  // Lenis RAF
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-
-  // Sync ScrollTrigger with Lenis
-  lenis.on("scroll", ScrollTrigger.update);
+  // Un SOLO loop (GSAP ticker)
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
   gsap.ticker.lagSmoothing(0);
 
-  // Tell ScrollTrigger to use Lenis' scroller position
-  ScrollTrigger.scrollerProxy(document.body, {
-    scrollTop(value) {
-      if (arguments.length) lenis.scrollTo(value, { immediate: true });
-      return lenis.scroll;
-    },
-    getBoundingClientRect() {
-      return {
-        top: 0,
-        left: 0,
-        width: window.innerWidth,
-        height: window.innerHeight,
-      };
-    },
-  });
+  // Sincroniza ScrollTrigger
+  lenis.on("scroll", ScrollTrigger.update);
 
-  // Refresh everything after setup
-  ScrollTrigger.addEventListener("refresh", () => lenis.update());
-  ScrollTrigger.refresh();
+  // Refresh al cargar (imagenes/fuentes)
+  window.addEventListener("load", () => ScrollTrigger.refresh());
+
+  console.log("✅ Lenis activo");
+} else {
+  console.warn("❌ Lenis no activo (Lenis undefined o reduced motion)");
 }
 
 /* --------------------------------------------------------------------------
-   2. Helpers
+   3. Navbar state
    -------------------------------------------------------------------------- */
 const navbar = document.querySelector("#navbar");
-const linksToScroll = document.querySelectorAll(
-  'a.nav-link[href^="#"], a.btn-accent[href^="#"], a.btn-ghost[href^="#"]'
-);
 
 function setNavbarScrolledState() {
   if (!navbar) return;
-  const isScrolled = window.scrollY > 10;
-  navbar.classList.toggle("is-scrolled", isScrolled);
+  const y = lenis ? lenis.scroll : window.scrollY;
+  navbar.classList.toggle("is-scrolled", y > 10);
 }
 
+setNavbarScrolledState();
+window.addEventListener("scroll", setNavbarScrolledState, { passive: true });
+if (lenis) lenis.on("scroll", setNavbarScrolledState);
+
 /* --------------------------------------------------------------------------
-   3. Hero Intro + Parallax (no-jump)
+   4. Hero intro + parallax
    -------------------------------------------------------------------------- */
 if (!prefersReducedMotion) {
   gsap.set(".hero-card", { opacity: 0, y: 40 });
   gsap.set(".hero-card .gsap-reveal", { opacity: 0, y: 20 });
 
-  const heroTl = gsap.timeline({
-    defaults: { ease: "power3.out" },
-    onComplete: () => ScrollTrigger.refresh(),
-  });
-
-  heroTl
-    .to(".hero-card", { opacity: 1, y: 0, duration: 1.1 })
+  gsap
+    .timeline({ defaults: { ease: "power3.out" } })
+    .to(".hero-card", { opacity: 1, y: 0, duration: 1.05 })
     .to(
       ".hero-card .gsap-reveal",
-      { opacity: 1, y: 0, duration: 0.9, stagger: 0.12 },
-      "-=0.7"
+      { opacity: 1, y: 0, duration: 0.85, stagger: 0.12 },
+      "-=0.65"
     );
 
-  // Parallax hero bg
   gsap.to(".hero-bg", {
     y: 80,
     ease: "none",
@@ -110,12 +82,10 @@ if (!prefersReducedMotion) {
       trigger: "#hero",
       start: "top top",
       end: "bottom top",
-      scrub: 0.6,
-      invalidateOnRefresh: true,
+      scrub: 0.8,
     },
   });
 
-  // Parallax hero card (smooth + stable)
   gsap.to(".hero-card", {
     y: 120,
     scale: 0.975,
@@ -124,19 +94,16 @@ if (!prefersReducedMotion) {
       trigger: "#hero",
       start: "top top",
       end: "bottom top+=140",
-      scrub: 0.6,
-      invalidateOnRefresh: true,
+      scrub: 0.8,
     },
   });
 }
 
 /* --------------------------------------------------------------------------
-   4. Section Reveals (grouped stagger)
+   5. Section reveals (por sección)
    -------------------------------------------------------------------------- */
 if (!prefersReducedMotion) {
-  // Animate reveals per section for a smoother rhythm
   gsap.utils.toArray("section").forEach((section) => {
-    // Skip hero: already animated
     if (section.id === "hero") return;
 
     const items = section.querySelectorAll(".gsap-reveal");
@@ -161,8 +128,12 @@ if (!prefersReducedMotion) {
 }
 
 /* --------------------------------------------------------------------------
-   5. Smooth Scroll (menu + buttons)
+   6. Anchor scroll (menú + botones)
    -------------------------------------------------------------------------- */
+const linksToScroll = document.querySelectorAll(
+  'a.nav-link[href^="#"], a.btn-accent[href^="#"], a.btn-ghost[href^="#"]'
+);
+
 linksToScroll.forEach((link) => {
   link.addEventListener("click", (e) => {
     const targetId = link.getAttribute("href");
@@ -173,65 +144,36 @@ linksToScroll.forEach((link) => {
 
     e.preventDefault();
 
-    // Close navbar collapse on mobile after click
+    // Cierra el menú en móvil
     const navCollapse = document.querySelector("#navbarNav");
     if (navCollapse && navCollapse.classList.contains("show")) {
-      // Bootstrap 5 collapse API
       const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navCollapse);
       bsCollapse.hide();
     }
 
-    /* --------------------------------------------------------------------------
-   5. Smooth Scroll (menu + buttons)
-   -------------------------------------------------------------------------- */
-    linksToScroll.forEach((link) => {
-      link.addEventListener("click", (e) => {
-        const targetId = link.getAttribute("href");
-        if (!targetId || !targetId.startsWith("#")) return;
-
-        const target = document.querySelector(targetId);
-        if (!target) return;
-
-        e.preventDefault();
-
-        // Close navbar collapse on mobile after click
-        const navCollapse = document.querySelector("#navbarNav");
-        if (navCollapse && navCollapse.classList.contains("show")) {
-          const bsCollapse =
-            bootstrap.Collapse.getOrCreateInstance(navCollapse);
-          bsCollapse.hide();
-        }
-
-        // Use Lenis if available (best smooth)
-        if (lenis) {
-          lenis.scrollTo(target, { offset: -90, duration: 1.1 });
-          return;
-        }
-
-        // Fallback
-        gsap.to(window, {
-          duration: 0.9,
-          scrollTo: { y: target, offsetY: 90 },
-          ease: "power3.out",
-        });
+    // Lenis (mejor)
+    if (lenis) {
+      lenis.scrollTo(target, {
+        offset: -90,
+        duration: 1.1,
       });
+      return;
+    }
+
+    // Fallback
+    gsap.to(window, {
+      duration: 0.9,
+      scrollTo: { y: target, offsetY: 90 },
+      ease: "power3.out",
     });
   });
 });
 
 /* --------------------------------------------------------------------------
-   6. Navbar Scroll State 
-   -------------------------------------------------------------------------- */
-setNavbarScrolledState();
-window.addEventListener("scroll", setNavbarScrolledState, { passive: true });
-
-/* --------------------------------------------------------------------------
-   7. Micro-interactions 
+   7. Micro-interactions
    -------------------------------------------------------------------------- */
 if (!prefersReducedMotion) {
-  // Button hover lift (subtle)
-  const hoverButtons = document.querySelectorAll(".btn-accent, .btn-ghost");
-  hoverButtons.forEach((btn) => {
+  document.querySelectorAll(".btn-accent, .btn-ghost").forEach((btn) => {
     btn.addEventListener("mouseenter", () => {
       gsap.to(btn, { y: -2, duration: 0.2, ease: "power2.out" });
     });
