@@ -1,44 +1,106 @@
-/* Fuentes (Space Grotesk + Playfair para acentos) */
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap");
+/* ==========================================================================
+   Emily Taco · Portfolio
+   Custom styles extending Bootstrap 5
+   Fonts: Inter + Source Serif 4
+   ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   0. Imports
+   -------------------------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap");
+
+/* --------------------------------------------------------------------------
+   1. CSS Custom Properties
+   -------------------------------------------------------------------------- */
 :root {
   --bg-main: #fffaef;
   --bg-tertiary: #eee7d6;
   --accent: #6d0303;
   --text-dark: #1c1410;
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
+  --font-serif: "Source Serif 4", serif;
+
+  /* Tracking (Framer-like) */
+  --track-sans-tight: -0.06em; /* Inter */
+  --track-serif-tight: -0.08em; /* Source Serif 4 Italic */
 }
 
+/* --------------------------------------------------------------------------
+   2. Base / Resets
+   -------------------------------------------------------------------------- */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: auto;
+}
+
 body {
   margin: 0;
   background-color: var(--bg-main);
   color: var(--text-dark);
-  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
+
+  /* Rendering polish */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* TITULARES */
+/* --------------------------------------------------------------------------
+   3. Typography System (H1/H2/H3 + Body)
+   -------------------------------------------------------------------------- */
 h1,
 h2,
 h3,
 .section-title {
-  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
-  letter-spacing: 0.02em;
+  font-family: var(--font-sans);
+  letter-spacing: var(--track-sans-tight);
   font-weight: 600;
 }
 
-/* Palabras de acento en serif (tipo "grooow") */
+/* Sizes */
+h1 {
+  font-size: clamp(3.4rem, 7vw, 6.2rem);
+  line-height: 1;
+  margin: 0;
+}
+
+h2,
+.section-title {
+  font-size: clamp(1.9rem, 2.8vw, 2.4rem);
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 1.6vw, 1.6rem);
+  line-height: 1.2;
+}
+
+/* Body text */
+p,
+.lead,
+li {
+  letter-spacing: var(--track-sans-tight);
+}
+
+/* Serif accent (like “right”) */
 .accent-serif {
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: var(--track-serif-tight);
 }
 
-/* NAVBAR */
+/* --------------------------------------------------------------------------
+   4. Navigation
+   -------------------------------------------------------------------------- */
 .navbar-custom {
   position: fixed;
   top: 0;
@@ -59,6 +121,7 @@ h3,
     rgba(0, 0, 0, 1) 70%,
     rgba(0, 0, 0, 0) 100%
   );
+
   z-index: 1000;
 }
 
@@ -96,7 +159,14 @@ h3,
   border: none;
 }
 
-/* SECCIONES */
+.navbar-custom.is-scrolled {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* --------------------------------------------------------------------------
+   5. Sections / Layout
+   -------------------------------------------------------------------------- */
 section {
   padding-block: 5rem;
 }
@@ -110,15 +180,14 @@ section {
   color: #fffaef;
 }
 
-.section-title {
-  font-size: clamp(1.9rem, 2.8vw, 2.4rem);
-}
-
-/* HERO */
+/* --------------------------------------------------------------------------
+   6. Hero
+   -------------------------------------------------------------------------- */
 .hero-section {
-  padding-top: 6rem; /* espacio por navbar fija */
+  padding-top: 6rem; /* space for fixed navbar */
   padding-bottom: 4rem;
   position: relative;
+  overflow: hidden;
 }
 
 .hero-bg {
@@ -146,6 +215,7 @@ section {
   padding: 2.4rem 2.6rem;
   box-shadow: 0 22px 60px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.04);
+
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
   gap: 2.2rem;
@@ -158,6 +228,7 @@ section {
   background-color: var(--bg-tertiary);
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
+
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
@@ -194,16 +265,22 @@ section {
   gap: 0.6rem;
 }
 
-/* BOTONES */
+/* --------------------------------------------------------------------------
+   7. Buttons
+   -------------------------------------------------------------------------- */
 .btn-accent {
   background-color: var(--accent);
   color: #fffaef;
   border-radius: 999px;
   padding: 0.8rem 1.8rem;
   border: none;
+
   font-size: 0.85rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .btn-accent:hover,
@@ -217,20 +294,28 @@ section {
 .btn-ghost {
   border-radius: 999px;
   padding: 0.8rem 1.6rem;
+
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
+
   border: 1px solid rgba(0, 0, 0, 0.16);
   background-color: transparent;
   color: var(--text-dark);
+
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-ghost:hover,
 .btn-ghost:focus {
   background-color: var(--bg-tertiary);
+  transform: translateY(-1px);
 }
 
-/* HERO IMAGEN */
+/* --------------------------------------------------------------------------
+   8. Media / Cards
+   -------------------------------------------------------------------------- */
+/* Hero image card */
 .hero-image-card {
   border-radius: 1.4rem;
   overflow: hidden;
@@ -254,12 +339,13 @@ section {
   background-color: rgba(255, 250, 239, 0.9);
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
+
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-/* ABOUT IMG placeholder */
+/* About image placeholder */
 .placeholder-img {
   border-radius: 1.6rem;
   background: repeating-linear-gradient(
@@ -273,14 +359,18 @@ section {
   min-height: 260px;
 }
 
-/* ANIMACIÓN INICIAL PARA GSAP */
+/* --------------------------------------------------------------------------
+   9. GSAP helpers
+   -------------------------------------------------------------------------- */
 .gsap-reveal {
   opacity: 0;
   transform: translateY(26px);
 }
 
-/* RESPONSIVE */
-@media (max-width: 991px) {
+/* --------------------------------------------------------------------------
+   10. Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
   section {
     padding-block: 4.5rem;
   }
@@ -299,7 +389,7 @@ section {
   }
 }
 
-@media (max-width: 575px) {
+@media (max-width: 575.98px) {
   .hero-card {
     border-radius: 1.4rem;
   }
