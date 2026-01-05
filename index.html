@@ -73,51 +73,50 @@
 
     <main>
       <!-- HERO -->
-      <section
-        id="hero"
-        class="hero-section min-vh-100 d-flex align-items-center position-relative overflow-hidden"
-      >
+      <section id="hero" class="hero-section hero-ref">
         <div class="hero-bg" aria-hidden="true"></div>
 
-        <div class="container position-relative hero-inner">
-          <div class="hero-card gsap-hero">
-            <div class="hero-text">
-              <span class="hero-badge gsap-reveal">
-                Photography · Graphic Design
-              </span>
+        <div class="container hero-inner">
+          <div class="hero-ref-grid">
+            <!-- IZQUIERDA -->
+            <div class="hero-ref-left">
+              <p class="hero-ref-name">EMILY TACO</p>
+              <h1 class="hero-ref-big">DISEÑO</h1>
+            </div>
 
-              <h1 class="display-3 fw-bold hero-title gsap-reveal">
-                Emily Taco
-              </h1>
+            <!-- CENTRO -->
+            <div class="hero-ref-center">
+              <div class="tilt-stage">
+                <div class="tilt-card" id="tiltCard">
+                  <img
+                    src="https://images.pexels.com/photos/2706379/pexels-photo-2706379.jpeg?auto=compress&cs=tinysrgb&w=1400"
+                    alt="Trabajo destacado"
+                    loading="eager"
+                  />
+                </div>
 
-              <p class="lead hero-subtitle gsap-reveal">
-                Visual stories with a warm, editorial touch for brands, events
-                and people.
-              </p>
-
-              <div class="hero-tags gsap-reveal" aria-label="Especialidades">
-                <span class="hero-tag">Event Photography</span>
-                <span class="hero-tag">Branding</span>
-                <span class="hero-tag">Editorial Design</span>
-              </div>
-
-              <div class="hero-cta gsap-reveal">
-                <a href="#photography" class="btn btn-accent me-2">
-                  View work
-                </a>
-                <a href="#contact" class="btn btn-ghost">Get in touch</a>
+                <!-- BADGE ESQUINA (FUERA de tilt-card para que nunca se recorte) -->
+                <button class="wave-badge" type="button" aria-label="Saludar">
+                  <svg
+                    class="wave-icon"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      d="M7.2 22c-1.1 0-2-.9-2-2v-6.6c0-.5.2-1 .6-1.3l2-1.6V5.5C7.8 4.1 8.9 3 10.3 3c.9 0 1.6.4 2 1V11h.6V6.2c0-.9.7-1.6 1.6-1.6S16 5.3 16 6.2V11h.6V7.3c0-.9.7-1.6 1.6-1.6s1.6.7 1.6 1.6V12c0 1.1-.4 2.1-1.2 2.8l-3.7 3.5c-.7.7-1.7 1.1-2.7 1.1H7.2z"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
 
-            <div class="hero-image gsap-reveal">
-              <div class="hero-image-card">
-                <img
-                  src="https://images.pexels.com/photos/2706379/pexels-photo-2706379.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                  alt="Vista previa del portfolio de Emily Taco"
-                  loading="eager"
-                />
-                <span class="hero-image-label">Selected work · 2025</span>
-              </div>
+            <!-- DERECHA -->
+            <div class="hero-ref-right">
+              <h2 class="hero-ref-big">GRÁFICO</h2>
+              <p class="hero-ref-sub">
+                Diseñadora gráfica, fotógrafa y videógrafa.
+              </p>
             </div>
           </div>
         </div>
