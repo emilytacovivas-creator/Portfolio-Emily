@@ -1,223 +1,151 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP + Lenis smooth scroll (stable, no jump after intro)
+   GSAP + Lenis + Hero Animations
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-// Evita que el navegador "recuerde" el scroll al recargar
+// Scroll manual al recargar
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 window.scrollTo(0, 0);
 
-// Reduced motion
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
-if (prefersReducedMotion) {
-  ScrollTrigger.disable();
-  gsap.set(".gsap-reveal", { opacity: 1, y: 0, clearProps: "transform" });
-}
 
 /* --------------------------------------------------------------------------
-   1) Lenis (smooth scroll)
+   1) Lenis (Smooth Scroll)
    -------------------------------------------------------------------------- */
 let lenis = null;
-
-if (!prefersReducedMotion) {
-  if (typeof Lenis === "undefined") {
-    console.warn(
-      "❌ Lenis undefined → el CDN no está cargando o está antes de tu JS."
-    );
-  } else {
-    lenis = new Lenis({
-      lerp: 0.1,
-      smoothWheel: true,
-      smoothTouch: true,
-      wheelMultiplier: 1,
-    });
-
-    // Un solo loop (GSAP ticker)
-    gsap.ticker.add((t) => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
-
-    // ScrollTrigger update con Lenis
-    lenis.on("scroll", ScrollTrigger.update);
-
-    // Bloquea scroll durante la intro (para arreglar el "salto")
-    lenis.stop();
-
-    console.log("✅ Lenis activo");
-  }
+if (!prefersReducedMotion && typeof Lenis !== "undefined") {
+  lenis = new Lenis({
+    lerp: 0.1,
+    smoothWheel: true,
+    wheelMultiplier: 1,
+  });
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  lenis.stop(); // Se detiene durante la intro
 }
 
 /* --------------------------------------------------------------------------
-   2) Navbar state
-   -------------------------------------------------------------------------- */
-const navbar = document.querySelector("#navbar");
-function setNavbarScrolledState() {
-  if (!navbar) return;
-  const y = lenis ? lenis.scroll : window.scrollY;
-  navbar.classList.toggle("is-scrolled", y > 10);
-}
-setNavbarScrolledState();
-window.addEventListener("scroll", setNavbarScrolledState, { passive: true });
-if (lenis) lenis.on("scroll", setNavbarScrolledState);
-
-/* --------------------------------------------------------------------------
-   3) Hero intro + parallax 
+   2) Hero Intro & Animation
    -------------------------------------------------------------------------- */
 if (!prefersReducedMotion) {
-  // Bloquea scroll nativo durante la intro (evita “rueda acumulada”)
-  document.documentElement.classList.add("is-intro");
+  // Estado inicial: Todo oculto para evitar parpadeos
   document.body.classList.add("is-intro");
 
-  gsap.set(".hero-card", { opacity: 0, y: 40 });
-  gsap.set(".hero-card .gsap-reveal", { opacity: 0, y: 20 });
+  // IMPORTANTE: Usamos las clases correctas de tu HTML
+  gsap.set(".tilt-card", { opacity: 0, scale: 0.9, y: 30, rotationX: 10 });
+  gsap.set(".wave-badge", { scale: 0, opacity: 0 }); // El círculo empieza invisible y pequeño
+  gsap.set(".hero-ref-name", { opacity: 0, x: -20 });
+  gsap.set(".hero-ref-big", { opacity: 0, y: 40 });
+  gsap.set(".hero-ref-sub", { opacity: 0, x: 20 });
 
-  // Función: crea parallax DESPUÉS de la intro
-  const setupHeroParallax = () => {
-    ScrollTrigger.getAll()
-      .filter((st) => st.vars?.id === "heroParallax")
-      .forEach((st) => st.kill());
-
-    gsap.to(".hero-bg", {
-      y: 80,
-      ease: "none",
-      immediateRender: false,
-      scrollTrigger: {
-        id: "heroParallax",
-        trigger: "#hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: 0.8,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    gsap.to(".hero-card", {
-      y: 120,
-      scale: 0.975,
-      ease: "none",
-      immediateRender: false,
-      scrollTrigger: {
-        id: "heroParallax",
-        trigger: "#hero",
-        start: "top top",
-        end: "bottom top+=140",
-        scrub: 0.8,
-        invalidateOnRefresh: true,
-      },
-    });
-  };
-
+  // Timeline de Entrada
   const heroTl = gsap.timeline({
-    defaults: { ease: "power3.out" },
+    defaults: { ease: "power4.out" },
     onComplete: () => {
-      // Quita el bloqueo de scroll
-      document.documentElement.classList.remove("is-intro");
       document.body.classList.remove("is-intro");
-
-      requestAnimationFrame(() => {
-        // Primero refresca mediciones
-        ScrollTrigger.refresh(true);
-
-        // Asegura Lenis alineado
-        if (lenis) {
-          lenis.scrollTo(window.scrollY, { immediate: true });
-          lenis.start();
-        }
-
-        // Crea parallax DESPUÉS del refresh
-        setupHeroParallax();
-        ScrollTrigger.refresh(true);
-      });
+      ScrollTrigger.refresh();
+      if (lenis) {
+        lenis.start();
+        lenis.scrollTo(0, { immediate: true });
+      }
     },
   });
 
   heroTl
-    .to(".hero-card", { opacity: 1, y: 0, duration: 1.05 })
+    // 1. Aparece la foto central
+    .to(".tilt-card", {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      rotationX: 0,
+      duration: 1.4,
+    })
+    // 2. ¡POP! Aparece el círculo amarillo (wave-badge)
     .to(
-      ".hero-card .gsap-reveal",
-      { opacity: 1, y: 0, duration: 0.85, stagger: 0.12 },
-      "-=0.65"
-    );
+      ".wave-badge",
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.6,
+        ease: "back.out(1.7)",
+      },
+      "-=0.8"
+    )
+    // 3. Suben los textos grandes (DISEÑO / GRÁFICO)
+    .to(
+      ".hero-ref-big",
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.1,
+        stagger: 0.1,
+      },
+      "-=0.6"
+    )
+    // 4. Entran los textos cursiva laterales
+    .to(".hero-ref-name", { opacity: 1, x: 0, duration: 1 }, "-=1")
+    .to(".hero-ref-sub", { opacity: 1, x: 0, duration: 1 }, "-=0.9");
+
+  // Parallax Effect (se activa al hacer scroll)
+  gsap.to(".hero-bg", {
+    y: 80,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#hero",
+      start: "top top",
+      end: "bottom top",
+      scrub: 0.8,
+    },
+  });
+
+  gsap.to(".tilt-card", {
+    y: 100,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#hero",
+      start: "top top",
+      end: "bottom top+=100",
+      scrub: 0.5,
+    },
+  });
 }
 
 /* --------------------------------------------------------------------------
-   4) Section reveals
+   3) Resto de Secciones (Fade Up)
    -------------------------------------------------------------------------- */
 if (!prefersReducedMotion) {
   gsap.utils.toArray("section").forEach((section) => {
     if (section.id === "hero") return;
-
     const items = section.querySelectorAll(".gsap-reveal");
     if (!items.length) return;
 
     gsap.fromTo(
       items,
-      { opacity: 0, y: 26 },
+      { opacity: 0, y: 30 },
       {
         opacity: 1,
         y: 0,
-        duration: 0.9,
+        duration: 1,
         ease: "power3.out",
-        stagger: 0.12,
-        scrollTrigger: {
-          trigger: section,
-          start: "top 75%",
-          invalidateOnRefresh: true,
-        },
+        stagger: 0.1,
+        scrollTrigger: { trigger: section, start: "top 80%" },
       }
     );
   });
 }
 
 /* --------------------------------------------------------------------------
-   5) Anchor scroll (menú/botones)
+   4) Micro-interacciones (Botones)
    -------------------------------------------------------------------------- */
-document
-  .querySelectorAll(
-    'a.nav-link[href^="#"], a.btn-accent[href^="#"], a.btn-ghost[href^="#"]'
-  )
-  .forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const targetId = link.getAttribute("href");
-      const target = document.querySelector(targetId);
-      if (!target) return;
-
-      e.preventDefault();
-
-      // Cierra navbar en móvil
-      const navCollapse = document.querySelector("#navbarNav");
-      if (navCollapse && navCollapse.classList.contains("show")) {
-        bootstrap.Collapse.getOrCreateInstance(navCollapse).hide();
-      }
-
-      if (lenis) {
-        lenis.scrollTo(target, { offset: -90, duration: 1.15 });
-      } else {
-        gsap.to(window, {
-          duration: 0.9,
-          scrollTo: { y: target, offsetY: 90 },
-          ease: "power3.out",
-        });
-      }
-    });
-  });
-
-/* --------------------------------------------------------------------------
-   6) Micro-interactions
-   -------------------------------------------------------------------------- */
-if (!prefersReducedMotion) {
-  document.querySelectorAll(".btn-accent, .btn-ghost").forEach((btn) => {
-    btn.addEventListener("mouseenter", () =>
-      gsap.to(btn, { y: -2, duration: 0.2, ease: "power2.out" })
-    );
-    btn.addEventListener("mouseleave", () =>
-      gsap.to(btn, { y: 0, duration: 0.2, ease: "power2.out" })
-    );
-  });
-}
-
-// Último refresh al terminar de cargar todo
-window.addEventListener("load", () => ScrollTrigger.refresh(true));
+document.querySelectorAll(".btn-accent").forEach((btn) => {
+  btn.addEventListener("mouseenter", () =>
+    gsap.to(btn, { y: -2, duration: 0.2 })
+  );
+  btn.addEventListener("mouseleave", () =>
+    gsap.to(btn, { y: 0, duration: 0.2 })
+  );
+});
