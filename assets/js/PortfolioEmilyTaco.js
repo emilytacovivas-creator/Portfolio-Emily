@@ -1,6 +1,6 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP + Lenis + Card Flip (Left/Right) + Slide Down + Move Right
+   GSAP + Lenis + Card Flip (Left/Right) + Move Right
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -40,9 +40,8 @@ function setup3D() {
     willChange: "transform",
   });
 
-  // Aseguramos que el badge tenga su posición 3D
   gsap.set(".wave-badge", {
-    z: 40, // Flotar encima de la tarjeta
+    z: 40,
     transformOrigin: "center center",
   });
 }
@@ -52,8 +51,7 @@ function intro() {
   document.body.classList.add("is-intro");
 
   gsap.set("#tiltCard", { opacity: 0, scale: 0.8, y: 50, rotationY: 0, x: 0 });
-
-  gsap.set(".wave-badge", { opacity: 0, scale: 0 }); // Empezar oculto para animación pop
+  gsap.set(".wave-badge", { opacity: 0, scale: 0 });
 
   gsap.set(".hero-ref-big", { y: "100%", opacity: 0 });
   gsap.set(".hero-ref-name", { opacity: 0 });
@@ -92,8 +90,16 @@ function intro() {
     );
 }
 
-/* 4. Scroll effect */
+/* 4. Scroll effect (VERSIÓN “PERFECTO” que me pasaste) */
 function initCardFlipScroll() {
+  const hero = document.querySelector("#hero");
+  const servicios = document.querySelector("#servicios-list");
+  const tiltCard = document.querySelector("#tiltCard");
+  const slotHero = document.querySelector("#cardSlotHero");
+  const slotServicios = document.querySelector("#cardSlotServices");
+
+  let flipped = false;
+
   const moveRight = () => {
     if (window.innerWidth < 992) return 0;
     return window.innerWidth * 0.24;
@@ -101,25 +107,50 @@ function initCardFlipScroll() {
 
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: "#hero",
+      trigger: hero,
       start: "top top",
-      end: "+=140%",
+      endTrigger: servicios,
+      end: "top top",
       scrub: 1,
       pin: true,
       pinSpacing: true,
       anticipatePin: 1,
       invalidateOnRefresh: true,
+      onUpdate(self) {
+        if (!flipped && self.progress > 0.2 && window.innerWidth >= 992) {
+          flipped = true;
+
+          const state = Flip.getState(tiltCard);
+          slotServicios.appendChild(tiltCard);
+
+          Flip.from(state, {
+            duration: 0.9,
+            ease: "power2.inOut",
+            absolute: true,
+            scale: true,
+          });
+        }
+
+        if (flipped && self.progress < 0.35 && window.innerWidth >= 992) {
+          flipped = false;
+
+          const state = Flip.getState(tiltCard);
+          slotHero.appendChild(tiltCard);
+
+          Flip.from(state, {
+            duration: 0.9,
+            ease: "power2.inOut",
+            absolute: true,
+            scale: true,
+          });
+        }
+      },
     },
   });
 
   tl.to(
-    [".hero-ref-left", ".hero-ref-right"], // Quitamos el badge de aquí para que siga a la carta
-    {
-      opacity: 0,
-      y: -50,
-      duration: 0.35,
-      ease: "power1.out",
-    },
+    [".hero-ref-left", ".hero-ref-right"],
+    { opacity: 0, y: -50, duration: 0.35, ease: "power1.out" },
     0
   )
     .to(
@@ -129,22 +160,11 @@ function initCardFlipScroll() {
         rotationY: -179.9,
         z: 120,
         ease: "expo.inOut",
-        duration: 1.1,
+        duration: 1.0,
         force3D: true,
       },
       0
     )
-    .to(
-      "#tiltCard",
-      {
-        y: "130vh",
-        scale: 0.72,
-        ease: "expo.inOut",
-        duration: 1.2,
-      },
-      0.15
-    )
-    // Desaparecer el badge suavemente cuando la carta gira para que no moleste en el reverso
     .to(".wave-badge", { opacity: 0, duration: 0.2 }, 0);
 }
 
