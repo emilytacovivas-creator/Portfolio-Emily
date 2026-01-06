@@ -26,18 +26,24 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis.stop();
 }
 
-/* 2. "Detalle pro" (look Framer): perspectiva y 3D estable */
+/* 2. 3D estable */
 function setup3D() {
   gsap.set(".tilt-stage", {
     perspective: 1600,
     transformStyle: "preserve-3d",
   });
 
-  gsap.set(".tilt-card", {
+  gsap.set("#tiltCard", {
     transformStyle: "preserve-3d",
     transformOrigin: "50% 50%",
     force3D: true,
     willChange: "transform",
+  });
+
+  // Aseguramos que el badge tenga su posición 3D
+  gsap.set(".wave-badge", {
+    z: 40, // Flotar encima de la tarjeta
+    transformOrigin: "center center",
   });
 }
 
@@ -45,9 +51,10 @@ function setup3D() {
 function intro() {
   document.body.classList.add("is-intro");
 
-  // estado inicial
-  gsap.set(".tilt-card", { opacity: 0, scale: 0.8, y: 50, rotationY: 0, x: 0 });
-  gsap.set(".wave-badge", { scale: 0, opacity: 0 });
+  gsap.set("#tiltCard", { opacity: 0, scale: 0.8, y: 50, rotationY: 0, x: 0 });
+
+  gsap.set(".wave-badge", { opacity: 0, scale: 0 }); // Empezar oculto para animación pop
+
   gsap.set(".hero-ref-big", { y: "100%", opacity: 0 });
   gsap.set(".hero-ref-name", { opacity: 0 });
   gsap.set(".hero-ref-sub", { opacity: 0 });
@@ -63,7 +70,7 @@ function intro() {
   });
 
   heroTl
-    .to(".tilt-card", {
+    .to("#tiltCard", {
       opacity: 1,
       scale: 1,
       y: 0,
@@ -85,58 +92,50 @@ function intro() {
     );
 }
 
-/* 4. Scroll effect: MÁS recorrido + flip completo + se va a la derecha */
+/* 4. Scroll effect */
 function initCardFlipScroll() {
-  // distancia hacia la derecha (responsive)
   const moveRight = () => {
-    // en desktop empuja bastante; en móvil casi nada
     if (window.innerWidth < 992) return 0;
-    return window.innerWidth * 0.24; // ajusta: 0.20 - 0.30 según te guste
+    return window.innerWidth * 0.24;
   };
 
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: "#hero",
       start: "top top",
-      end: "+=140%", // ✅ MÁS scroll = llega a completar el flip
+      end: "+=140%",
       scrub: 1,
       pin: true,
-      pinSpacing: true, // ✅ evita cortes raros / “se queda en medio”
+      pinSpacing: true,
       anticipatePin: 1,
       invalidateOnRefresh: true,
     },
   });
 
-  tl
-    // 1) textos fuera
+  tl.to(
+    [".hero-ref-left", ".hero-ref-right"], // Quitamos el badge de aquí para que siga a la carta
+    {
+      opacity: 0,
+      y: -50,
+      duration: 0.35,
+      ease: "power1.out",
+    },
+    0
+  )
     .to(
-      [".hero-ref-left", ".hero-ref-right", ".wave-badge"],
+      "#tiltCard",
       {
-        opacity: 0,
-        y: -50,
-        duration: 0.35,
-        ease: "power1.out",
-      },
-      0
-    )
-
-    // 2) tarjeta: se va a la derecha + flip completo
-    .to(
-      ".tilt-card",
-      {
-        x: moveRight, // ✅ a la derecha
-        rotationY: -179.9, // ✅ NO usar -180 exacto (flicker)
-        z: 120, // ✅ más 3D
+        x: moveRight,
+        rotationY: -179.9,
+        z: 120,
         ease: "expo.inOut",
         duration: 1.1,
         force3D: true,
       },
       0
     )
-
-    // 3) y luego cae
     .to(
-      ".tilt-card",
+      "#tiltCard",
       {
         y: "130vh",
         scale: 0.72,
@@ -144,7 +143,9 @@ function initCardFlipScroll() {
         duration: 1.2,
       },
       0.15
-    );
+    )
+    // Desaparecer el badge suavemente cuando la carta gira para que no moleste en el reverso
+    .to(".wave-badge", { opacity: 0, duration: 0.2 }, 0);
 }
 
 /* 5. Reveal secciones */
@@ -187,6 +188,5 @@ if (!prefersReducedMotion) {
   revealSections();
   microInteractions();
 } else {
-  // si reduce motion: arrancas sin animaciones
   if (lenis) lenis.destroy();
 }
