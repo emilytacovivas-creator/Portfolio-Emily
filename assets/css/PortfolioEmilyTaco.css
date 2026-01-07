@@ -172,12 +172,12 @@ section {
 .stage-inner {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 100%;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-  /* LIFT GENERAL: Mantenemos el 5% de subida */
-  transform: translateY(-5vh);
+  transform: none;
+  margin-top: 8vh;
 }
 
 .card-layer,
@@ -185,7 +185,7 @@ section {
   grid-column: 1 / -1;
   grid-row: 1 / -1;
   width: 100%;
-  height: auto;
+  height: 100%;
   pointer-events: none;
   display: grid;
   place-items: center;
@@ -209,9 +209,7 @@ section {
   width: 100%;
 }
 
-/* FANTASMA AUMENTADO (Sincronizado con la tarjeta) */
 .hero-ghost-center {
-  /* Aumentado de 65vh a 75vh */
   width: calc(clamp(500px, 75vh, 950px) * 0.68);
   height: 1px;
   visibility: hidden;
@@ -219,13 +217,14 @@ section {
 
 .services-text {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   z-index: 15;
   opacity: 0;
   transform: translateY(100px);
   width: 100%;
   height: 100%;
+  padding-top: calc(var(--nav-h) + 4rem);
 }
 
 /* 7. ESTILOS VISUALES
@@ -251,18 +250,16 @@ section {
   font-style: italic;
   font-weight: 500;
   letter-spacing: -0.06em;
-  font-size: calc(1rem + 0.5vw); /* Ligeramente más grande */
+  font-size: calc(1rem + 0.5vw);
   margin: 0 0 -0.5em 0.2em;
   color: var(--text-dark);
 }
 
-/* TEXTO GIGANTE AUMENTADO */
 .hero-ref-big {
   font-family: var(--font-sans);
   font-weight: 800;
   letter-spacing: -0.06em;
   line-height: 0.9;
-  /* Aumentado de 7vw a 10vw */
   font-size: clamp(4rem, 10vw, 9rem);
   color: var(--text-dark);
   text-transform: uppercase;
@@ -275,7 +272,7 @@ section {
   font-style: italic;
   font-weight: 500;
   letter-spacing: -0.04em;
-  font-size: calc(0.9rem + 0.3vw); /* Ligeramente más grande */
+  font-size: calc(0.9rem + 0.3vw);
   color: var(--text-dark);
   margin: 0.5em 0.2em 0 0;
   white-space: nowrap;
@@ -288,10 +285,8 @@ section {
   overflow: visible;
 }
 
-/* TARJETA AUMENTADA */
 .tilt-card {
   position: relative;
-  /* Aumentado de 65vh a 75vh. Mínimos y máximos también suben */
   height: clamp(500px, 75vh, 950px);
   width: calc(clamp(500px, 75vh, 950px) * 0.68);
   border-radius: 40px;
@@ -391,11 +386,12 @@ section {
   font-family: var(--font-sans);
   font-weight: 500 !important;
   letter-spacing: -0.06em;
-  line-height: 1;
+  line-height: 1.1;
   text-transform: none;
-  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-size: clamp(2rem, 4.5vw, 4rem);
   color: var(--text-dark);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .title-with-accent .accent-serif {
@@ -405,17 +401,46 @@ section {
   letter-spacing: -0.08em;
   text-transform: lowercase;
   font-size: 1.1em;
-  margin-left: 0.15em;
+  margin-left: 0.25em;
+  position: relative;
+  top: 0.05em;
+}
+
+.services-text .lead {
+  font-size: 1.15rem;
+  line-height: 1.35;
+  margin-bottom: 1.5rem;
+  max-width: 90%;
 }
 
 .services-accordion details {
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   border-bottom: 1px solid rgba(28, 20, 16, 0.15);
-  transition: all 0.3s ease;
 }
 
-.services-accordion details[open] {
-  padding-bottom: 2.5rem;
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.5s ease, padding-top 0.5s ease;
+  opacity: 0;
+  padding-left: 3.5rem;
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.services-accordion details[open] .accordion-content {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  padding-top: 1rem;
+}
+
+.accordion-content ul {
+  min-height: 0;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .services-accordion summary {
@@ -423,13 +448,24 @@ section {
   cursor: pointer;
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   color: var(--text-dark);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 0;
+  transition: color 0.3s ease;
+}
+
+.services-accordion summary:hover {
+  color: var(--accent);
+}
+
+.services-accordion summary:hover .accordion-icon::before,
+.services-accordion summary:hover .accordion-icon::after {
+  background-color: var(--accent);
 }
 
 .services-accordion summary::-webkit-details-marker {
@@ -461,43 +497,36 @@ section {
   right: 0;
   height: 2px;
   transform: translateY(-50%);
+  transition: transform 0.5s ease, background-color 0.3s ease;
 }
 
 .accordion-icon::after {
   transform: translateY(-50%) rotate(90deg);
-  transition: transform 0.3s;
 }
 
 details[open] .accordion-icon::after {
   transform: translateY(-50%) rotate(0deg);
 }
 
-.accordion-content {
-  padding-top: 1.5rem;
-  padding-left: 3.5rem;
-}
-
-.accordion-content ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
 .accordion-content li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   position: relative;
-  padding-left: 1.2rem;
+  padding-left: 1.5rem;
   font-family: var(--font-sans);
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 .accordion-content li::before {
-  content: "—";
+  content: "";
   position: absolute;
-  left: 0;
-  color: var(--accent);
-  font-weight: bold;
+  left: 2px;
+  top: 6px;
+  width: 6px;
+  height: 10px;
+  border: solid var(--accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 /* 9. UTILIDADES Y RESPONSIVE
@@ -605,15 +634,18 @@ details[open] .accordion-icon::after {
   }
 }
 
-/* 10. AJUSTE FINO PARA PORTÁTILES (SOLUCIÓN DEFINITIVA + AUMENTO)
+/* 10. AJUSTE FINO PARA PORTÁTILES
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 992px) and (max-height: 850px) {
-  /* Mantenemos el lift agresivo */
   .stage-inner {
-    transform: translateY(-12vh) !important;
+    transform: translateY(-4vh) !important;
+    margin-top: 0 !important;
   }
 
-  /* AUMENTADO: De 52vh a 62vh para que sea más grande en portátiles también */
+  .services-text {
+    padding-top: calc(var(--nav-h) + 4rem) !important;
+  }
+
   .tilt-card {
     height: 62vh !important;
     width: calc(62vh * 0.68) !important;
@@ -624,8 +656,7 @@ details[open] .accordion-icon::after {
     width: calc(62vh * 0.68) !important;
   }
 
-  /* Texto un poco más grande también */
   .hero-ref-big {
-    font-size: clamp(3rem, 7vw, 6rem) !important;
+    font-size: clamp(3rem, 7vw, 5rem) !important;
   }
 }
