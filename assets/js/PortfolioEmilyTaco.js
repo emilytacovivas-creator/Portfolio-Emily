@@ -1,6 +1,6 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP + Lenis + Card Flip (Left/Right) + Move Right
+   GSAP + Lenis + Master Stage (Unified Scroll)
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -23,10 +23,10 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
-  lenis.stop();
+  lenis.stop(); // Lo pausamos hasta que termine la intro
 }
 
-/* 2. 3D estable */
+/* 2. Setup Inicial 3D */
 function setup3D() {
   gsap.set(".tilt-stage", {
     perspective: 1600,
@@ -46,13 +46,84 @@ function setup3D() {
   });
 }
 
-/* 3. Intro */
+/* 3. Lógica del Master Scroll (La magia nueva) */
+function initMasterScroll() {
+  // Aseguramos refrescar cálculos
+  ScrollTrigger.refresh();
+
+  const stage = document.querySelector("#master-stage");
+  const card = document.querySelector("#tiltCard");
+  const heroText = document.querySelector("#heroText");
+  const servicesText = document.querySelector("#servicesText");
+
+  // Cálculo responsive para mover la tarjeta
+  const getMoveRight = () => {
+    return window.innerWidth < 992 ? 0 : window.innerWidth * 0.25;
+  };
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: stage,
+      start: "top top",
+      end: "+=150%", // Aumenta este valor si quieres que la transición sea más lenta
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true, // Recalcula si cambian el tamaño de ventana
+    },
+  });
+
+  // --- LA COREOGRAFÍA ---
+
+  // A. El texto del Hero sube y desaparece
+  tl.to(
+    heroText,
+    {
+      y: -100,
+      opacity: 0,
+      duration: 1,
+      ease: "power2.inOut",
+    },
+    "start"
+  );
+
+  // B. La tarjeta gira y se mueve a la derecha
+  tl.to(
+    card,
+    {
+      rotationY: -180,
+      x: getMoveRight,
+      scale: 0.85, // Un pelín más pequeño para dar aire
+      duration: 1.5,
+      ease: "power2.inOut",
+    },
+    "start"
+  );
+
+  // C. El texto de Servicios entra desde abajo
+  tl.fromTo(
+    servicesText,
+    {
+      y: () => window.innerHeight, // Función flecha para que sea dinámico
+      opacity: 0,
+    },
+    {
+      y: 0,
+      opacity: 1,
+      duration: 1.5,
+      ease: "power2.out",
+    },
+    "start+=0.2"
+  );
+}
+
+/* 4. Intro Animation */
 function intro() {
   document.body.classList.add("is-intro");
 
+  // Estados iniciales para la intro
   gsap.set("#tiltCard", { opacity: 0, scale: 0.8, y: 50, rotationY: 0, x: 0 });
   gsap.set(".wave-badge", { opacity: 0, scale: 0 });
-
   gsap.set(".hero-ref-big", { y: "100%", opacity: 0 });
   gsap.set(".hero-ref-name", { opacity: 0 });
   gsap.set(".hero-ref-sub", { opacity: 0 });
@@ -63,7 +134,9 @@ function intro() {
     onComplete: () => {
       document.body.classList.remove("is-intro");
       if (lenis) lenis.start();
-      initCardFlipScroll();
+
+      // AQUÍ ESTABA EL ERROR: Llamamos a la función correcta
+      initMasterScroll();
     },
   });
 
@@ -90,85 +163,7 @@ function intro() {
     );
 }
 
-/* 4. Scroll effect (VERSIÓN “PERFECTO” que me pasaste) */
-function initCardFlipScroll() {
-  const hero = document.querySelector("#hero");
-  const servicios = document.querySelector("#servicios-list");
-  const tiltCard = document.querySelector("#tiltCard");
-  const slotHero = document.querySelector("#cardSlotHero");
-  const slotServicios = document.querySelector("#cardSlotServices");
-
-  let flipped = false;
-
-  const moveRight = () => {
-    if (window.innerWidth < 992) return 0;
-    return window.innerWidth * 0.24;
-  };
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: hero,
-      start: "top top",
-      endTrigger: servicios,
-      end: "top top",
-      scrub: 1,
-      pin: true,
-      pinSpacing: true,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-      onUpdate(self) {
-        if (!flipped && self.progress > 0.2 && window.innerWidth >= 992) {
-          flipped = true;
-
-          const state = Flip.getState(tiltCard);
-          slotServicios.appendChild(tiltCard);
-
-          Flip.from(state, {
-            duration: 0.9,
-            ease: "power2.inOut",
-            absolute: true,
-            scale: true,
-          });
-        }
-
-        if (flipped && self.progress < 0.35 && window.innerWidth >= 992) {
-          flipped = false;
-
-          const state = Flip.getState(tiltCard);
-          slotHero.appendChild(tiltCard);
-
-          Flip.from(state, {
-            duration: 0.9,
-            ease: "power2.inOut",
-            absolute: true,
-            scale: true,
-          });
-        }
-      },
-    },
-  });
-
-  tl.to(
-    [".hero-ref-left", ".hero-ref-right"],
-    { opacity: 0, y: -50, duration: 0.35, ease: "power1.out" },
-    0
-  )
-    .to(
-      "#tiltCard",
-      {
-        x: moveRight,
-        rotationY: -179.9,
-        z: 120,
-        ease: "expo.inOut",
-        duration: 1.0,
-        force3D: true,
-      },
-      0
-    )
-    .to(".wave-badge", { opacity: 0, duration: 0.2 }, 0);
-}
-
-/* 5. Reveal secciones */
+/* 5. Reveal del resto de secciones (About, Contact, etc) */
 function revealSections() {
   gsap.utils.toArray(".gsap-reveal").forEach((item) => {
     gsap.fromTo(
@@ -189,7 +184,7 @@ function revealSections() {
   });
 }
 
-/* 6. Micro-interacciones */
+/* 6. Micro-interacciones (Botones) */
 function microInteractions() {
   document.querySelectorAll(".btn-accent").forEach((btn) => {
     btn.addEventListener("mouseenter", () =>
@@ -201,12 +196,19 @@ function microInteractions() {
   });
 }
 
-/* INIT */
+/* INIT - Ejecución Principal */
 if (!prefersReducedMotion) {
   setup3D();
-  intro();
   revealSections();
   microInteractions();
+  // Lanzamos la intro, la cual lanzará initMasterScroll al terminar
+  intro();
 } else {
+  // Accesibilidad: Si prefieren no movimiento, matamos lenis
   if (lenis) lenis.destroy();
+  // Y mostramos todo sin animar
+  gsap.set("#tiltCard, .hero-ref-big, .hero-ref-name, .hero-ref-sub", {
+    opacity: 1,
+    y: 0,
+  });
 }

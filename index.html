@@ -27,7 +27,7 @@
       class="navbar navbar-expand-lg fixed-top navbar-custom navbar-light"
     >
       <div class="container">
-        <a class="navbar-brand fw-bold" href="#hero">Emily Taco</a>
+        <a class="navbar-brand fw-bold" href="#master-stage">Emily Taco</a>
 
         <button
           class="navbar-toggler"
@@ -44,10 +44,12 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#hero" aria-current="page">Home</a>
+              <a class="nav-link" href="#master-stage" aria-current="page"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#servicios-list">Servicios</a>
+              <a class="nav-link" href="#services-layer">Servicios</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#about">About</a>
@@ -67,52 +69,47 @@
     </nav>
 
     <main>
-      <section id="hero" class="hero-section hero-ref">
-        <div class="hero-bg" aria-hidden="true"></div>
+      <section id="master-stage">
+        <div class="container stage-inner">
+          <div class="card-layer">
+            <div class="tilt-stage">
+              <div class="tilt-card" id="tiltCard">
+                <div class="card-face card-front">
+                  <img
+                    src="https://images.pexels.com/photos/2706379/pexels-photo-2706379.jpeg?auto=compress&cs=tinysrgb&w=1400"
+                    alt="Trabajo frontal"
+                  />
+                </div>
 
-        <div class="container hero-inner">
-          <div class="hero-ref-grid">
+                <div class="card-face card-back">
+                  <img
+                    src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1400"
+                    alt="Trabajo trasero"
+                  />
+                </div>
+
+                <button class="wave-badge" type="button" aria-label="Saludar">
+                  <svg
+                    class="wave-icon wave-hand"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M220.17,100,202.86,70a28,28,0,0,0-38.24-10.25,27.69,27.69,0,0,0-9,8.34L138.2,38a28,28,0,0,0-48.48,0A28,28,0,0,0,48.15,74l1.59,2.76A27.67,27.67,0,0,0,38,80.41a28,28,0,0,0-10.24,38.25l40,69.32a87.47,87.47,0,0,0,53.43,41,88.56,88.56,0,0,0,22.92,3,88,88,0,0,0,76.06-132Zm-6.66,62.64A72,72,0,0,1,81.62,180l-40-69.32a12,12,0,0,1,20.78-12L81.63,132a8,8,0,1,0,13.85-8L62,66A12,12,0,1,1,82.78,54L114,108a8,8,0,1,0,13.85-8L103.57,58h0a12,12,0,1,1,20.78-12l33.42,57.9a48,48,0,0,0-5.54,60.6,8,8,0,0,0,13.24-9A32,32,0,0,1,172.78,112a8,8,0,0,0,2.13-10.4L168.23,90A12,12,0,1,1,189,78l17.31,30A71.56,71.56,0,0,1,213.51,162.62ZM184.25,31.71A8,8,0,0,1,194,26a59.62,59.62,0,0,1,36.53,28l.33.57a8,8,0,1,1-13.85,8l-.33-.57a43.67,43.67,0,0,0-26.8-20.5A8,8,0,0,1,184.25,31.71ZM80.89,237a8,8,0,0,1-11.23,1.33A119.56,119.56,0,0,1,40.06,204a8,8,0,0,1,13.86-8,103.67,103.67,0,0,0,25.64,29.72A8,8,0,0,1,80.89,237Z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="text-layer hero-text" id="heroText">
             <div class="hero-ref-left">
               <p class="hero-ref-name">Emily Taco</p>
               <h1 class="hero-ref-big">DISEÑO</h1>
             </div>
 
-            <div class="hero-ref-center">
-              <div class="tilt-stage">
-                <div class="tilt-card" id="tiltCard">
-                  <div class="card-face card-front">
-                    <img
-                      src="https://images.pexels.com/photos/2706379/pexels-photo-2706379.jpeg?auto=compress&cs=tinysrgb&w=1400"
-                      alt="Trabajo frontal"
-                    />
-
-                    <button
-                      class="wave-badge"
-                      type="button"
-                      aria-label="Saludar"
-                    >
-                      <svg
-                        class="wave-icon wave-hand"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 256 256"
-                        fill="currentColor"
-                      >
-                        <path
-                          d="M220.17,100,202.86,70a28,28,0,0,0-38.24-10.25,27.69,27.69,0,0,0-9,8.34L138.2,38a28,28,0,0,0-48.48,0A28,28,0,0,0,48.15,74l1.59,2.76A27.67,27.67,0,0,0,38,80.41a28,28,0,0,0-10.24,38.25l40,69.32a87.47,87.47,0,0,0,53.43,41,88.56,88.56,0,0,0,22.92,3,88,88,0,0,0,76.06-132Zm-6.66,62.64A72,72,0,0,1,81.62,180l-40-69.32a12,12,0,0,1,20.78-12L81.63,132a8,8,0,1,0,13.85-8L62,66A12,12,0,1,1,82.78,54L114,108a8,8,0,1,0,13.85-8L103.57,58h0a12,12,0,1,1,20.78-12l33.42,57.9a48,48,0,0,0-5.54,60.6,8,8,0,0,0,13.24-9A32,32,0,0,1,172.78,112a8,8,0,0,0,2.13-10.4L168.23,90A12,12,0,1,1,189,78l17.31,30A71.56,71.56,0,0,1,213.51,162.62ZM184.25,31.71A8,8,0,0,1,194,26a59.62,59.62,0,0,1,36.53,28l.33.57a8,8,0,1,1-13.85,8l-.33-.57a43.67,43.67,0,0,0-26.8-20.5A8,8,0,0,1,184.25,31.71ZM80.89,237a8,8,0,0,1-11.23,1.33A119.56,119.56,0,0,1,40.06,204a8,8,0,0,1,13.86-8,103.67,103.67,0,0,0,25.64,29.72A8,8,0,0,1,80.89,237Z"
-                        ></path>
-                      </svg>
-                    </button>
-                  </div>
-
-                  <div class="card-face card-back">
-                    <img
-                      src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1400"
-                      alt="Trabajo trasero"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div class="hero-ghost-center"></div>
 
             <div class="hero-ref-right">
               <h2 class="hero-ref-big">GRÁFICO</h2>
@@ -121,97 +118,85 @@
               </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section
-        id="servicios-list"
-        class="section-alt py-5"
-        style="min-height: 100vh; display: flex; align-items: center"
-      >
-        <div class="container my-4 gsap-reveal">
-          <div class="row align-items-center">
-            <div class="col-lg-6 pe-lg-5">
-              <div class="mb-5">
-                <h2 class="display-4 mb-4 title-with-accent">
-                  Lo que puedo hacer <span class="accent-serif">por ti</span>
-                </h2>
-                <p class="lead">
-                  Cuento historias visuales que conectan y elevan la percepción
-                  de tu marca a través del diseño y la imagen.
-                </p>
-              </div>
+          <div class="text-layer services-text" id="servicesText">
+            <div class="row w-100" id="services-layer">
+              <div class="col-lg-6 pe-lg-5">
+                <div class="mb-4">
+                  <h2 class="display-4 mb-3 title-with-accent">
+                    Lo que puedo hacer <span class="accent-serif">por ti</span>
+                  </h2>
+                  <p class="lead">
+                    Cuento historias visuales que conectan y elevan la
+                    percepción de tu marca a través del diseño y la imagen.
+                  </p>
+                </div>
 
-              <div class="services-accordion">
-                <details open>
-                  <summary>
-                    <span class="service-number">1.</span> Fotografía Editorial
-                    & Producto
-                    <span class="accordion-icon"></span>
-                  </summary>
-                  <div class="accordion-content">
-                    <ul>
-                      <li>Dirección de arte y estilismo</li>
-                      <li>Fotografía de producto e-commerce</li>
-                      <li>Editoriales de moda y lifestyle</li>
-                      <li>Retoque de alta gama</li>
-                    </ul>
-                  </div>
-                </details>
-                <details>
-                  <summary>
-                    <span class="service-number">2.</span> Diseño Gráfico &
-                    Branding
-                    <span class="accordion-icon"></span>
-                  </summary>
-                  <div class="accordion-content">
-                    <ul>
-                      <li>Creación de identidad visual completa</li>
-                      <li>Diseño de logotipos y manual de marca</li>
-                      <li>Diseño de packaging y papelería</li>
-                      <li>Material gráfico para redes sociales</li>
-                    </ul>
-                  </div>
-                </details>
-                <details>
-                  <summary>
-                    <span class="service-number">3.</span> Videografía & Reels
-                    <span class="accordion-icon"></span>
-                  </summary>
-                  <div class="accordion-content">
-                    <ul>
-                      <li>Grabación y edición de vídeo</li>
-                      <li>Creación de contenido vertical (Reels/TikTok)</li>
-                      <li>Vídeos corporativos y de campaña</li>
-                      <li>Etalonaje y postproducción</li>
-                    </ul>
-                  </div>
-                </details>
-                <details>
-                  <summary>
-                    <span class="service-number">4.</span> Diseño Web UI/UX
-                    <span class="accordion-icon"></span>
-                  </summary>
-                  <div class="accordion-content">
-                    <ul>
-                      <li>Diseño de interfaces web (Figma)</li>
-                      <li>Prototipado y wireframing</li>
-                      <li>Diseño centrado en el usuario</li>
-                      <li>Adaptación responsive</li>
-                    </ul>
-                  </div>
-                </details>
+                <div class="services-accordion">
+                  <details open>
+                    <summary>
+                      <span class="service-number">1.</span> Fotografía
+                      Editorial & Producto
+                      <span class="accordion-icon"></span>
+                    </summary>
+                    <div class="accordion-content">
+                      <ul>
+                        <li>Dirección de arte y estilismo</li>
+                        <li>Fotografía de producto e-commerce</li>
+                        <li>Editoriales de moda y lifestyle</li>
+                        <li>Retoque de alta gama</li>
+                      </ul>
+                    </div>
+                  </details>
+                  <details>
+                    <summary>
+                      <span class="service-number">2.</span> Diseño Gráfico &
+                      Branding
+                      <span class="accordion-icon"></span>
+                    </summary>
+                    <div class="accordion-content">
+                      <ul>
+                        <li>Creación de identidad visual completa</li>
+                        <li>Diseño de logotipos y manual de marca</li>
+                        <li>Diseño de packaging y papelería</li>
+                        <li>Material gráfico para redes sociales</li>
+                      </ul>
+                    </div>
+                  </details>
+                  <details>
+                    <summary>
+                      <span class="service-number">3.</span> Videografía & Reels
+                      <span class="accordion-icon"></span>
+                    </summary>
+                    <div class="accordion-content">
+                      <ul>
+                        <li>Grabación y edición de vídeo</li>
+                        <li>Creación de contenido vertical (Reels/TikTok)</li>
+                        <li>Vídeos corporativos y de campaña</li>
+                        <li>Etalonaje y postproducción</li>
+                      </ul>
+                    </div>
+                  </details>
+                  <details>
+                    <summary>
+                      <span class="service-number">4.</span> Diseño Web UI/UX
+                      <span class="accordion-icon"></span>
+                    </summary>
+                    <div class="accordion-content">
+                      <ul>
+                        <li>Diseño de interfaces web (Figma)</li>
+                        <li>Prototipado y wireframing</li>
+                        <li>Diseño centrado en el usuario</li>
+                        <li>Adaptación responsive</li>
+                      </ul>
+                    </div>
+                  </details>
+                </div>
               </div>
             </div>
-
-            <div
-              class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center"
-              style="min-height: 600px"
-            ></div>
           </div>
         </div>
       </section>
-
       <section id="about" class="py-5">
         <div class="container">
           <div class="row align-items-center g-5">
