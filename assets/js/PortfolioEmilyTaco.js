@@ -46,68 +46,85 @@ function setup3D() {
   });
 }
 
-/* 3. LOGICA MASTER SCROLL */
+/* 3. LOGICA MASTER SCROLL (ACTUALIZADO CON MATCHMEDIA) */
 function initMasterScroll() {
   ScrollTrigger.refresh();
 
-  const stage = document.querySelector("#master-stage");
-  const card = document.querySelector("#tiltCard");
-  const heroText = document.querySelector("#heroText");
-  const servicesText = document.querySelector("#servicesText");
+  // Usamos matchMedia para separar lógica de Móvil vs Escritorio
+  ScrollTrigger.matchMedia({
+    // --- ESCRITORIO (Pantallas grandes) ---
+    "(min-width: 992px)": function () {
+      const stage = document.querySelector("#master-stage");
+      const card = document.querySelector("#tiltCard");
+      const heroText = document.querySelector("#heroText");
+      const servicesText = document.querySelector("#servicesText");
 
-  const getMoveRight = () => {
-    return window.innerWidth < 992 ? 0 : window.innerWidth * 0.25;
-  };
+      const getMoveRight = () => {
+        return window.innerWidth * 0.25;
+      };
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: stage,
-      start: "top top",
-      end: "+=150%", // Pinned duration (150vh)
-      scrub: 1,
-      pin: true,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage,
+          start: "top top",
+          end: "+=150%", // Pinned duration (150vh)
+          scrub: 1,
+          pin: true, // ACTIVAMOS PIN SOLO EN ESCRITORIO
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      tl.to(
+        heroText,
+        {
+          y: -100,
+          opacity: 0,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "start"
+      );
+
+      tl.to(
+        card,
+        {
+          rotationY: -180,
+          x: getMoveRight,
+          scale: 0.85,
+          duration: 1.5,
+          ease: "power2.inOut",
+        },
+        "start"
+      );
+
+      tl.fromTo(
+        servicesText,
+        {
+          y: () => window.innerHeight,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "start+=0.2"
+      );
+    },
+
+    // --- MÓVIL Y TABLET (Pantallas pequeñas) ---
+    "(max-width: 991px)": function () {
+      // Reseteamos propiedades para que se vea normal (sin scroll 3D raro)
+      gsap.set("#master-stage", { clearProps: "all" });
+      gsap.set("#heroText", { opacity: 1, y: 0 });
+      gsap.set("#tiltCard", { opacity: 1, scale: 1, x: 0, rotationY: 0 });
+      gsap.set("#servicesText", { opacity: 1, y: 0 });
+
+      // Aquí NO hay pin, permitiendo scroll nativo fluido
     },
   });
-
-  tl.to(
-    heroText,
-    {
-      y: -100,
-      opacity: 0,
-      duration: 1,
-      ease: "power2.inOut",
-    },
-    "start"
-  );
-
-  tl.to(
-    card,
-    {
-      rotationY: -180,
-      x: getMoveRight,
-      scale: 0.85,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
-    "start"
-  );
-
-  tl.fromTo(
-    servicesText,
-    {
-      y: () => window.innerHeight,
-      opacity: 0,
-    },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 1.5,
-      ease: "power2.out",
-    },
-    "start+=0.2"
-  );
 }
 
 /* 4. INTRO ANIMATION */
@@ -127,7 +144,7 @@ function intro() {
       document.body.classList.remove("is-intro");
       if (lenis) lenis.start();
       initMasterScroll();
-      initScrollSpy(); // Iniciamos el espía de scroll
+      initScrollSpy();
       ScrollTrigger.refresh();
     },
   });
@@ -303,8 +320,6 @@ function initNavClick() {
         if (lenis) lenis.scrollTo(0);
         else window.scrollTo({ top: 0, behavior: "smooth" });
       } else if (targetId === "#services-layer") {
-        // Truco: Para ir a servicios, bajamos el scroll lo suficiente para que la animación termine
-        // Calculamos la altura de ventana + un poco más del pin
         if (lenis) lenis.scrollTo(window.innerHeight * 1.2);
         else
           window.scrollTo({
@@ -334,7 +349,7 @@ function initNavClick() {
   });
 }
 
-/* 10. SCROLL SPY (CORREGIDO) */
+/* 10. SCROLL SPY */
 function initScrollSpy() {
   const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
 
@@ -349,26 +364,26 @@ function initScrollSpy() {
     });
   }
 
-  // 1. HOME: Activo desde el inicio (0) hasta que avanzamos un 80% de la altura de la ventana
+  // 1. HOME
   ScrollTrigger.create({
     trigger: "body",
     start: "top top",
-    end: "+=100vh", // Duración de la fase "Home"
+    end: "+=100vh",
     onEnter: () => setActive("#master-stage"),
     onEnterBack: () => setActive("#master-stage"),
   });
 
-  // 2. SERVICIOS: Activo cuando llevamos scrolleado un 80% de la altura (el texto empieza a subir)
+  // 2. SERVICIOS
   ScrollTrigger.create({
     trigger: "body",
-    start: "top -80vh", // Empezamos a contar cuando hemos bajado 80vh
+    start: "top -80vh",
     end: () =>
-      "+=" + document.querySelector("#master-stage").offsetHeight * 1.5, // Hasta que acabe el pin
+      "+=" + document.querySelector("#master-stage").offsetHeight * 1.5,
     onEnter: () => setActive("#services-layer"),
     onEnterBack: () => setActive("#services-layer"),
   });
 
-  // 3. RESTO DE SECCIONES (Estándar)
+  // 3. RESTO DE SECCIONES
   const sections = ["#about", "#projects", "#contact"];
   sections.forEach((id) => {
     ScrollTrigger.create({
