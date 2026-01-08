@@ -1,6 +1,6 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP + Lenis + Master Stage (Unified Scroll)
+   GSAP + Lenis + Master Stage + Smooth Accordion
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -12,7 +12,7 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
-/* 1. Lenis Smooth Scroll */
+/* 1. LENIS SMOOTH SCROLL */
 let lenis = null;
 if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis = new Lenis({
@@ -23,10 +23,10 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
-  lenis.stop(); // Lo pausamos hasta que termine la intro
+  lenis.stop();
 }
 
-/* 2. Setup Inicial 3D */
+/* 2. SETUP INICIAL 3D */
 function setup3D() {
   gsap.set(".tilt-stage", {
     perspective: 1600,
@@ -46,9 +46,8 @@ function setup3D() {
   });
 }
 
-/* 3. Lógica del Master Scroll (La magia nueva) */
+/* 3. LOGICA MASTER SCROLL */
 function initMasterScroll() {
-  // Aseguramos refrescar cálculos
   ScrollTrigger.refresh();
 
   const stage = document.querySelector("#master-stage");
@@ -56,7 +55,6 @@ function initMasterScroll() {
   const heroText = document.querySelector("#heroText");
   const servicesText = document.querySelector("#servicesText");
 
-  // Cálculo responsive para mover la tarjeta
   const getMoveRight = () => {
     return window.innerWidth < 992 ? 0 : window.innerWidth * 0.25;
   };
@@ -65,17 +63,14 @@ function initMasterScroll() {
     scrollTrigger: {
       trigger: stage,
       start: "top top",
-      end: "+=150%", // Aumenta este valor si quieres que la transición sea más lenta
+      end: "+=150%",
       scrub: 1,
       pin: true,
       anticipatePin: 1,
-      invalidateOnRefresh: true, // Recalcula si cambian el tamaño de ventana
+      invalidateOnRefresh: true,
     },
   });
 
-  // --- LA COREOGRAFÍA ---
-
-  // A. El texto del Hero sube y desaparece
   tl.to(
     heroText,
     {
@@ -87,24 +82,22 @@ function initMasterScroll() {
     "start"
   );
 
-  // B. La tarjeta gira y se mueve a la derecha
   tl.to(
     card,
     {
       rotationY: -180,
       x: getMoveRight,
-      scale: 0.85, // Un pelín más pequeño para dar aire
+      scale: 0.85,
       duration: 1.5,
       ease: "power2.inOut",
     },
     "start"
   );
 
-  // C. El texto de Servicios entra desde abajo
   tl.fromTo(
     servicesText,
     {
-      y: () => window.innerHeight, // Función flecha para que sea dinámico
+      y: () => window.innerHeight,
       opacity: 0,
     },
     {
@@ -117,11 +110,10 @@ function initMasterScroll() {
   );
 }
 
-/* 4. Intro Animation */
+/* 4. INTRO ANIMATION */
 function intro() {
   document.body.classList.add("is-intro");
 
-  // Estados iniciales para la intro
   gsap.set("#tiltCard", { opacity: 0, scale: 0.8, y: 50, rotationY: 0, x: 0 });
   gsap.set(".wave-badge", { opacity: 0, scale: 0 });
   gsap.set(".hero-ref-big", { y: "100%", opacity: 0 });
@@ -134,8 +126,6 @@ function intro() {
     onComplete: () => {
       document.body.classList.remove("is-intro");
       if (lenis) lenis.start();
-
-      // AQUÍ ESTABA EL ERROR: Llamamos a la función correcta
       initMasterScroll();
     },
   });
@@ -163,7 +153,68 @@ function intro() {
     );
 }
 
-/* 5. Reveal del resto de secciones (About, Contact, etc) */
+/* 5. SMOOTH ACCORDION (GSAP) */
+function initAccordion() {
+  const detailsElements = document.querySelectorAll(
+    ".services-accordion details"
+  );
+
+  detailsElements.forEach((targetDetail) => {
+    const summary = targetDetail.querySelector("summary");
+    const content = targetDetail.querySelector(".accordion-content");
+
+    if (!targetDetail.hasAttribute("open")) {
+      gsap.set(content, { height: 0, opacity: 0 });
+    } else {
+      targetDetail.classList.add("is-open");
+    }
+
+    summary.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const isOpen = targetDetail.classList.contains("is-open");
+
+      // Cerrar otros
+      detailsElements.forEach((detail) => {
+        if (detail !== targetDetail && detail.classList.contains("is-open")) {
+          const otherContent = detail.querySelector(".accordion-content");
+          gsap.to(otherContent, {
+            height: 0,
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.inOut",
+            onComplete: () => {
+              detail.removeAttribute("open");
+              detail.classList.remove("is-open");
+            },
+          });
+        }
+      });
+
+      // Toggle actual
+      if (isOpen) {
+        targetDetail.classList.remove("is-open");
+        gsap.to(content, {
+          height: 0,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.inOut",
+          onComplete: () => targetDetail.removeAttribute("open"),
+        });
+      } else {
+        targetDetail.setAttribute("open", "");
+        targetDetail.classList.add("is-open");
+        gsap.fromTo(
+          content,
+          { height: 0, opacity: 0 },
+          { height: "auto", opacity: 1, duration: 0.4, ease: "power2.out" }
+        );
+      }
+    });
+  });
+}
+
+/* 6. REVEAL SECTIONS */
 function revealSections() {
   gsap.utils.toArray(".gsap-reveal").forEach((item) => {
     gsap.fromTo(
@@ -184,7 +235,7 @@ function revealSections() {
   });
 }
 
-/* 6. Micro-interacciones (Botones) */
+/* 7. MICRO-INTERACCIONES */
 function microInteractions() {
   document.querySelectorAll(".btn-accent").forEach((btn) => {
     btn.addEventListener("mouseenter", () =>
@@ -196,17 +247,15 @@ function microInteractions() {
   });
 }
 
-/* INIT - Ejecución Principal */
+/* INIT */
 if (!prefersReducedMotion) {
   setup3D();
   revealSections();
   microInteractions();
-  // Lanzamos la intro, la cual lanzará initMasterScroll al terminar
+  initAccordion(); // Nuevo Accordion Init
   intro();
 } else {
-  // Accesibilidad: Si prefieren no movimiento, matamos lenis
   if (lenis) lenis.destroy();
-  // Y mostramos todo sin animar
   gsap.set("#tiltCard, .hero-ref-big, .hero-ref-name, .hero-ref-sub", {
     opacity: 1,
     y: 0,
