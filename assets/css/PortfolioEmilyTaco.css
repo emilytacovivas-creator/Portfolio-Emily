@@ -78,6 +78,20 @@ li {
   letter-spacing: var(--track-serif-tight);
 }
 
+a,
+button,
+.nav-link,
+.project-card img,
+.accordion-icon::before,
+.accordion-icon::after,
+summary {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+img {
+  transition: opacity 0.5s ease;
+}
+
 /* 4. NAVBAR
    -------------------------------------------------------------------------- */
 .navbar-custom {
