@@ -243,6 +243,7 @@ section {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  padding-top: 3.7rem;
 }
 
 .hero-ref-name {
@@ -251,13 +252,13 @@ section {
   font-weight: 500;
   letter-spacing: -0.06em;
   font-size: calc(1rem + 0.5vw);
-  margin: 0 0 -0.5em 0.2em;
+  margin: 0 0 0.5em 0.2em;
   color: var(--text-dark);
 }
 
 .hero-ref-big {
   font-family: var(--font-sans);
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.06em;
   line-height: 0.9;
   font-size: clamp(4rem, 10vw, 9rem);

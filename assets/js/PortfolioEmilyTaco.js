@@ -1,6 +1,6 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP + Lenis + Master Stage + Smooth Accordion + Contact Copy
+   GSAP + Lenis + Master Stage + Smooth Accordion + Contact Copy + Nav Fixes
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -63,7 +63,7 @@ function initMasterScroll() {
     scrollTrigger: {
       trigger: stage,
       start: "top top",
-      end: "+=150%",
+      end: "+=150%", // Pinned duration (150vh)
       scrub: 1,
       pin: true,
       anticipatePin: 1,
@@ -127,6 +127,8 @@ function intro() {
       document.body.classList.remove("is-intro");
       if (lenis) lenis.start();
       initMasterScroll();
+      initScrollSpy(); // Iniciamos el espía de scroll
+      ScrollTrigger.refresh();
     },
   });
 
@@ -153,7 +155,7 @@ function intro() {
     );
 }
 
-/* 5. SMOOTH ACCORDION (GSAP) */
+/* 5. SMOOTH ACCORDION */
 function initAccordion() {
   const detailsElements = document.querySelectorAll(
     ".services-accordion details"
@@ -171,10 +173,8 @@ function initAccordion() {
 
     summary.addEventListener("click", (e) => {
       e.preventDefault();
-
       const isOpen = targetDetail.classList.contains("is-open");
 
-      // Cerrar otros
       detailsElements.forEach((detail) => {
         if (detail !== targetDetail && detail.classList.contains("is-open")) {
           const otherContent = detail.querySelector(".accordion-content");
@@ -191,7 +191,6 @@ function initAccordion() {
         }
       });
 
-      // Toggle actual
       if (isOpen) {
         targetDetail.classList.remove("is-open");
         gsap.to(content, {
@@ -247,7 +246,7 @@ function microInteractions() {
   });
 }
 
-/* 8. FUNCIONALIDAD COPIAR CONTACTO (NUEVO) */
+/* 8. FUNCIONALIDAD COPIAR CONTACTO */
 function initContactCopy() {
   const copyButtons = document.querySelectorAll(".btn-contact-copy");
 
@@ -258,7 +257,6 @@ function initContactCopy() {
       const isPhone = btn.id === "btnPhone";
       const successMsg = isPhone ? "Teléfono copiado" : "Email copiado";
 
-      // Icono check SVG
       const checkIcon = `
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-2">
           <polyline points="20 6 9 17 4 12"></polyline>
@@ -268,11 +266,8 @@ function initContactCopy() {
         navigator.clipboard
           .writeText(textToCopy)
           .then(() => {
-            // Éxito: Cambiar estilo y texto
             btn.classList.add("copied");
             btn.innerHTML = `<span class="btn-text">${successMsg}</span> ${checkIcon}`;
-
-            // Revertir después de 3 segundos
             setTimeout(() => {
               btn.classList.remove("copied");
               btn.innerHTML = originalContent;
@@ -286,13 +281,114 @@ function initContactCopy() {
   });
 }
 
+/* 9. SMOOTH SCROLL TO ANCHOR (CLICK NAV) */
+function initNavClick() {
+  const navLinks = document.querySelectorAll(
+    ".navbar-nav .nav-link, .navbar-brand"
+  );
+  const navHeight = 80;
+
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute("href");
+
+      // Feedback visual inmediato
+      document
+        .querySelectorAll(".nav-link")
+        .forEach((l) => l.classList.remove("active"));
+      if (link.classList.contains("nav-link")) link.classList.add("active");
+
+      if (targetId === "#master-stage") {
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      } else if (targetId === "#services-layer") {
+        // Truco: Para ir a servicios, bajamos el scroll lo suficiente para que la animación termine
+        // Calculamos la altura de ventana + un poco más del pin
+        if (lenis) lenis.scrollTo(window.innerHeight * 1.2);
+        else
+          window.scrollTo({
+            top: window.innerHeight * 1.2,
+            behavior: "smooth",
+          });
+      } else {
+        const targetSection = document.querySelector(targetId);
+        if (targetSection) {
+          const offsetTop =
+            targetSection.getBoundingClientRect().top +
+            window.scrollY -
+            navHeight;
+          if (lenis) lenis.scrollTo(targetSection, { offset: -navHeight });
+          else window.scrollTo({ top: offsetTop, behavior: "smooth" });
+        }
+      }
+
+      const navbarCollapse = document.querySelector(".navbar-collapse");
+      if (navbarCollapse.classList.contains("show")) {
+        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+          toggle: true,
+        });
+        bsCollapse.hide();
+      }
+    });
+  });
+}
+
+/* 10. SCROLL SPY (CORREGIDO) */
+function initScrollSpy() {
+  const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+  function setActive(id) {
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href === id) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    });
+  }
+
+  // 1. HOME: Activo desde el inicio (0) hasta que avanzamos un 80% de la altura de la ventana
+  ScrollTrigger.create({
+    trigger: "body",
+    start: "top top",
+    end: "+=100vh", // Duración de la fase "Home"
+    onEnter: () => setActive("#master-stage"),
+    onEnterBack: () => setActive("#master-stage"),
+  });
+
+  // 2. SERVICIOS: Activo cuando llevamos scrolleado un 80% de la altura (el texto empieza a subir)
+  ScrollTrigger.create({
+    trigger: "body",
+    start: "top -80vh", // Empezamos a contar cuando hemos bajado 80vh
+    end: () =>
+      "+=" + document.querySelector("#master-stage").offsetHeight * 1.5, // Hasta que acabe el pin
+    onEnter: () => setActive("#services-layer"),
+    onEnterBack: () => setActive("#services-layer"),
+  });
+
+  // 3. RESTO DE SECCIONES (Estándar)
+  const sections = ["#about", "#projects", "#contact"];
+  sections.forEach((id) => {
+    ScrollTrigger.create({
+      trigger: id,
+      start: "top 60%",
+      end: "bottom 60%",
+      onEnter: () => setActive(id),
+      onEnterBack: () => setActive(id),
+    });
+  });
+}
+
 /* INIT */
 if (!prefersReducedMotion) {
   setup3D();
+  initNavClick();
   revealSections();
   microInteractions();
   initAccordion();
-  initContactCopy(); // Activamos botones de copia
+  initContactCopy();
   intro();
 } else {
   if (lenis) lenis.destroy();
@@ -300,5 +396,7 @@ if (!prefersReducedMotion) {
     opacity: 1,
     y: 0,
   });
-  initContactCopy(); // Activamos botones de copia también aquí
+  initNavClick();
+  initContactCopy();
+  initScrollSpy();
 }
