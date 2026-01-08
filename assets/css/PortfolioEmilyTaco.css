@@ -864,7 +864,136 @@ details.is-open .accordion-icon::after {
   filter: invert(1);
 }
 
-/* 12. UTILIDADES Y RESPONSIVE
+/* 12. CONTACT SECTION 
+   -------------------------------------------------------------------------- */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.5rem;
+  min-height: 550px;
+}
+
+.contact-panel {
+  background-color: var(--bg-tertiary);
+  border-radius: 2rem;
+  padding: clamp(2rem, 5vw, 4rem);
+  position: relative;
+}
+
+.text-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Cuadrado con icono */
+.icon-box-top {
+  width: 64px;
+  height: 64px;
+  background-color: var(--text-dark);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bg-main);
+
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.badge-editorial {
+  display: inline-block;
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+}
+
+.btn-contact-copy {
+  background-color: var(--text-dark);
+  color: var(--bg-main);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.btn-contact-copy:hover {
+  background-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(109, 3, 3, 0.2);
+}
+
+.btn-contact-copy.copied {
+  background-color: #27ae60;
+  pointer-events: none;
+}
+
+.btn-contact-copy .icon-copy {
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.btn-contact-copy:hover .icon-copy {
+  opacity: 1;
+}
+
+.visual-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
+  overflow: hidden;
+}
+
+.visual-element {
+  max-width: 80%;
+  height: auto;
+  object-fit: contain;
+  transform: rotate(-5deg);
+  transition: transform 0.5s ease;
+}
+
+.contact-panel:hover .visual-element {
+  transform: rotate(0deg) scale(1.05);
+}
+
+@media (max-width: 991px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 300px;
+  }
+
+  .visual-panel {
+    order: -1;
+  }
+
+  /* Ajuste en móvil para el icono saliente */
+  .contact-panel.text-panel {
+    margin-top: 40px; /* Espacio extra arriba en móvil */
+    overflow: visible;
+  }
+}
+
+/* 14. UTILIDADES Y RESPONSIVE
    -------------------------------------------------------------------------- */
 .gsap-reveal {
   opacity: 0;
@@ -969,7 +1098,7 @@ details.is-open .accordion-icon::after {
   }
 }
 
-/* 13. AJUSTE PARA PORTÁTILES
+/* 15. AJUSTE PARA PORTÁTILES
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 992px) and (max-height: 850px) {
   .stage-inner {

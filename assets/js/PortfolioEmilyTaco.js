@@ -1,6 +1,6 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP + Lenis + Master Stage + Smooth Accordion
+   GSAP + Lenis + Master Stage + Smooth Accordion + Contact Copy
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -247,12 +247,52 @@ function microInteractions() {
   });
 }
 
+/* 8. FUNCIONALIDAD COPIAR CONTACTO (NUEVO) */
+function initContactCopy() {
+  const copyButtons = document.querySelectorAll(".btn-contact-copy");
+
+  copyButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const textToCopy = btn.getAttribute("data-copy-text");
+      const originalContent = btn.innerHTML;
+      const isPhone = btn.id === "btnPhone";
+      const successMsg = isPhone ? "Teléfono copiado" : "Email copiado";
+
+      // Icono check SVG
+      const checkIcon = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ms-2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard
+          .writeText(textToCopy)
+          .then(() => {
+            // Éxito: Cambiar estilo y texto
+            btn.classList.add("copied");
+            btn.innerHTML = `<span class="btn-text">${successMsg}</span> ${checkIcon}`;
+
+            // Revertir después de 3 segundos
+            setTimeout(() => {
+              btn.classList.remove("copied");
+              btn.innerHTML = originalContent;
+            }, 3000);
+          })
+          .catch((err) => {
+            console.error("Error al copiar: ", err);
+          });
+      }
+    });
+  });
+}
+
 /* INIT */
 if (!prefersReducedMotion) {
   setup3D();
   revealSections();
   microInteractions();
-  initAccordion(); // Nuevo Accordion Init
+  initAccordion();
+  initContactCopy(); // Activamos botones de copia
   intro();
 } else {
   if (lenis) lenis.destroy();
@@ -260,4 +300,5 @@ if (!prefersReducedMotion) {
     opacity: 1,
     y: 0,
   });
+  initContactCopy(); // Activamos botones de copia también aquí
 }
