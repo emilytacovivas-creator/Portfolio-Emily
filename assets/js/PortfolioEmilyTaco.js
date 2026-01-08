@@ -1,6 +1,6 @@
 /* ==========================================================================
    Emily Taco · Portfolio
-   GSAP + Lenis + Fix Navbar Active + Smooth Animations
+   GSAP + Lenis + Fix Visibilidad + Smooth Animations
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -16,7 +16,7 @@ const prefersReducedMotion = window.matchMedia(
 let lenis = null;
 if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis = new Lenis({
-    lerp: 0.08,
+    lerp: 0.08, // Suavidad en el scroll
     smoothWheel: true,
   });
 
@@ -46,7 +46,7 @@ function setup3D() {
   });
 }
 
-/* 3. MASTER SCROLL (HERO) */
+/* 3. MASTER SCROLL (HERO SECTION) */
 function initMasterScroll() {
   ScrollTrigger.refresh();
 
@@ -110,6 +110,7 @@ function initMasterScroll() {
 function intro() {
   document.body.classList.add("is-intro");
 
+  // Preparar estado inicial
   gsap.set("#tiltCard", { opacity: 0, scale: 0.8, y: 50 });
   gsap.set(".wave-badge", { opacity: 0, scale: 0 });
   gsap.set(".hero-ref-big", { y: "100%", opacity: 0 });
@@ -123,6 +124,7 @@ function intro() {
       if (lenis) lenis.start();
       initMasterScroll();
       initScrollSpy();
+      // ¡AQUÍ ESTÁ LA CLAVE! Disparar las animaciones del resto de la web
       revealRestOfSite();
       ScrollTrigger.refresh();
     },
@@ -149,48 +151,28 @@ function intro() {
     );
 }
 
-/* 5. ANIMACIONES SUAVES DE APARICIÓN */
+/* 5. ANIMACIONES DE APARICIÓN (FIX VISIBILIDAD) */
 function revealRestOfSite() {
-  // A. Elementos generales (.gsap-reveal)
+  // Buscamos TODOS los elementos que tienen la clase .gsap-reveal en tu HTML
   const elements = gsap.utils.toArray(".gsap-reveal");
+
   elements.forEach((element) => {
     gsap.fromTo(
       element,
-      { opacity: 0, y: 60 },
+      { opacity: 0, y: 60 }, // Empiezan invisibles y abajo
       {
-        opacity: 1,
-        y: 0,
-        duration: 1.2,
+        opacity: 1, // Se vuelven visibles
+        y: 0, // Suben a su sitio
+        duration: 1.2, // Duración suave
         ease: "power3.out",
         scrollTrigger: {
           trigger: element,
-          start: "top 85%",
+          start: "top 85%", // Empieza cuando el elemento asoma por abajo
           toggleActions: "play none none reverse",
         },
       }
     );
   });
-
-  // B. Tarjetas de Proyectos (Cascada)
-  const projects = gsap.utils.toArray(".project-card");
-  if (projects.length) {
-    ScrollTrigger.batch(projects, {
-      start: "top 85%",
-      onEnter: (batch) =>
-        gsap.fromTo(
-          batch,
-          { opacity: 0, y: 60, scale: 0.95 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            stagger: 0.2,
-            duration: 1.2,
-            ease: "power3.out",
-          }
-        ),
-    });
-  }
 }
 
 /* 6. ACORDEÓN SUAVE */
@@ -213,6 +195,7 @@ function initAccordion() {
       e.preventDefault();
       const isOpen = targetDetail.classList.contains("is-open");
 
+      // Cerrar otros
       detailsElements.forEach((detail) => {
         if (detail !== targetDetail && detail.classList.contains("is-open")) {
           const otherContent = detail.querySelector(".accordion-content");
@@ -251,9 +234,10 @@ function initAccordion() {
   });
 }
 
-/* 7. MICRO-INTERACCIONES */
+/* 7. MICRO-INTERACCIONES (Botones) */
 function microInteractions() {
   document.querySelectorAll(".btn-accent, .cta-link-rounded").forEach((btn) => {
+    // Solo hover en escritorio (pantallas grandes)
     if (window.matchMedia("(min-width: 992px)").matches) {
       btn.addEventListener("mouseenter", () =>
         gsap.to(btn, { scale: 1.05, duration: 0.3 })
@@ -339,42 +323,31 @@ function initNavClick() {
   });
 }
 
-/* 10. SCROLL SPY (CORREGIDO: HOME VS SERVICIOS) */
+/* 10. SCROLL SPY */
 function initScrollSpy() {
   const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-
   function setActive(id) {
-    navLinks.forEach((link) => {
-      // Toggle estricto: Si coincide el ID, pon active. Si no, quítalo.
-      if (link.getAttribute("href") === id) {
-        link.classList.add("active");
-      } else {
-        link.classList.remove("active");
-      }
-    });
+    navLinks.forEach((link) =>
+      link.classList.toggle("active", link.getAttribute("href") === id)
+    );
   }
 
-  // A. HOME (Se mantiene activo durante la primera mitad del scroll inicial)
   ScrollTrigger.create({
     trigger: "body",
     start: "top top",
-    end: "+=50%", // Al bajar el 50% de la pantalla, deja de ser Home
+    end: "+=100vh",
     onEnter: () => setActive("#master-stage"),
     onEnterBack: () => setActive("#master-stage"),
   });
 
-  // B. SERVICIOS (Se activa cuando Home termina)
-  // Usamos "body" como trigger para evitar problemas con elementos pinned
   ScrollTrigger.create({
-    trigger: "body",
-    start: "top -51%", // Justo después de que Home se apague
-    end: () =>
-      "+=" + document.querySelector("#master-stage").offsetHeight * 1.5,
+    trigger: "#services-text",
+    start: "top center",
+    end: "bottom center",
     onEnter: () => setActive("#services-layer"),
     onEnterBack: () => setActive("#services-layer"),
   });
 
-  // C. RESTO DE SECCIONES (Normal)
   ["#about", "#projects", "#contact"].forEach((id) => {
     ScrollTrigger.create({
       trigger: id,
