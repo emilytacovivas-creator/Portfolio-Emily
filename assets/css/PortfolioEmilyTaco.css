@@ -980,10 +980,10 @@ details.is-open .accordion-icon::after {
   transform: translateY(-3px);
   box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
 }
+
 /* 14. MEDIA QUERIES & RESPONSIVE
    -------------------------------------------------------------------------- */
 
-/* A. ESCRITORIO (Ajustes para pantallas pequeñas o con poca altura) */
 @media screen and (min-width: 1025px) and (max-height: 850px) {
   .tilt-card,
   .hero-ghost-center {
@@ -996,20 +996,17 @@ details.is-open .accordion-icon::after {
   }
 }
 
-/* B. COMÚN PARA TÁCTILES (Hasta 1024px) */
 @media (max-width: 1024px) {
   .navbar-custom {
     backdrop-filter: blur(8px);
   }
 
-  /* --- DESACTIVAR FILTROS BLANCO Y NEGRO (Software e Imagen Sobre Mí) --- */
   .marquee-group img,
   .photo-area img {
     filter: grayscale(0%) !important;
     opacity: 1 !important;
   }
 
-  /* --- PROYECTOS: Texto siempre visible y foto a color --- */
   .project-card img {
     filter: grayscale(0%) brightness(0.7) !important;
   }
@@ -1024,7 +1021,6 @@ details.is-open .accordion-icon::after {
     transform: none !important;
   }
 
-  /* Botones en granate por defecto */
   .cta-link-rounded,
   .btn-contact-copy {
     background-color: var(--accent);
@@ -1035,7 +1031,6 @@ details.is-open .accordion-icon::after {
     padding-block: 3rem !important;
   }
 
-  /* --- ESTRUCTURA HERO VERTICAL --- */
   #master-stage {
     height: auto !important;
     display: block;
@@ -1084,11 +1079,24 @@ details.is-open .accordion-icon::after {
     text-align: center;
     padding: 0 1rem;
   }
+
+  /* AJUSTE ANCHO SERVICIOS IPAD VERTICAL */
   .services-text {
     order: 6;
     position: relative;
     opacity: 1 !important;
     transform: none !important;
+    width: 100% !important;
+    display: block !important;
+    padding-top: 16vh !important;
+  }
+  .services-text .col-lg-6 {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-right: 0 !important;
+  }
+  .services-accordion {
+    width: 100% !important;
   }
 
   .hero-ghost-center,
@@ -1102,25 +1110,34 @@ details.is-open .accordion-icon::after {
     height: 80px;
   }
 
-  /* Cuadrícula Sobre Mí (Simplificada) */
+  /* REESTRUCTURACIÓN SOBRE MÍ IPAD VERTICAL (MADRID A LA DERECHA DE UDIT) */
   .hybrid-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 1.5rem !important;
   }
-  .bio-area,
-  .photo-area,
-  .cta-area {
-    grid-column: 1 / -1;
+  .bio-area {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 / 2 !important;
   }
   .photo-area {
-    order: -1;
-    height: 350px;
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 2 !important; /* Ahora comparte altura con Introducción */
+    height: 100% !important;
+    order: 0 !important;
   }
   .info-area-1 {
-    grid-column: 1 / 2;
+    grid-column: 1 / 2 !important; /* UDIT debajo de Introducción */
+    grid-row: 2 / 3 !important;
   }
   .info-area-2 {
-    grid-column: 2 / 3;
+    grid-column: 2 / 3 !important; /* MADRID debajo de Foto y a la derecha de UDIT */
+    grid-row: 2 / 3 !important;
+  }
+  .cta-area {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 / 4 !important;
   }
 
   #contact {
@@ -1134,13 +1151,12 @@ details.is-open .accordion-icon::after {
   }
 }
 
-/* C. AJUSTES EXCLUSIVOS IPAD (769px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-  /* --- LANDING PAGE: Recuperamos estructura editorial vertical --- */
   #master-stage {
     height: auto !important;
+    min-height: 100vh;
     display: block !important;
-    padding-top: 14px !important;
+    padding-top: 14vh !important;
     padding-bottom: 4rem !important;
   }
 
@@ -1148,131 +1164,86 @@ details.is-open .accordion-icon::after {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 0 !important; /* Quitamos gap para controlar márgenes manualmente */
+    gap: 0 !important;
     margin-top: 0 !important;
   }
 
-  /* Forzamos el orden correcto de los elementos */
-  .hero-ref-name {
-    order: 1 !important;
-    margin-bottom: 0.5rem !important;
-  }
-  .hero-ref-left {
-    order: 2 !important;
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-  }
-  .hero-ref-left .hero-ref-big {
-    margin: 0 !important;
-  }
-
-  .card-layer {
-    order: 3 !important;
-    position: relative !important;
-    margin: 2rem 0 !important;
-    pointer-events: none !important; /* Desactiva cualquier interacción/flip táctil */
-  }
-
-  /* AJUSTE TARJETA: Estática y sin rotación */
   .tilt-card {
-    width: 60vw !important;
-    height: 70vw !important;
-    max-width: 500px;
-    max-height: 600px;
-    transform: none !important; /* Elimina cualquier inclinación 3D */
-    perspective: none !important;
-  }
-  .card-back {
-    display: none !important;
-  } /* Ocultamos la cara trasera definitivamente */
-
-  .hero-ref-right {
-    order: 4 !important;
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-    padding-top: 0 !important;
-  }
-  .hero-ref-right .hero-ref-big {
-    margin: 0 !important;
-  }
-  .hero-ref-sub {
-    order: 5 !important;
-    margin-top: 1.5rem !important;
-    font-size: 1.8rem !important;
+    width: 55vw !important;
+    height: 65vw !important;
+    max-width: 450px;
+    max-height: 550px;
+    transform: none !important;
+    margin: 2rem 0 !important;
   }
 
-  /* --- SERVICIOS --- */
-  .services-text {
-    order: 6 !important;
-    margin-top: 5rem !important; /* Espacio generoso antes de servicios */
-  }
-  #services-layer > div,
-  .services-text p.lead {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  /* --- SOBRE MI (iPad balanceado) --- */
-  .hybrid-grid {
-    grid-template-columns: 1.2fr 0.8fr !important;
-    display: grid !important;
-    gap: 1.5rem !important;
-  }
-  .photo-area {
-    grid-column: 2 / 3 !important;
-    grid-row: 1 / 3 !important;
-    height: 100% !important;
-    order: unset !important;
-  }
-  .bio-area,
-  .info-area-1 {
-    grid-column: 1 / 2 !important;
-    order: unset !important;
-  }
-  .info-area-2 {
-    display: none !important;
-  }
-
-  /* --- IPAD HORIZONTAL (Landscape) --- */
   @media (orientation: landscape) {
     #master-stage {
       height: 100vh !important;
-      display: grid !important;
+      display: flex !important;
+      align-items: center !important;
       padding-top: 0 !important;
     }
+
     .stage-inner {
       display: grid !important;
-      grid-template-columns: 1.2fr auto 1.2fr !important;
+      grid-template-columns: 1.4fr auto 1.4fr !important;
       flex-direction: row !important;
-      gap: 1.5rem !important;
+      align-items: center !important;
+      gap: 1rem !important;
+      width: 95% !important;
+      margin: 0 auto !important;
     }
-    .tilt-card {
-      width: 30vw !important;
-      height: 55vh !important;
-      max-height: 400px;
+
+    .card-layer {
+      order: 2 !important;
       margin: 0 !important;
     }
+
+    .tilt-card {
+      width: 28vw !important;
+      height: 45vh !important;
+      max-height: 380px;
+      margin: 0 !important;
+    }
+
     .hero-text {
-      display: grid !important;
+      display: contents !important;
     }
-    .hero-ref-big {
-      font-size: 7.5vw !important;
-      white-space: nowrap;
+
+    .hero-ref-left {
+      order: 1 !important;
+      justify-self: end !important;
+      text-align: right !important;
     }
+
     .hero-ref-right {
-      align-items: flex-start;
-      text-align: left;
+      order: 3 !important;
+      justify-self: start !important;
+      text-align: left !important;
       padding-top: 0 !important;
     }
-    .hero-ref-left {
-      justify-self: end;
+
+    .hero-ref-big {
+      font-size: 6.5vw !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
     }
+
+    .hero-ref-sub {
+      font-size: 1.1rem !important;
+      max-width: 250px;
+      margin-left: 0 !important;
+    }
+  }
+
+  .hybrid-grid {
+    grid-template-columns: 1fr 1fr !important;
+    display: grid !important;
+    gap: 1.5rem !important;
   }
 }
 
-/* D. AJUSTES EXCLUSIVOS MÓVIL (Menos de 768px) */
 @media (max-width: 768px) {
   #master-stage {
     padding-top: 80px !important;
@@ -1288,11 +1259,11 @@ details.is-open .accordion-icon::after {
     max-height: 450px;
   }
   .hybrid-grid {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
   }
   .photo-area {
-    height: 300px;
+    height: 300px !important;
   }
   .projects-grid {
     grid-template-columns: 1fr;
@@ -1302,7 +1273,6 @@ details.is-open .accordion-icon::after {
   }
 }
 
-/* E. MÓVIL MUY PEQUEÑO */
 @media (max-width: 480px) {
   .hero-ref-left .hero-ref-big,
   .hero-ref-right .hero-ref-big {
