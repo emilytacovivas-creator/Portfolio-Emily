@@ -393,12 +393,300 @@
         </div>
       </section>
 
-      <section id="photography" class="section-alt py-5">
-        <div class="container gsap-reveal">
-          <h2 class="section-title mb-4">Photography</h2>
-          <p>Luego aquí montamos la grid de fotos.</p>
+      <section id="projects" class="py-5">
+        <div class="container">
+          <div class="row mb-5 gsap-reveal">
+            <div class="col-12">
+              <h2 class="display-3 fw-medium mb-3 title-with-accent">
+                <span class="d-block">Selección de</span>
+                <span class="d-block">
+                  proyectos
+                  <span class="accent-serif fst-italic">destacados</span>
+                </span>
+              </h2>
+              <p class="lead text-muted">
+                Una selección curada de mis trabajos favoritos en branding,
+                ilustración y fotografía.
+              </p>
+            </div>
+          </div>
+
+          <div class="projects-grid gsap-reveal">
+            <div
+              class="project-card"
+              data-bs-toggle="modal"
+              data-bs-target="#projectModal1"
+            >
+              <img
+                src="https://images.pexels.com/photos/354939/pexels-photo-354939.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Proyecto Branding"
+              />
+              <div class="project-overlay">
+                <div class="text-center">
+                  <span class="project-category">Branding</span>
+                  <h3 class="project-title">Identidad Visual "Oryx"</h3>
+                  <p class="project-more">Ver galería</p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="project-card"
+              data-bs-toggle="modal"
+              data-bs-target="#projectModal2"
+            >
+              <img
+                src="https://images.pexels.com/photos/159644/art-supplies-brushes-rulers-scissors-159644.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Proyecto Ilustración"
+              />
+              <div class="project-overlay">
+                <div class="text-center">
+                  <span class="project-category">Ilustración</span>
+                  <h3 class="project-title">Editorial "Sueños"</h3>
+                  <p class="project-more">Ver galería</p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="project-card"
+              data-bs-toggle="modal"
+              data-bs-target="#projectModal3"
+            >
+              <img
+                src="https://images.pexels.com/photos/1457812/pexels-photo-1457812.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Proyecto Fotografía"
+              />
+              <div class="project-overlay">
+                <div class="text-center">
+                  <span class="project-category">Fotografía</span>
+                  <h3 class="project-title">Retratos Urbanos</h3>
+                  <p class="project-more">Ver galería</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+
+      <div
+        class="modal fade"
+        id="projectModal1"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body pt-0">
+              <div
+                id="carouselProject1"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img
+                      src="https://images.pexels.com/photos/354939/pexels-photo-354939.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      class="d-block w-100"
+                      alt="Imagen 1"
+                    />
+                  </div>
+                  <div class="carousel-item">
+                    <img
+                      src="https://images.pexels.com/photos/414974/pexels-photo-414974.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      class="d-block w-100"
+                      alt="Imagen 2"
+                    />
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselProject1"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselProject1"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              </div>
+              <div class="mt-4">
+                <h3>Identidad Visual "Oryx"</h3>
+                <p>
+                  Descripción detallada del proyecto de branding. Aquí explicas
+                  tu proceso creativo, los colores elegidos y el objetivo de la
+                  marca.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="projectModal2"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body pt-0">
+              <div
+                id="carouselProject2"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img
+                      src="https://images.pexels.com/photos/159644/art-supplies-brushes-rulers-scissors-159644.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      class="d-block w-100"
+                      alt="Ilustración 1"
+                    />
+                  </div>
+                  <div class="carousel-item">
+                    <img
+                      src="https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      class="d-block w-100"
+                      alt="Ilustración 2"
+                    />
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselProject2"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselProject2"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              </div>
+              <div class="mt-4">
+                <h3>Editorial "Sueños"</h3>
+                <p>
+                  Ilustraciones digitales realizadas para una revista
+                  independiente.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="projectModal3"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body pt-0">
+              <div
+                id="carouselProject3"
+                class="carousel slide"
+                data-bs-ride="carousel"
+              >
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img
+                      src="https://images.pexels.com/photos/1457812/pexels-photo-1457812.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      class="d-block w-100"
+                      alt="Foto 1"
+                    />
+                  </div>
+                  <div class="carousel-item">
+                    <img
+                      src="https://images.pexels.com/photos/1553783/pexels-photo-1553783.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                      class="d-block w-100"
+                      alt="Foto 2"
+                    />
+                  </div>
+                </div>
+                <button
+                  class="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#carouselProject3"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+                <button
+                  class="carousel-control-next"
+                  type="button"
+                  data-bs-target="#carouselProject3"
+                  data-bs-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              </div>
+              <div class="mt-4">
+                <h3>Retratos Urbanos</h3>
+                <p>
+                  Sesión fotográfica en exteriores explorando la luz natural.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <section id="design" class="py-5">
         <div class="container gsap-reveal">
