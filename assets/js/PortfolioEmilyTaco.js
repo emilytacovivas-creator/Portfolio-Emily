@@ -4,7 +4,6 @@
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-// Forzar el scroll al inicio al recargar
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 window.scrollTo(0, 0);
 
@@ -12,7 +11,7 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
-/* 1. LENIS (Smooth Scroll) */
+/* 1. LENIS */
 let lenis = null;
 if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
@@ -20,7 +19,7 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   gsap.ticker.add((t) => lenis.raf(t * 1000));
 }
 
-/* 2. SETUP 3D (Efecto Tilt de la tarjeta) */
+/* 2. SETUP 3D */
 function setup3D() {
   if (!document.querySelector(".tilt-stage")) return;
   gsap.set(".tilt-stage", { perspective: 1600, transformStyle: "preserve-3d" });
@@ -30,11 +29,10 @@ function setup3D() {
     force3D: true,
   });
   gsap.set(".wave-badge", { z: 40 });
-  // Aseguramos visibilidad inicial de secciones
   gsap.set(".gsap-reveal", { opacity: 1, y: 0 });
 }
 
-/* 3. NAVEGACIÓN ACTIVA (Scrollspy personalizado) */
+/* 3. NAVEGACIÓN ACTIVA */
 function updateActiveNav(id) {
   const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
   navLinks.forEach((link) => {
@@ -45,13 +43,14 @@ function updateActiveNav(id) {
   });
 }
 
-/* 4. ANIMACIÓN PRINCIPAL (HOME -> SERVICIOS) */
+/* 4. ANIMACIÓN PRINCIPAL (FIX IPAD: CAMBIADO A 1025PX) */
 function initMasterScroll() {
   const stage = document.querySelector("#master-stage");
   if (!stage) return;
 
   ScrollTrigger.matchMedia({
-    "(min-width: 992px)": function () {
+    /* ESCRITORIO (SOLO PANTALLAS GRANDES) - CON PIN */
+    "(min-width: 1025px)": function () {
       const card = document.querySelector("#tiltCard");
       const heroText = document.querySelector("#heroText");
       const servicesText = document.querySelector("#servicesText");
@@ -91,7 +90,8 @@ function initMasterScroll() {
           "start+=0.2"
         );
     },
-    "(max-width: 991px)": function () {
+    /* TABLET Y MÓVIL (IPAD INCLUIDO) - SIN PIN (SCROLL NORMAL) */
+    "(max-width: 1024px)": function () {
       ScrollTrigger.create({
         trigger: "#services-layer",
         start: "top 20%",
@@ -114,7 +114,7 @@ function initMasterScroll() {
   });
 }
 
-/* 5. ANIMACIÓN DE ENTRADA (Intro) */
+/* 5. INTRO */
 function intro() {
   const tiltCard = document.querySelector("#tiltCard");
   if (!tiltCard) {
@@ -157,7 +157,7 @@ function intro() {
     );
 }
 
-/* 6. REVELAR SECCIONES AL HACER SCROLL */
+/* 6. REVEAL */
 function revealRestOfSite() {
   gsap.utils.toArray(".gsap-reveal").forEach((el) => {
     gsap.fromTo(
@@ -178,7 +178,7 @@ function revealRestOfSite() {
   });
 }
 
-/* 7. LÓGICA DE NAVEGACIÓN Y MENÚ */
+/* 7. NAV LOGIC */
 function initNavLogic() {
   const navbar = document.getElementById("navbar");
   const navCollapse = document.getElementById("navbarNav");
@@ -186,7 +186,6 @@ function initNavLogic() {
     ".navbar-nav .nav-link, .navbar-brand"
   );
 
-  // 1. Detectar apertura/cierre para cambiar el fondo
   if (navCollapse && navbar) {
     navCollapse.addEventListener("show.bs.collapse", () => {
       navbar.classList.add("menu-open");
@@ -196,12 +195,10 @@ function initNavLogic() {
     });
   }
 
-  // 2. Cerrar menú al hacer clic en un enlace (Smooth Scroll)
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
       const targetId = link.getAttribute("href");
 
-      // Si es un enlace interno (#), prevenimos default y hacemos scroll suave
       if (targetId.includes("#")) {
         e.preventDefault();
         const pureId = targetId.includes(".html")
@@ -212,8 +209,7 @@ function initNavLogic() {
         let scrollTarget = 0;
         if (pureId !== "master-stage" && targetElement) {
           scrollTarget = targetElement;
-          // Ajuste específico para Servicios en Desktop
-          if (pureId === "services-layer" && window.innerWidth >= 992) {
+          if (pureId === "services-layer" && window.innerWidth >= 1025) {
             scrollTarget = window.innerHeight * 1.2;
           }
         }
@@ -229,7 +225,6 @@ function initNavLogic() {
         }
       }
 
-      // IMPORTANTE: Cerrar el menú si está abierto
       if (navCollapse && navCollapse.classList.contains("show")) {
         const bsCollapse = bootstrap.Collapse.getInstance(navCollapse);
         if (bsCollapse) bsCollapse.hide();
@@ -238,7 +233,7 @@ function initNavLogic() {
   });
 }
 
-/* 8. ACORDEÓN DE SERVICIOS */
+/* 8. ACORDEÓN */
 function initAccordion() {
   document.querySelectorAll(".services-accordion details").forEach((det) => {
     const summary = det.querySelector("summary");
@@ -264,7 +259,7 @@ function initAccordion() {
   });
 }
 
-/* 9. FUNCIÓN COPIAR AL PORTAPAPELES */
+/* 9. COPIAR */
 function initContactCopy() {
   document.querySelectorAll(".btn-contact-copy").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -285,7 +280,7 @@ function initContactCopy() {
   });
 }
 
-/* 10. LÓGICA PÁGINA 404 */
+/* 10. ERROR 404 */
 function initErrorPage() {
   const errorContainer = document.querySelector(".error-container");
   if (errorContainer) {
@@ -299,17 +294,17 @@ function initErrorPage() {
   }
 }
 
-/* --- INICIALIZACIÓN GENERAL --- */
+/* --- INIT --- */
 window.addEventListener("DOMContentLoaded", () => {
   setup3D();
-  initNavLogic(); // Nueva función unificada para el menú
+  initNavLogic();
   initAccordion();
   initContactCopy();
   initErrorPage();
   intro();
 });
 
-/* --- FUNCIONALIDAD FORMULARIO DE CONTACTO (SIMULADO) --- */
+/* FORM */
 const contactForm = document.getElementById("contactForm");
 if (contactForm) {
   contactForm.addEventListener("submit", function (e) {
