@@ -245,12 +245,13 @@ section {
 /* 6. MASTER STAGE
    -------------------------------------------------------------------------- */
 #master-stage {
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   width: 100%;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: grid;
-  place-items: center;
+  place-items: start; /* CAMBIO: Alineamos al inicio, no al centro global */
   padding: 0 !important;
 }
 
@@ -262,18 +263,22 @@ section {
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   transform: none;
-  margin-top: 7vh;
+  margin-top: 0;
 }
 
+/* Capas comunes */
 .card-layer,
 .text-layer {
   grid-column: 1 / -1;
   grid-row: 1 / -1;
   width: 100%;
-  height: 100%;
   pointer-events: none;
-  display: grid;
-  place-items: center;
+  /* CAMBIO: Forzamos altura de pantalla completa para centrado interno */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrado vertical interno */
+  align-items: center;
 }
 
 .services-accordion,
@@ -285,13 +290,15 @@ section {
   z-index: 20;
 }
 
+/* HERO TEXT: Grid específico */
 .hero-text {
   z-index: 10;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
+  align-items: center; /* Centrado vertical del grid */
   column-gap: clamp(2rem, 4vw, 5rem);
   width: 100%;
+  height: 100vh; /* Asegura que ocupe toda la pantalla */
 }
 
 .hero-ghost-center {
@@ -308,10 +315,12 @@ section {
   opacity: 0;
   transform: translateY(100px);
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  height: auto !important;
+  padding-bottom: 3rem;
   padding-top: calc(var(--nav-h) + 4rem);
+  background-color: var(--bg-main);
 }
-
 /* 7. ESTILOS VISUALES 
    -------------------------------------------------------------------------- */
 .hero-ref-left {
@@ -465,6 +474,11 @@ section {
 
 /* 8. SERVICIOS
    -------------------------------------------------------------------------- */
+.services-accordion {
+  width: 100%;
+  margin-bottom: 5rem;
+}
+
 .services-accordion details {
   border-bottom: 1px solid rgba(28, 20, 16, 0.15);
   padding: 1rem 0;
@@ -491,11 +505,6 @@ section {
   color: var(--accent);
 }
 
-.services-accordion summary:hover .accordion-icon::before,
-.services-accordion summary:hover .accordion-icon::after {
-  background-color: var(--accent);
-}
-
 .services-accordion summary::-webkit-details-marker {
   display: none;
 }
@@ -510,14 +519,17 @@ section {
   flex-shrink: 0;
 }
 
+/* --- ICONO ANIMADO (+ a -) --- */
 .accordion-icon {
   position: relative;
   width: 20px;
   height: 20px;
   margin-left: auto;
   flex-shrink: 0;
+  transition: transform 0.4s ease; /* Transición suave para el contenedor */
 }
 
+/* Líneas del icono (Horizontal y Vertical) */
 .accordion-icon::before,
 .accordion-icon::after {
   content: "";
@@ -528,17 +540,33 @@ section {
   right: 0;
   height: 2px;
   transform: translateY(-50%);
-  transition: transform 0.4s ease, background-color 0.3s ease;
+  /* Esta transición es la que anima el cambio de forma */
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+    background-color 0.3s ease;
 }
 
+/* Al hacer hover en el texto, el icono cambia de color */
+.services-accordion summary:hover .accordion-icon::before,
+.services-accordion summary:hover .accordion-icon::after {
+  background-color: var(--accent);
+}
+
+/* La línea vertical está rotada 90 grados para formar el + */
 .accordion-icon::after {
   transform: translateY(-50%) rotate(90deg);
 }
 
-details.is-open .accordion-icon::after {
+/* ESTADO ABIERTO: La línea vertical rota a 0 grados (se tumba) para formar el - */
+details[open] .accordion-icon::after {
   transform: translateY(-50%) rotate(0deg);
 }
 
+/* Opcional: Rotación sutil de todo el icono al abrir */
+details[open] .accordion-icon {
+  transform: rotate(180deg);
+}
+
+/* --- CONTENIDO --- */
 .accordion-content {
   padding-left: 3.5rem;
   padding-top: 0;
@@ -571,7 +599,6 @@ details.is-open .accordion-icon::after {
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-
 /* 9. SOFTWARE MARQUEE SECTION
    -------------------------------------------------------------------------- */
 .software-badge {
@@ -1385,20 +1412,37 @@ details.is-open .accordion-icon::after {
     padding-block: 3rem !important;
   }
 
-  /* --- LANDING PAGE: ORDEN PERSONALIZADO (Diseño -> Tarjeta -> Gráfico) --- */
+  /* --- LANDING PAGE --- */
+
   #master-stage {
     height: auto !important;
+    min-height: auto !important;
     display: block;
     overflow: visible;
     padding-top: 120px !important;
+    padding-bottom: 60px !important;
   }
 
   .stage-inner {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    margin-top: 0;
+    height: auto !important;
+    gap: 30px;
+  }
+
+  .hero-text,
+  .card-layer,
+  .text-layer {
+    height: auto !important;
+    min-height: auto !important;
+    position: relative !important;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 2vh;
+    width: 100%;
   }
 
   .hero-text {
@@ -1412,14 +1456,17 @@ details.is-open .accordion-icon::after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    padding-top: 0;
   }
+
   .hero-ref-name {
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
     width: 100%;
     text-align: center;
   }
+
   .hero-ref-left .hero-ref-big {
     font-size: 15vw !important;
     line-height: 1;
@@ -1429,12 +1476,9 @@ details.is-open .accordion-icon::after {
 
   .card-layer {
     order: 2;
-    position: relative;
-    width: 100%;
-    margin: 1rem 0;
     z-index: 5;
-    display: flex;
-    justify-content: center;
+    margin: 0;
+    padding: 0;
   }
 
   .tilt-stage {
@@ -1448,6 +1492,7 @@ details.is-open .accordion-icon::after {
     max-width: 400px;
     max-height: 500px;
     margin: 0 auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   }
 
   .card-back {
@@ -1464,8 +1509,9 @@ details.is-open .accordion-icon::after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 1rem !important;
+    padding-top: 0 !important;
   }
+
   .hero-ref-right .hero-ref-big {
     font-size: 15vw !important;
     line-height: 1;
@@ -1473,6 +1519,7 @@ details.is-open .accordion-icon::after {
     width: 100%;
     text-align: center;
   }
+
   .hero-ref-sub {
     margin-top: 1rem;
     padding: 0 1rem;
@@ -1488,12 +1535,16 @@ details.is-open .accordion-icon::after {
     transform: none !important;
     width: 100% !important;
     display: block !important;
-    padding-top: 5rem !important;
+    padding-top: 3rem !important;
+    height: auto !important;
+    min-height: auto !important;
   }
+
   .services-text .col-lg-6 {
     width: 100% !important;
     padding-right: 0 !important;
   }
+
   .services-accordion {
     width: 100% !important;
   }
@@ -1509,7 +1560,6 @@ details.is-open .accordion-icon::after {
     height: 80px;
   }
 
-  /* CONTACTO EN COLUMNA */
   #contact {
     margin-top: 0 !important;
   }
@@ -1528,16 +1578,24 @@ details.is-open .accordion-icon::after {
   @media (orientation: landscape) {
     #master-stage {
       padding-top: 12vh !important;
+      height: 100vh !important;
+      min-height: 600px !important;
     }
     .stage-inner {
       display: grid !important;
       grid-template-columns: 1fr auto 1fr !important;
       align-items: center !important;
+      gap: 0 !important;
     }
     .card-layer {
       order: 2 !important;
       width: auto !important;
       margin: 0 !important;
+      height: 100% !important;
+    }
+    .hero-text {
+      display: grid !important;
+      height: 100% !important;
     }
     .hero-ref-left {
       order: 1 !important;
@@ -1563,7 +1621,7 @@ details.is-open .accordion-icon::after {
 
 @media (max-width: 767px) {
   #master-stage {
-    padding-top: 80px !important;
+    padding-top: 100px !important;
     padding-bottom: 50px !important;
   }
 
@@ -1589,7 +1647,6 @@ details.is-open .accordion-icon::after {
     order: 5;
   }
 
-  /* Proyectos en 1 columna */
   .projects-grid {
     grid-template-columns: 1fr;
   }
@@ -1609,5 +1666,8 @@ details.is-open .accordion-icon::after {
   .hero-ref-left .hero-ref-big,
   .hero-ref-right .hero-ref-big {
     font-size: 16vw !important;
+  }
+  .stage-inner {
+    gap: 20px;
   }
 }
