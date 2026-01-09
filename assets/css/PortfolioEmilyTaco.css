@@ -345,6 +345,7 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   display: block;
 }
 
@@ -653,13 +654,15 @@ details.is-open .accordion-icon::after {
 .photo-area {
   grid-column: 3 / 4;
   grid-row: 1 / 3;
-  min-height: 100%;
+  max-height: 500px;
+  height: 100%;
 }
 
 .photo-area img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   filter: grayscale(100%);
   transition: filter 0.5s ease, transform 0.6s ease;
   display: block;
@@ -827,7 +830,73 @@ details.is-open .accordion-icon::after {
 .carousel-control-next-icon {
   filter: invert(1);
 }
+/* --- ESTILOS EXCLUSIVOS PARA EL VIDEO CENTRADO --- */
 
+.video-standalone-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 4rem; /* Espacio con la fila de arriba */
+}
+
+.video-card-direct {
+  width: 100%;
+  max-width: 550px; /* Tamaño controlado del reproductor */
+  text-align: center;
+}
+
+.video-container-inline {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  background: #000;
+}
+
+.inline-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-video-info {
+  margin-top: 1.5rem;
+}
+
+.video-category-label {
+  display: block;
+  color: var(--text-dark);
+  opacity: 0.5;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.4rem;
+}
+
+.video-title-label {
+  color: var(--text-dark);
+  font-size: 1.8rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Ajustes para tablets y móviles */
+@media (max-width: 768px) {
+  .video-card-direct {
+    max-width: 90%;
+  }
+
+  .video-title-label {
+    font-size: 1.5rem;
+  }
+
+  .video-standalone-section {
+    margin-top: 2.5rem;
+  }
+}
 /* 12. CONTACT SECTION 
    -------------------------------------------------------------------------- */
 .contact-grid {
@@ -937,7 +1006,128 @@ details.is-open .accordion-icon::after {
   transform: rotate(0deg) scale(1.05);
 }
 
-/* 13. UTILIDADES
+/* --- FOOTER STYLES --- */
+.minimal-footer {
+  background-color: var(--bg-tertiary);
+  color: var(--text-dark);
+  padding: 3rem 0 2rem 0;
+}
+
+.footer-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10rem;
+  margin-bottom: 3rem;
+}
+
+.footer-box {
+  text-align: left;
+  min-width: 150px;
+}
+
+.footer-tagline-medium {
+  text-align: center;
+  font-size: 1.8rem;
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-left: -20px;
+}
+
+.footer-label {
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  opacity: 0.5;
+}
+
+.footer-list {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-list a {
+  text-decoration: none;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.footer-list a:hover {
+  color: var(--accent);
+}
+
+.social-circles {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fffaef;
+  transition: all 0.3s ease;
+}
+
+.social-icon-custom {
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover,
+.social-icon-custom:hover {
+  transform: translateY(-4px);
+  opacity: 0.8;
+}
+
+.footer-email-link {
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+.footer-credits-centered {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.75rem;
+  opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+  .footer-content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2.5rem;
+  }
+
+  .social-circles {
+    justify-content: center;
+  }
+
+  .footer-tagline-medium {
+    margin-left: 0;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+}
+/* 14. UTILIDADES
    -------------------------------------------------------------------------- */
 .gsap-reveal {
   opacity: 0;
