@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Emily Taco · Portfolio - FIX TOTAL: Subrayado + Visibilidad
+   Emily Taco · Portfolio 
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -21,6 +21,7 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
 
 /* 2. SETUP 3D */
 function setup3D() {
+  if (!document.querySelector(".tilt-stage")) return;
   gsap.set(".tilt-stage", { perspective: 1600, transformStyle: "preserve-3d" });
   gsap.set("#tiltCard", {
     transformStyle: "preserve-3d",
@@ -28,23 +29,26 @@ function setup3D() {
     force3D: true,
   });
   gsap.set(".wave-badge", { z: 40 });
-  // Aseguramos visibilidad inicial de secciones
-  gsap.set(".gsap-reveal", { opacity: 1, y: 0 });
 }
 
 /* 3. NAVEGACIÓN ACTIVA (SCROLLSPY FIX) */
 function updateActiveNav(id) {
   const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
   navLinks.forEach((link) => {
-    link.classList.toggle("active", link.getAttribute("href") === id);
+    link.classList.toggle(
+      "active",
+      link.getAttribute("href") === id || link.getAttribute("href").includes(id)
+    );
   });
 }
 
 /* 4. ANIMACIÓN PRINCIPAL (HOME -> SERVICIOS) */
 function initMasterScroll() {
+  const stage = document.querySelector("#master-stage");
+  if (!stage) return;
+
   ScrollTrigger.matchMedia({
     "(min-width: 992px)": function () {
-      const stage = document.querySelector("#master-stage");
       const card = document.querySelector("#tiltCard");
       const heroText = document.querySelector("#heroText");
       const servicesText = document.querySelector("#servicesText");
@@ -57,7 +61,6 @@ function initMasterScroll() {
           scrub: 1,
           pin: true,
           onUpdate: (self) => {
-            // Si el scroll de la home pasa del 40%, subrayamos Servicios
             if (self.progress > 0.4) {
               updateActiveNav("#services-layer");
             } else {
@@ -86,7 +89,6 @@ function initMasterScroll() {
         );
     },
     "(max-width: 991px)": function () {
-      // En móvil no hay animación de pin, Servicios es una sección normal
       ScrollTrigger.create({
         trigger: "#services-layer",
         start: "top 20%",
@@ -95,20 +97,28 @@ function initMasterScroll() {
     },
   });
 
-  // ScrollSpy para el resto de la web
   ["#about", "#projects", "#contact"].forEach((id) => {
-    ScrollTrigger.create({
-      trigger: id,
-      start: "top 40%",
-      end: "bottom 40%",
-      onEnter: () => updateActiveNav(id),
-      onEnterBack: () => updateActiveNav(id),
-    });
+    const el = document.querySelector(id);
+    if (el) {
+      ScrollTrigger.create({
+        trigger: id,
+        start: "top 40%",
+        end: "bottom 40%",
+        onEnter: () => updateActiveNav(id),
+        onEnterBack: () => updateActiveNav(id),
+      });
+    }
   });
 }
 
 /* 5. INTRO ANIMATION */
 function intro() {
+  const tiltCard = document.querySelector("#tiltCard");
+  if (!tiltCard) {
+    revealRestOfSite();
+    return;
+  }
+
   const heroTl = gsap.timeline({
     onComplete: () => {
       if (lenis) lenis.start();
@@ -144,7 +154,7 @@ function intro() {
     );
 }
 
-/* 6. REVEAL SECTIONS (EVITA QUE DESAPAREZCAN) */
+/* 6. REVEAL SECTIONS (FOOTER Y OTROS) */
 function revealRestOfSite() {
   gsap.utils.toArray(".gsap-reveal").forEach((el) => {
     gsap.fromTo(
@@ -157,7 +167,7 @@ function revealRestOfSite() {
         ease: "power2.out",
         scrollTrigger: {
           trigger: el,
-          start: "top 95%", // Se activa en cuanto asoma un poco
+          start: "top 95%",
           toggleActions: "play none none none",
         },
       }
@@ -171,16 +181,30 @@ function initNavClick() {
     .querySelectorAll(".navbar-nav .nav-link, .navbar-brand")
     .forEach((link) => {
       link.addEventListener("click", (e) => {
-        e.preventDefault();
         const targetId = link.getAttribute("href");
 
+        if (targetId.includes(".html") && !targetId.includes("#")) return;
+
+        e.preventDefault();
+        const pureId = targetId.includes("#")
+          ? targetId.split("#")[1]
+          : targetId;
+        const targetElement = document.getElementById(pureId);
+
         let scrollTarget;
-        if (targetId === "#master-stage") {
+        if (pureId === "master-stage") {
           scrollTarget = 0;
-        } else if (targetId === "#services-layer" && window.innerWidth >= 992) {
-          scrollTarget = window.innerHeight * 1.2; // Baja al punto de servicios en PC
+        } else if (
+          pureId === "services-layer" &&
+          window.innerWidth >= 992 &&
+          document.querySelector("#master-stage")
+        ) {
+          scrollTarget = window.innerHeight * 1.2;
+        } else if (targetElement) {
+          scrollTarget = targetElement;
         } else {
-          scrollTarget = document.querySelector(targetId);
+          window.location.href = targetId;
+          return;
         }
 
         if (lenis) lenis.scrollTo(scrollTarget, { offset: -80 });
@@ -192,9 +216,8 @@ function initNavClick() {
           window.scrollTo({ top, behavior: "smooth" });
         }
 
-        // Cerrar menú móvil
         const navbarCollapse = document.querySelector(".navbar-collapse");
-        if (navbarCollapse.classList.contains("show")) {
+        if (navbarCollapse && navbarCollapse.classList.contains("show")) {
           bootstrap.Collapse.getInstance(navbarCollapse).hide();
         }
       });
@@ -243,11 +266,27 @@ function initContactCopy() {
   });
 }
 
+/* 9. LÓGICA 404 */
+function initErrorPage() {
+  const errorContainer = document.querySelector(".error-container");
+  if (errorContainer) {
+    gsap.from(errorContainer, {
+      opacity: 0,
+      y: 30,
+      duration: 1,
+      ease: "power2.out",
+    });
+
+    gsap.to(".gsap-reveal", { opacity: 1, y: 0, duration: 1, delay: 0.5 });
+  }
+}
+
 /* --- INICIALIZACIÓN --- */
 window.addEventListener("DOMContentLoaded", () => {
   setup3D();
   initNavClick();
   initAccordion();
   initContactCopy();
+  initErrorPage();
   intro();
 });
