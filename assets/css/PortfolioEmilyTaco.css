@@ -133,7 +133,7 @@ img {
   position: relative;
   padding-inline: 0.75rem;
   display: flex;
-  align-items: center; /* Centra el texto verticalmente con el botón */
+  align-items: center;
 }
 
 .navbar-nav .nav-link::after {
@@ -184,14 +184,14 @@ img {
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
-  padding-bottom: 0.5rem; /* Ajuste al abrir */
+  padding-bottom: 0.5rem;
 }
 
 /* --- BOTÓN CTA EN NAVBAR --- */
 .btn-navbar-cta {
   background-color: var(--accent);
   color: var(--bg-main) !important;
-  padding: 0.6rem 1.8rem !important; /* Un poco más grande */
+  padding: 0.6rem 1.8rem !important;
   border-radius: 50px;
   border: 2px solid var(--accent);
   font-weight: 700 !important;
@@ -201,7 +201,7 @@ img {
   margin-left: 1.5rem;
   display: inline-block;
   text-align: center;
-  line-height: 1; /* Asegura centrado vertical del texto */
+  line-height: 1;
 }
 
 .btn-navbar-cta:hover {
@@ -221,7 +221,7 @@ img {
     margin-top: 1rem;
     width: 100%;
     display: block;
-    padding: 0.8rem 0 !important; /* Más fácil de tocar en móvil */
+    padding: 0.8rem 0 !important;
   }
 }
 /* 5. SECCIONES
@@ -312,7 +312,7 @@ section {
   padding-top: calc(var(--nav-h) + 4rem);
 }
 
-/* 7. ESTILOS VISUALES (HERO & TILT - ESCRITORIO)
+/* 7. ESTILOS VISUALES 
    -------------------------------------------------------------------------- */
 .hero-ref-left {
   justify-self: end;
@@ -939,7 +939,6 @@ details.is-open .accordion-icon::after {
   margin: 0;
 }
 
-/* Ajustes para tablets y móviles */
 @media (max-width: 768px) {
   .video-card-direct {
     max-width: 90%;
@@ -1114,6 +1113,7 @@ details.is-open .accordion-icon::after {
 .small-email {
   font-size: 0.85rem;
 }
+
 /* ERROR 404 */
 
 .error-page {
@@ -1341,7 +1341,6 @@ details.is-open .accordion-icon::after {
 /* 14. MEDIA QUERIES & RESPONSIVE
    -------------------------------------------------------------------------- */
 
-/* Ajuste específico para portátiles con poca altura */
 @media screen and (min-width: 1025px) and (max-height: 850px) {
   .tilt-card,
   .hero-ghost-center {
@@ -1360,7 +1359,6 @@ details.is-open .accordion-icon::after {
     backdrop-filter: blur(8px);
   }
 
-  /* Restauramos imágenes a color */
   .marquee-group img,
   .photo-area img {
     filter: grayscale(0%) !important;
@@ -1392,7 +1390,7 @@ details.is-open .accordion-icon::after {
     height: auto !important;
     display: block;
     overflow: visible;
-    padding-top: 120px !important; /* Espacio para el navbar */
+    padding-top: 120px !important;
   }
 
   .stage-inner {
@@ -1404,10 +1402,9 @@ details.is-open .accordion-icon::after {
   }
 
   .hero-text {
-    display: contents; /* Desactiva el grid para usar order flex */
+    display: contents;
   }
 
-  /* 1. Texto DISEÑO */
   .hero-ref-left {
     order: 1;
     width: 100%;
@@ -1430,7 +1427,6 @@ details.is-open .accordion-icon::after {
     text-align: center;
   }
 
-  /* 2. Tarjeta Central (SIN FLIP) */
   .card-layer {
     order: 2;
     position: relative;
@@ -1442,11 +1438,11 @@ details.is-open .accordion-icon::after {
   }
 
   .tilt-stage {
-    perspective: none !important; /* Quita la perspectiva 3D */
+    perspective: none !important;
   }
 
   .tilt-card {
-    transform: none !important; /* Anula rotaciones */
+    transform: none !important;
     width: 70vw !important;
     height: 85vw !important;
     max-width: 400px;
@@ -1454,7 +1450,6 @@ details.is-open .accordion-icon::after {
     margin: 0 auto;
   }
 
-  /* Ocultamos la cara trasera para evitar giros extraños */
   .card-back {
     display: none !important;
   }
@@ -1462,7 +1457,6 @@ details.is-open .accordion-icon::after {
     transform: none !important;
   }
 
-  /* 3. Texto GRÁFICO */
   .hero-ref-right {
     order: 3;
     width: 100%;
@@ -1487,7 +1481,6 @@ details.is-open .accordion-icon::after {
     text-align: center;
   }
 
-  /* Servicios al final */
   .services-text {
     order: 6;
     position: relative;
@@ -1516,7 +1509,7 @@ details.is-open .accordion-icon::after {
     height: 80px;
   }
 
-  /* CONTACTO EN COLUMNA (Para Tablet y Móvil) */
+  /* CONTACTO EN COLUMNA */
   #contact {
     margin-top: 0 !important;
   }
@@ -1531,7 +1524,6 @@ details.is-open .accordion-icon::after {
   }
 }
 
-/* --- AJUSTES FINOS TABLET HORIZONTAL --- */
 @media (min-width: 769px) and (max-width: 1024px) {
   @media (orientation: landscape) {
     #master-stage {
@@ -1567,15 +1559,14 @@ details.is-open .accordion-icon::after {
   }
 }
 
-/* --- MÓVIL PURO (Menos de 768px) --- */
-/* Aquí forzamos la columna vertical para "Sobre Mí" */
+/* --- MÓVIL --- */
+
 @media (max-width: 767px) {
   #master-stage {
     padding-top: 80px !important;
     padding-bottom: 50px !important;
   }
 
-  /* SOBRE MÍ: Todo vertical solo en móvil */
   .hybrid-grid {
     display: flex !important;
     flex-direction: column !important;
