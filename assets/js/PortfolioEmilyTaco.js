@@ -4,6 +4,7 @@
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+// Forzar el scroll al inicio al recargar
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 window.scrollTo(0, 0);
 
@@ -11,7 +12,7 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
-/* 1. LENIS */
+/* 1. LENIS (Smooth Scroll) */
 let lenis = null;
 if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
@@ -19,7 +20,7 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   gsap.ticker.add((t) => lenis.raf(t * 1000));
 }
 
-/* 2. SETUP 3D */
+/* 2. SETUP 3D (Efecto Tilt de la tarjeta) */
 function setup3D() {
   if (!document.querySelector(".tilt-stage")) return;
   gsap.set(".tilt-stage", { perspective: 1600, transformStyle: "preserve-3d" });
@@ -31,7 +32,7 @@ function setup3D() {
   gsap.set(".wave-badge", { z: 40 });
 }
 
-/* 3. NAVEGACIÓN ACTIVA (SCROLLSPY FIX) */
+/* 3. NAVEGACIÓN ACTIVA (Scrollspy personalizado) */
 function updateActiveNav(id) {
   const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
   navLinks.forEach((link) => {
@@ -111,7 +112,7 @@ function initMasterScroll() {
   });
 }
 
-/* 5. INTRO ANIMATION */
+/* 5. ANIMACIÓN DE ENTRADA (Intro) */
 function intro() {
   const tiltCard = document.querySelector("#tiltCard");
   if (!tiltCard) {
@@ -154,7 +155,7 @@ function intro() {
     );
 }
 
-/* 6. REVEAL SECTIONS (FOOTER Y OTROS) */
+/* 6. REVELAR SECCIONES AL HACER SCROLL */
 function revealRestOfSite() {
   gsap.utils.toArray(".gsap-reveal").forEach((el) => {
     gsap.fromTo(
@@ -175,14 +176,13 @@ function revealRestOfSite() {
   });
 }
 
-/* 7. CLICS DEL NAV */
+/* 7. CLICS DEL NAVBAR (Smooth scroll manual) */
 function initNavClick() {
   document
     .querySelectorAll(".navbar-nav .nav-link, .navbar-brand")
     .forEach((link) => {
       link.addEventListener("click", (e) => {
         const targetId = link.getAttribute("href");
-
         if (targetId.includes(".html") && !targetId.includes("#")) return;
 
         e.preventDefault();
@@ -224,7 +224,7 @@ function initNavClick() {
     });
 }
 
-/* 8. ACORDEÓN Y COPIAR */
+/* 8. ACORDEÓN DE SERVICIOS */
 function initAccordion() {
   document.querySelectorAll(".services-accordion details").forEach((det) => {
     const summary = det.querySelector("summary");
@@ -250,14 +250,19 @@ function initAccordion() {
   });
 }
 
+/* 9. FUNCIÓN COPIAR AL PORTAPAPELES (Nuevos botones debajo del teléfono) */
 function initContactCopy() {
   document.querySelectorAll(".btn-contact-copy").forEach((btn) => {
     btn.addEventListener("click", () => {
-      navigator.clipboard.writeText(btn.getAttribute("data-copy-text"));
+      const textToCopy = btn.getAttribute("data-copy-text");
+      navigator.clipboard.writeText(textToCopy);
+
       const btnText = btn.querySelector(".btn-text");
       const original = btnText.innerText;
+
       btnText.innerText = "¡Copiado!";
       btn.classList.add("copied");
+
       setTimeout(() => {
         btnText.innerText = original;
         btn.classList.remove("copied");
@@ -266,7 +271,7 @@ function initContactCopy() {
   });
 }
 
-/* 9. LÓGICA 404 */
+/* 10. LÓGICA PÁGINA 404 */
 function initErrorPage() {
   const errorContainer = document.querySelector(".error-container");
   if (errorContainer) {
@@ -276,12 +281,11 @@ function initErrorPage() {
       duration: 1,
       ease: "power2.out",
     });
-
     gsap.to(".gsap-reveal", { opacity: 1, y: 0, duration: 1, delay: 0.5 });
   }
 }
 
-/* --- INICIALIZACIÓN --- */
+/* --- INICIALIZACIÓN GENERAL --- */
 window.addEventListener("DOMContentLoaded", () => {
   setup3D();
   initNavClick();
@@ -290,3 +294,27 @@ window.addEventListener("DOMContentLoaded", () => {
   initErrorPage();
   intro();
 });
+
+/* --- FUNCIONALIDAD FORMULARIO DE CONTACTO (SIMULADO) --- */
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById("submitBtn");
+    const formFeedback = document.getElementById("formFeedback");
+
+    submitBtn.innerText = "Enviando...";
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      contactForm.reset();
+      submitBtn.innerText = "Enviar mensaje";
+      submitBtn.disabled = false;
+      formFeedback.classList.remove("d-none");
+
+      setTimeout(() => {
+        formFeedback.classList.add("d-none");
+      }, 5000);
+    }, 1500);
+  });
+}
