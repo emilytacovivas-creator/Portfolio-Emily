@@ -1,12 +1,20 @@
-# Extensiones de sistema
+# Excluir dependencias 
+node_modules/
+
+# Excluir archivos de sistema 
 .DS_Store
 Thumbs.db
 
-# Configuración de editores (VS Code)
+# Excluir configuraciones de IDE 
 .vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Dependencias 
-node_modules/
-
-# Archivos temporales o de logs
+# Otros archivos temporales
+dist/
+build/
 *.log
