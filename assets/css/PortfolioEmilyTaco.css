@@ -168,6 +168,19 @@ img {
   transform: rotate(90deg);
 }
 
+/* --- CLASE ACTIVADA POR JS CUANDO EL MENÚ SE ABRE --- */
+.navbar-custom.menu-open {
+  background-color: var(--bg-tertiary) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
 /* 5. SECCIONES
    -------------------------------------------------------------------------- */
 section {
@@ -951,7 +964,7 @@ details.is-open .accordion-icon::after {
 }
 
 #contact h2.display-3 {
-  font-size: clamp(1.8rem, 4vw, 2.8rem) !important;
+  font-size: clamp(2rem, 5vw, 3rem) !important;
   line-height: 1.1;
   margin-bottom: 1.5rem !important;
   text-align: center;
@@ -1057,23 +1070,6 @@ details.is-open .accordion-icon::after {
 
 .small-email {
   font-size: 0.85rem;
-}
-
-@media (max-width: 992px) {
-  .contact-grid {
-    flex-direction: column;
-    max-height: none;
-    align-items: center;
-  }
-
-  .contact-panel {
-    width: 100%;
-    max-width: 600px;
-  }
-
-  .visual-element-recta {
-    max-height: 200px;
-  }
 }
 /* ERROR 404 */
 
@@ -1302,6 +1298,7 @@ details.is-open .accordion-icon::after {
 /* 14. MEDIA QUERIES & RESPONSIVE
    -------------------------------------------------------------------------- */
 
+/* Ajuste específico para portátiles con poca altura */
 @media screen and (min-width: 1025px) and (max-height: 850px) {
   .tilt-card,
   .hero-ghost-center {
@@ -1314,11 +1311,13 @@ details.is-open .accordion-icon::after {
   }
 }
 
+/* --- TABLET (iPad Vertical) Y MÓVIL (hasta 1024px) --- */
 @media (max-width: 1024px) {
   .navbar-custom {
     backdrop-filter: blur(8px);
   }
 
+  /* Restauramos imágenes a color */
   .marquee-group img,
   .photo-area img {
     filter: grayscale(0%) !important;
@@ -1328,6 +1327,7 @@ details.is-open .accordion-icon::after {
   .project-card img {
     filter: grayscale(0%) brightness(0.7) !important;
   }
+
   .project-overlay {
     opacity: 1 !important;
     transform: translateY(0) !important;
@@ -1335,6 +1335,7 @@ details.is-open .accordion-icon::after {
     align-items: flex-end !important;
     padding-bottom: 1.5rem !important;
   }
+
   .project-card:hover img {
     transform: none !important;
   }
@@ -1343,53 +1344,107 @@ details.is-open .accordion-icon::after {
     padding-block: 3rem !important;
   }
 
+  /* --- LANDING PAGE: ORDEN PERSONALIZADO (Diseño -> Tarjeta -> Gráfico) --- */
   #master-stage {
     height: auto !important;
     display: block;
     overflow: visible;
+    padding-top: 120px !important; /* Espacio para el navbar */
   }
+
   .stage-inner {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 3vh;
-  }
-  .hero-text {
-    display: contents;
+    justify-content: center;
+    margin-top: 2vh;
   }
 
-  .hero-ref-name {
+  .hero-text {
+    display: contents; /* Desactiva el grid para usar order flex */
+  }
+
+  /* 1. Texto DISEÑO */
+  .hero-ref-left {
     order: 1;
     width: 100%;
     text-align: center;
-    font-weight: 700;
-  }
-  .hero-ref-left .hero-ref-big {
-    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 1rem;
+  }
+  .hero-ref-name {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
     width: 100%;
     text-align: center;
   }
+  .hero-ref-left .hero-ref-big {
+    font-size: 15vw !important;
+    line-height: 1;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* 2. Tarjeta Central (SIN FLIP) */
   .card-layer {
-    order: 3;
+    order: 2;
     position: relative;
     width: 100%;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     z-index: 5;
+    display: flex;
+    justify-content: center;
+  }
+
+  .tilt-stage {
+    perspective: none !important; /* Quita la perspectiva 3D */
+  }
+
+  .tilt-card {
+    transform: none !important; /* Anula rotaciones */
+    width: 70vw !important;
+    height: 85vw !important;
+    max-width: 400px;
+    max-height: 500px;
+    margin: 0 auto;
+  }
+
+  /* Ocultamos la cara trasera para evitar giros extraños */
+  .card-back {
+    display: none !important;
+  }
+  .card-front {
+    transform: none !important;
+  }
+
+  /* 3. Texto GRÁFICO */
+  .hero-ref-right {
+    order: 3;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1rem !important;
   }
   .hero-ref-right .hero-ref-big {
-    order: 4;
-    margin-top: 1rem;
+    font-size: 15vw !important;
+    line-height: 1;
+    margin: 0;
     width: 100%;
     text-align: center;
   }
   .hero-ref-sub {
-    order: 5;
+    margin-top: 1rem;
+    padding: 0 1rem;
+    font-size: 1rem;
     width: 100%;
     text-align: center;
-    padding: 0 1rem;
   }
 
+  /* Servicios al final */
   .services-text {
     order: 6;
     position: relative;
@@ -1397,21 +1452,20 @@ details.is-open .accordion-icon::after {
     transform: none !important;
     width: 100% !important;
     display: block !important;
-    padding-top: 10vh !important;
+    padding-top: 5rem !important;
   }
   .services-text .col-lg-6 {
     width: 100% !important;
-    max-width: 100% !important;
     padding-right: 0 !important;
   }
   .services-accordion {
     width: 100% !important;
   }
 
-  .hero-ghost-center,
-  .card-back {
+  .hero-ghost-center {
     display: none;
   }
+
   .wave-badge {
     left: -10px;
     bottom: -10px;
@@ -1419,42 +1473,14 @@ details.is-open .accordion-icon::after {
     height: 80px;
   }
 
-  .hybrid-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    grid-template-rows: auto auto auto !important;
-    gap: 1.5rem !important;
-  }
-  .bio-area {
-    grid-column: 1 / 2 !important;
-    grid-row: 1 / 2 !important;
-  }
-  .photo-area {
-    grid-column: 2 / 3 !important;
-    grid-row: 1 / 2 !important;
-    height: 100% !important;
-    order: 0 !important;
-  }
-  .info-area-1 {
-    grid-column: 1 / 2 !important;
-    grid-row: 2 / 3 !important;
-  }
-  .info-area-2 {
-    grid-column: 2 / 3 !important;
-    grid-row: 2 / 3 !important;
-  }
-  .cta-area {
-    grid-column: 1 / -1 !important;
-    grid-row: 3 / 4 !important;
-  }
-
-  /* AJUSTE CONTACTO TABLET/LAPTOP */
+  /* CONTACTO EN COLUMNA (Para Tablet y Móvil) */
   #contact {
     margin-top: 0 !important;
   }
   .contact-grid {
     flex-direction: column;
     align-items: center;
+    max-height: none;
   }
   .contact-panel {
     width: 100%;
@@ -1462,83 +1488,92 @@ details.is-open .accordion-icon::after {
   }
 }
 
+/* --- AJUSTES FINOS TABLET HORIZONTAL --- */
 @media (min-width: 769px) and (max-width: 1024px) {
-  #master-stage {
-    padding-top: 14vh !important;
-    padding-bottom: 4rem !important;
-  }
-
-  .tilt-card {
-    width: 55vw !important;
-    height: 65vw !important;
-    max-width: 450px;
-    max-height: 550px;
-    margin: 2rem 0 !important;
-  }
-
   @media (orientation: landscape) {
+    #master-stage {
+      padding-top: 12vh !important;
+    }
     .stage-inner {
       display: grid !important;
       grid-template-columns: 1fr auto 1fr !important;
-      gap: 2rem !important;
+      align-items: center !important;
     }
     .card-layer {
       order: 2 !important;
       width: auto !important;
-    }
-    .tilt-card {
-      width: 25vw !important;
-      height: 38vw !important;
+      margin: 0 !important;
     }
     .hero-ref-left {
       order: 1 !important;
       text-align: right !important;
+      align-items: flex-end !important;
     }
     .hero-ref-right {
       order: 3 !important;
       text-align: left !important;
+      align-items: flex-start !important;
+    }
+    .tilt-card {
+      width: 28vw !important;
+      height: 40vw !important;
+    }
+    .hero-ref-big {
+      font-size: 8vw !important;
     }
   }
 }
 
-@media (max-width: 768px) {
+/* --- MÓVIL PURO (Menos de 768px) --- */
+/* Aquí forzamos la columna vertical para "Sobre Mí" */
+@media (max-width: 767px) {
   #master-stage {
     padding-top: 80px !important;
     padding-bottom: 50px !important;
   }
-  .hero-ref-left .hero-ref-big,
-  .hero-ref-right .hero-ref-big {
-    font-size: 18vw !important;
-  }
-  .tilt-card {
-    width: 85vw !important;
-    height: 100vw !important;
-    max-height: 400px;
-  }
+
+  /* SOBRE MÍ: Todo vertical solo en móvil */
   .hybrid-grid {
     display: flex !important;
     flex-direction: column !important;
+    gap: 1.5rem !important;
+  }
+  .bio-area {
+    order: 1;
   }
   .photo-area {
-    height: 300px !important;
+    order: 2;
+    height: 350px !important;
   }
+  .info-area-1 {
+    order: 3;
+  }
+  .info-area-2 {
+    order: 4;
+  }
+  .cta-area {
+    order: 5;
+  }
+
+  /* Proyectos en 1 columna */
   .projects-grid {
     grid-template-columns: 1fr;
   }
 
-  /* AJUSTE IMAGEN TELEFONO MÓVIL */
   .visual-element-recta {
-    max-height: 180px !important;
-    margin-bottom: 1.5rem;
+    max-height: 200px;
   }
-  .contact-panel {
-    padding: 1.5rem !important;
+
+  .hero-ref-left .hero-ref-big,
+  .hero-ref-right .hero-ref-big {
+    font-size: 18vw !important;
   }
 }
 
+/* MÓVIL PEQUEÑO */
 @media (max-width: 480px) {
   .hero-ref-left .hero-ref-big,
   .hero-ref-right .hero-ref-big {
-    font-size: 15vw !important;
+    font-size: 16vw !important;
   }
 }

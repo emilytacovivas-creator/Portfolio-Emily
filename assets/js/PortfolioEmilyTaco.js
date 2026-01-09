@@ -30,6 +30,8 @@ function setup3D() {
     force3D: true,
   });
   gsap.set(".wave-badge", { z: 40 });
+  // Aseguramos visibilidad inicial de secciones
+  gsap.set(".gsap-reveal", { opacity: 1, y: 0 });
 }
 
 /* 3. NAVEGACIÓN ACTIVA (Scrollspy personalizado) */
@@ -176,52 +178,64 @@ function revealRestOfSite() {
   });
 }
 
-/* 7. CLICS DEL NAVBAR (Smooth scroll manual) */
-function initNavClick() {
-  document
-    .querySelectorAll(".navbar-nav .nav-link, .navbar-brand")
-    .forEach((link) => {
-      link.addEventListener("click", (e) => {
-        const targetId = link.getAttribute("href");
-        if (targetId.includes(".html") && !targetId.includes("#")) return;
+/* 7. LÓGICA DE NAVEGACIÓN Y MENÚ */
+function initNavLogic() {
+  const navbar = document.getElementById("navbar");
+  const navCollapse = document.getElementById("navbarNav");
+  const navLinks = document.querySelectorAll(
+    ".navbar-nav .nav-link, .navbar-brand"
+  );
 
+  // 1. Detectar apertura/cierre para cambiar el fondo
+  if (navCollapse && navbar) {
+    navCollapse.addEventListener("show.bs.collapse", () => {
+      navbar.classList.add("menu-open");
+    });
+    navCollapse.addEventListener("hide.bs.collapse", () => {
+      navbar.classList.remove("menu-open");
+    });
+  }
+
+  // 2. Cerrar menú al hacer clic en un enlace (Smooth Scroll)
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const targetId = link.getAttribute("href");
+
+      // Si es un enlace interno (#), prevenimos default y hacemos scroll suave
+      if (targetId.includes("#")) {
         e.preventDefault();
-        const pureId = targetId.includes("#")
+        const pureId = targetId.includes(".html")
           ? targetId.split("#")[1]
-          : targetId;
+          : targetId.replace("#", "");
         const targetElement = document.getElementById(pureId);
 
-        let scrollTarget;
-        if (pureId === "master-stage") {
-          scrollTarget = 0;
-        } else if (
-          pureId === "services-layer" &&
-          window.innerWidth >= 992 &&
-          document.querySelector("#master-stage")
-        ) {
-          scrollTarget = window.innerHeight * 1.2;
-        } else if (targetElement) {
+        let scrollTarget = 0;
+        if (pureId !== "master-stage" && targetElement) {
           scrollTarget = targetElement;
-        } else {
-          window.location.href = targetId;
-          return;
+          // Ajuste específico para Servicios en Desktop
+          if (pureId === "services-layer" && window.innerWidth >= 992) {
+            scrollTarget = window.innerHeight * 1.2;
+          }
         }
 
-        if (lenis) lenis.scrollTo(scrollTarget, { offset: -80 });
-        else {
+        if (typeof lenis !== "undefined" && lenis) {
+          lenis.scrollTo(scrollTarget, { offset: -80 });
+        } else {
           const top =
             typeof scrollTarget === "number"
               ? scrollTarget
               : scrollTarget.offsetTop - 80;
           window.scrollTo({ top, behavior: "smooth" });
         }
+      }
 
-        const navbarCollapse = document.querySelector(".navbar-collapse");
-        if (navbarCollapse && navbarCollapse.classList.contains("show")) {
-          bootstrap.Collapse.getInstance(navbarCollapse).hide();
-        }
-      });
+      // IMPORTANTE: Cerrar el menú si está abierto
+      if (navCollapse && navCollapse.classList.contains("show")) {
+        const bsCollapse = bootstrap.Collapse.getInstance(navCollapse);
+        if (bsCollapse) bsCollapse.hide();
+      }
     });
+  });
 }
 
 /* 8. ACORDEÓN DE SERVICIOS */
@@ -250,7 +264,7 @@ function initAccordion() {
   });
 }
 
-/* 9. FUNCIÓN COPIAR AL PORTAPAPELES (Nuevos botones debajo del teléfono) */
+/* 9. FUNCIÓN COPIAR AL PORTAPAPELES */
 function initContactCopy() {
   document.querySelectorAll(".btn-contact-copy").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -288,7 +302,7 @@ function initErrorPage() {
 /* --- INICIALIZACIÓN GENERAL --- */
 window.addEventListener("DOMContentLoaded", () => {
   setup3D();
-  initNavClick();
+  initNavLogic(); // Nueva función unificada para el menú
   initAccordion();
   initContactCopy();
   initErrorPage();
