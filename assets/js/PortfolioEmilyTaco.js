@@ -328,6 +328,28 @@ function initAccordion() {
   });
 }
 
+/* 9. LUZ INTERACTIVA DE EXPERIENCIA */
+function initExperienceHover() {
+  const cards = document.querySelectorAll(".experience-card");
+
+  cards.forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      card.style.setProperty("--mouse-x", `${mouseX}px`);
+      card.style.setProperty("--mouse-y", `${mouseY}px`);
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--mouse-x", "50%");
+      card.style.setProperty("--mouse-y", "50%");
+    });
+  });
+}
+
 /* 9. COPIAR */
 function initContactCopy() {
   document.querySelectorAll(".btn-contact-copy").forEach((btn) => {
@@ -371,6 +393,7 @@ window.addEventListener("DOMContentLoaded", () => {
   initContactCopy();
   initErrorPage();
   intro();
+  
 });
 
 /* FORM */

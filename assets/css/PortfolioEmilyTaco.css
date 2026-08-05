@@ -804,10 +804,11 @@ details[open] .accordion-icon {
   right: -220px;
   border-radius: 50%;
   background: radial-gradient(
-    circle,
-    rgba(109, 3, 3, 0.1) 0%,
-    rgba(109, 3, 3, 0) 70%
-  );
+  220px circle at var(--mouse-x) var(--mouse-y),
+  rgba(109, 3, 3, 0.16) 0%,
+  rgba(109, 3, 3, 0.08) 35%,
+  transparent 70%
+);
   pointer-events: none;
 }
 
