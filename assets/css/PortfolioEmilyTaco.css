@@ -847,8 +847,12 @@ details[open] .accordion-icon {
 
 .experience-card {
 
-  --trail-x: 50%;
+ --trail-x: 50%;
   --trail-y: 50%;
+  --blob-angle: 0deg;
+  --blob-stretch: 1;
+  --blob-squash: 1;
+
 
   position: relative;
   min-height: 360px;
@@ -866,24 +870,47 @@ details[open] .accordion-icon {
 }
 
 /* Luz que sigue al cursor */
+/* Luz elástica que sigue al cursor */
 .experience-card::before {
   content: "";
   position: absolute;
-  inset: 0;
+
+  width: 170px;
+  height: 170px;
+
+  left: var(--trail-x);
+  top: var(--trail-y);
+
   z-index: -1;
   opacity: 0;
+  border-radius: 50%;
 
   background: radial-gradient(
-    210px circle at var(--trail-x) var(--trail-y),
+    circle at center,
     rgba(109, 3, 3, 0.32) 0%,
-    rgba(109, 3, 3, 0.11) 38%,
-    rgba(109, 3, 3, 0.04) 58%,
-    transparent 76%
+    rgba(109, 3, 3, 0.15) 38%,
+    rgba(109, 3, 3, 0.06) 58%,
+    transparent 78%
   );
 
+  filter: blur(8px);
+
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--blob-angle))
+    scaleX(var(--blob-stretch))
+    scaleY(var(--blob-squash));
+
+  transform-origin: center;
   transition: opacity 0.45s ease;
+
   pointer-events: none;
-  will-change: opacity, background;
+
+  will-change:
+    left,
+    top,
+    transform,
+    opacity;
 }
 
 /* Línea decorativa inferior */

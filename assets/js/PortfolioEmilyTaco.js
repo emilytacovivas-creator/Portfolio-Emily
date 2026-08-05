@@ -327,7 +327,7 @@ function initAccordion() {
     });
   });
 }
-/* 9. LUZ INTERACTIVA DE EXPERIENCIA */
+/* 9. LUZ ELÁSTICA DE EXPERIENCIA */
 function initExperienceHover() {
   const cards = document.querySelectorAll(".experience-card");
 
@@ -341,30 +341,114 @@ function initExperienceHover() {
     let targetX = 0;
     let targetY = 0;
 
-    let trailX = 0;
-    let trailY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    let previousX = 0;
+    let previousY = 0;
+
+    let stretch = 1;
+    let squash = 1;
+    let angle = 0;
 
     let animationFrame = null;
     let resetTimer = null;
-    let isInside = false;
 
-    function updateTrail() {
+    function updateBlob() {
       /*
-       * Cuanto menor sea este número,
-       * más flotante y retrasado será el movimiento.
+       * La luz avanza hacia el cursor con retraso.
+       * Un valor menor produce más inercia.
        */
-      trailX += (targetX - trailX) * 0.09;
-      trailY += (targetY - trailY) * 0.09;
+      currentX += (targetX - currentX) * 0.12;
+      currentY += (targetY - currentY) * 0.12
 
-      card.style.setProperty("--trail-x", `${trailX}px`);
-      card.style.setProperty("--trail-y", `${trailY}px`);
+      /*
+       * Calculamos cuánto se ha movido la luz
+       * durante este fotograma.
+       */
+      const velocityX = currentX - previousX;
+      const velocityY = currentY - previousY;
 
-      const stillMoving =
-        Math.abs(targetX - trailX) > 0.1 ||
-        Math.abs(targetY - trailY) > 0.1;
+      const speed = Math.min(
+        Math.hypot(velocityX, velocityY),
+        28
+      );
 
-      if (isInside || stillMoving) {
-        animationFrame = requestAnimationFrame(updateTrail);
+      /*
+       * Cuanto más rápido se mueve:
+       * más se estira horizontalmente
+       * y más se comprime verticalmente.
+       */
+      const targetStretch =
+        1 + Math.min(speed * 0.09, 1.2);
+
+      const targetSquash =
+        1 - Math.min(speed * 0.024, 0.27);
+
+      /*
+       * Suavizamos también la deformación.
+       */
+      stretch += (targetStretch - stretch) * 0.2;
+      squash += (targetSquash - squash) * 0.2;
+
+      /*
+       * La masa gira hacia la dirección
+       * en la que se está desplazando.
+       */
+      if (speed > 0.05) {
+        const targetAngle =
+          Math.atan2(velocityY, velocityX) *
+          (180 / Math.PI);
+
+        const angleDifference =
+          ((targetAngle - angle + 540) % 360) - 180;
+
+        angle += angleDifference * 0.18;
+      }
+
+      card.style.setProperty(
+        "--trail-x",
+        `${currentX}px`
+      );
+
+      card.style.setProperty(
+        "--trail-y",
+        `${currentY}px`
+      );
+
+      card.style.setProperty(
+        "--blob-angle",
+        `${angle}deg`
+      );
+
+      card.style.setProperty(
+        "--blob-stretch",
+        stretch.toFixed(3)
+      );
+
+      card.style.setProperty(
+        "--blob-squash",
+        squash.toFixed(3)
+      );
+
+      previousX = currentX;
+      previousY = currentY;
+
+      /*
+       * Continúa hasta llegar al cursor
+       * y recuperar la forma circular.
+       */
+      const positionIsMoving =
+        Math.abs(targetX - currentX) > 0.1 ||
+        Math.abs(targetY - currentY) > 0.1;
+
+      const shapeIsMoving =
+        Math.abs(stretch - 1) > 0.002 ||
+        Math.abs(squash - 1) > 0.002;
+
+      if (positionIsMoving || shapeIsMoving) {
+        animationFrame =
+          requestAnimationFrame(updateBlob);
       } else {
         animationFrame = null;
       }
@@ -372,7 +456,8 @@ function initExperienceHover() {
 
     function startAnimation() {
       if (animationFrame === null) {
-        animationFrame = requestAnimationFrame(updateTrail);
+        animationFrame =
+          requestAnimationFrame(updateBlob);
       }
     }
 
@@ -385,16 +470,31 @@ function initExperienceHover() {
       targetY = event.clientY - rect.top;
 
       /*
-       * Al entrar se coloca en el punto del cursor
-       * para evitar que aparezca desde el centro.
+       * Al entrar aparece directamente
+       * debajo del cursor.
        */
-      trailX = targetX;
-      trailY = targetY;
+      currentX = targetX;
+      currentY = targetY;
 
-      card.style.setProperty("--trail-x", `${trailX}px`);
-      card.style.setProperty("--trail-y", `${trailY}px`);
+      previousX = currentX;
+      previousY = currentY;
 
-      isInside = true;
+      stretch = 1;
+      squash = 1;
+
+      card.style.setProperty(
+        "--trail-x",
+        `${currentX}px`
+      );
+
+      card.style.setProperty(
+        "--trail-y",
+        `${currentY}px`
+      );
+
+      card.style.setProperty("--blob-stretch", "1");
+      card.style.setProperty("--blob-squash", "1");
+
       startAnimation();
     });
 
@@ -408,22 +508,37 @@ function initExperienceHover() {
     });
 
     card.addEventListener("pointerleave", () => {
-      isInside = false;
-
       /*
-       * La luz permanece donde salió mientras desaparece.
+       * La luz desaparece en la última posición.
+       * Después se reinicia sin que se vea.
        */
       resetTimer = setTimeout(() => {
+        if (animationFrame !== null) {
+          cancelAnimationFrame(animationFrame);
+          animationFrame = null;
+        }
+
         const centerX = card.clientWidth / 2;
         const centerY = card.clientHeight / 2;
 
         targetX = centerX;
         targetY = centerY;
-        trailX = centerX;
-        trailY = centerY;
+
+        currentX = centerX;
+        currentY = centerY;
+
+        previousX = centerX;
+        previousY = centerY;
+
+        stretch = 1;
+        squash = 1;
+        angle = 0;
 
         card.style.setProperty("--trail-x", "50%");
         card.style.setProperty("--trail-y", "50%");
+        card.style.setProperty("--blob-angle", "0deg");
+        card.style.setProperty("--blob-stretch", "1");
+        card.style.setProperty("--blob-squash", "1");
       }, 500);
     });
   });
