@@ -390,10 +390,10 @@ window.addEventListener("DOMContentLoaded", () => {
   setup3D();
   initNavLogic();
   initAccordion();
+  initExperienceHover();
   initContactCopy();
   initErrorPage();
   intro();
-  
 });
 
 /* FORM */

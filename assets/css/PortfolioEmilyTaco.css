@@ -794,23 +794,6 @@ details[open] .accordion-icon {
   overflow: hidden;
 }
 
-/* Mancha decorativa suave de fondo */
-.experience-section::before {
-  content: "";
-  position: absolute;
-  width: 520px;
-  height: 520px;
-  top: 8%;
-  right: -220px;
-  border-radius: 50%;
-  background: radial-gradient(
-  220px circle at var(--mouse-x) var(--mouse-y),
-  rgba(109, 3, 3, 0.16) 0%,
-  rgba(109, 3, 3, 0.08) 35%,
-  transparent 70%
-);
-  pointer-events: none;
-}
 
 .experience-heading {
   display: grid;
@@ -889,9 +872,10 @@ details[open] .accordion-icon {
   z-index: -1;
   opacity: 0;
   background: radial-gradient(
-    420px circle at var(--mouse-x) var(--mouse-y),
-    rgba(109, 3, 3, 0.13),
-    transparent 55%
+    200px circle at var(--mouse-x) var(--mouse-y),
+    rgba(109, 3, 3, 0.17) 0%,
+    rgba(109, 3, 3, 0.08) 38%,
+    transparent 72%
   );
   transition: opacity 0.35s ease;
   pointer-events: none;
