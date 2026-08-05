@@ -925,7 +925,7 @@ details[open] .accordion-icon {
   background-color: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .experience-card:hover {
@@ -952,7 +952,7 @@ details[open] .accordion-icon {
 .experience-card-number {
   position: absolute;
   right: 1.75rem;
-  bottom: -0.3em;
+  bottom: -0.12em;
   z-index: -1;
   font-family: var(--font-serif);
   font-size: clamp(7rem, 15vw, 13rem);
@@ -1059,33 +1059,13 @@ details[open] .accordion-icon {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(2rem, 5vw, 5rem);
-  padding-top: 2rem;
-  border-top: 1px solid rgba(28, 20, 16, 0.12);
+  padding-top: 1rem;
 }
 
 .experience-stage {
-  display: grid;
-  grid-template-columns: 12px minmax(0, 1fr);
-  gap: 1rem;
+  display: block;
 }
 
-.experience-stage-marker {
-  width: 10px;
-  height: 10px;
-  margin-top: 0.35rem;
-  border: 2px solid var(--accent);
-  border-radius: 50%;
-  background-color: var(--bg-tertiary);
-  box-shadow: 0 0 0 5px rgba(109, 3, 3, 0.08);
-  transition:
-    background-color 0.3s ease,
-    transform 0.3s ease;
-}
-
-.experience-stage:hover .experience-stage-marker {
-  background-color: var(--accent);
-  transform: scale(1.15);
-}
 
 .experience-stage-date {
   display: block;
