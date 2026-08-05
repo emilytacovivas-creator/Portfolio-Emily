@@ -327,29 +327,107 @@ function initAccordion() {
     });
   });
 }
-
 /* 9. LUZ INTERACTIVA DE EXPERIENCIA */
 function initExperienceHover() {
   const cards = document.querySelectorAll(".experience-card");
 
+  const supportsHover = window.matchMedia(
+    "(hover: hover) and (pointer: fine)"
+  ).matches;
+
+  if (prefersReducedMotion || !supportsHover) return;
+
   cards.forEach((card) => {
+    let targetX = 0;
+    let targetY = 0;
+
+    let trailX = 0;
+    let trailY = 0;
+
+    let animationFrame = null;
+    let resetTimer = null;
+    let isInside = false;
+
+    function updateTrail() {
+      /*
+       * Cuanto menor sea este número,
+       * más flotante y retrasado será el movimiento.
+       */
+      trailX += (targetX - trailX) * 0.09;
+      trailY += (targetY - trailY) * 0.09;
+
+      card.style.setProperty("--trail-x", `${trailX}px`);
+      card.style.setProperty("--trail-y", `${trailY}px`);
+
+      const stillMoving =
+        Math.abs(targetX - trailX) > 0.1 ||
+        Math.abs(targetY - trailY) > 0.1;
+
+      if (isInside || stillMoving) {
+        animationFrame = requestAnimationFrame(updateTrail);
+      } else {
+        animationFrame = null;
+      }
+    }
+
+    function startAnimation() {
+      if (animationFrame === null) {
+        animationFrame = requestAnimationFrame(updateTrail);
+      }
+    }
+
+    card.addEventListener("pointerenter", (event) => {
+      clearTimeout(resetTimer);
+
+      const rect = card.getBoundingClientRect();
+
+      targetX = event.clientX - rect.left;
+      targetY = event.clientY - rect.top;
+
+      /*
+       * Al entrar se coloca en el punto del cursor
+       * para evitar que aparezca desde el centro.
+       */
+      trailX = targetX;
+      trailY = targetY;
+
+      card.style.setProperty("--trail-x", `${trailX}px`);
+      card.style.setProperty("--trail-y", `${trailY}px`);
+
+      isInside = true;
+      startAnimation();
+    });
+
     card.addEventListener("pointermove", (event) => {
       const rect = card.getBoundingClientRect();
 
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+      targetX = event.clientX - rect.left;
+      targetY = event.clientY - rect.top;
 
-      card.style.setProperty("--mouse-x", `${mouseX}px`);
-      card.style.setProperty("--mouse-y", `${mouseY}px`);
+      startAnimation();
     });
 
     card.addEventListener("pointerleave", () => {
-      card.style.setProperty("--mouse-x", "50%");
-      card.style.setProperty("--mouse-y", "50%");
+      isInside = false;
+
+      /*
+       * La luz permanece donde salió mientras desaparece.
+       */
+      resetTimer = setTimeout(() => {
+        const centerX = card.clientWidth / 2;
+        const centerY = card.clientHeight / 2;
+
+        targetX = centerX;
+        targetY = centerY;
+        trailX = centerX;
+        trailY = centerY;
+
+        card.style.setProperty("--trail-x", "50%");
+        card.style.setProperty("--trail-y", "50%");
+      }, 500);
     });
   });
 }
-
 /* 9. COPIAR */
 function initContactCopy() {
   document.querySelectorAll(".btn-contact-copy").forEach((btn) => {
