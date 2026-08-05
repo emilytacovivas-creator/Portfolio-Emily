@@ -235,26 +235,95 @@ function initNavLogic() {
 
 /* 8. ACORDEÓN */
 function initAccordion() {
-  document.querySelectorAll(".services-accordion details").forEach((det) => {
+  const accordions = [
+    ...document.querySelectorAll(".services-accordion details"),
+  ];
+
+  accordions.forEach((det) => {
     const summary = det.querySelector("summary");
+    const content = det.querySelector(".accordion-content");
+
     summary.addEventListener("click", (e) => {
       e.preventDefault();
-      const content = det.querySelector(".accordion-content");
-      if (!det.hasAttribute("open")) {
-        det.setAttribute("open", "");
-        gsap.fromTo(
-          content,
-          { height: 0, opacity: 0 },
-          { height: "auto", opacity: 1, duration: 0.4 }
-        );
-      } else {
+
+      // Evita conflictos si se pulsa rápidamente varias veces.
+      gsap.killTweensOf(content);
+
+      // Si pulsamos el desplegable que ya está abierto, lo cerramos.
+      if (det.hasAttribute("open")) {
         gsap.to(content, {
           height: 0,
           opacity: 0,
-          duration: 0.4,
-          onComplete: () => det.removeAttribute("open"),
+          duration: 0.45,
+          ease: "power2.inOut",
+          onComplete: () => {
+            det.removeAttribute("open");
+            gsap.set(content, {
+              clearProps: "height,opacity",
+            });
+          },
         });
+
+        return;
       }
+
+      // Busca otro desplegable que estuviera abierto.
+      const previousOpen = accordions.find(
+        (item) => item !== det && item.hasAttribute("open")
+      );
+
+      const timeline = gsap.timeline();
+
+      // Cierra suavemente el desplegable anterior.
+      if (previousOpen) {
+        const previousContent = previousOpen.querySelector(
+          ".accordion-content"
+        );
+
+        gsap.killTweensOf(previousContent);
+
+        timeline.to(
+          previousContent,
+          {
+            height: 0,
+            opacity: 0,
+            duration: 0.45,
+            ease: "power2.inOut",
+            onComplete: () => {
+              previousOpen.removeAttribute("open");
+
+              gsap.set(previousContent, {
+                clearProps: "height,opacity",
+              });
+            },
+          },
+          0
+        );
+      }
+
+      // Abre suavemente el nuevo desplegable.
+      det.setAttribute("open", "");
+
+      gsap.set(content, {
+        height: 0,
+        opacity: 0,
+      });
+
+      timeline.to(
+        content,
+        {
+          height: "auto",
+          opacity: 1,
+          duration: 0.45,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.set(content, {
+              clearProps: "height,opacity",
+            });
+          },
+        },
+        0
+      );
     });
   });
 }
