@@ -1624,40 +1624,58 @@ details[open] .accordion-icon {
    ========================================================================== */
 
 .project-modal-carousel {
-  position: relative;
-
   width: 100%;
-  margin-top: 1rem;
-
-  /*
-   * Altura que utilizaremos también
-   * para centrar las flechas.
-   */
-  --project-carousel-height: clamp(360px, 62vh, 680px);
+  margin-top: 1.5rem;
 }
 
 
 /* ==========================================================================
-   ÁREA DE IMAGEN
+   MARCO FIJO DEL CARRUSEL
    ========================================================================== */
 
-.project-modal-carousel .carousel-inner {
-  height: var(--project-carousel-height);
+/*
+ * ESTA ES LA CLAVE DEL ARREGLO.
+ *
+ * Ya no utilizamos vh para determinar
+ * cuánto mide cada imagen.
+ *
+ * Las cuatro imágenes viven dentro
+ * del mismo rectángulo 10:7.
+ */
+
+.project-carousel-stage {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 10 / 7;
+
   overflow: hidden;
+
   border-radius: 1.25rem;
 }
 
 
-/* TODOS LOS SLIDES */
+/* El carrusel ocupa todo el marco */
 
-.project-modal-carousel .carousel-item {
+.project-carousel-stage .carousel-inner {
+  width: 100%;
   height: 100%;
 }
 
 
-/* CONTENEDOR DE LAS IMÁGENES */
+/* Todos los slides son exactamente iguales */
 
-.project-modal-carousel .project-slide-frame {
+.project-carousel-stage .carousel-item {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* ==========================================================================
+   CONTENEDOR DE CADA IMAGEN
+   ========================================================================== */
+
+.project-slide-frame {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1665,13 +1683,29 @@ details[open] .accordion-icon {
   width: 100%;
   height: 100%;
 
+  /*
+   * Pequeño espacio entre las imágenes
+   * cuando se produce la transición.
+   */
   padding: 0.6rem;
 }
 
 
 /* ==========================================================================
-   TODAS LAS IMÁGENES
+   LAS 4 IMÁGENES
    ========================================================================== */
+
+/*
+ * IMPORTANTE:
+ *
+ * Las cuatro reciben EXACTAMENTE
+ * las mismas reglas.
+ *
+ * El elemento mide todo el marco.
+ * object-fit: contain se encarga de
+ * adaptar cada proporción sin recortarla
+ * ni deformarla.
+ */
 
 .project-modal-carousel .project-slide-frame img {
   display: block;
@@ -1679,59 +1713,34 @@ details[open] .accordion-icon {
   width: 100% !important;
   height: 100% !important;
 
-  max-width: 100% !important;
-  max-height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
 
-  object-fit: contain;
+  object-fit: contain !important;
 
-  margin: 0;
+  margin: 0 !important;
 
   border-radius: 1.25rem;
 }
 
 
 /* ==========================================================================
-   DESPLEGABLE
+   FLECHAS
    ========================================================================== */
 
-.project-modal-carousel
-.project-slide-vertical
-.project-slide-frame img {
-  width: auto !important;
-  height: 100% !important;
+/*
+ * Ahora las flechas están DENTRO
+ * de project-carousel-stage.
+ *
+ * Por tanto siempre se centran respecto
+ * a la imagen y nunca respecto a los puntos.
+ */
 
-  max-width: 100% !important;
-  max-height: 100% !important;
-
-  object-fit: contain;
-
-  margin: 0 auto;
-}
-
-
-/* ==========================================================================
-   MÓVIL
-   ========================================================================== */
-
-@media (max-width: 767px) {
-
-  .project-modal-carousel {
-    --project-carousel-height: 420px;
-  }
-
-}
-
-.project-modal-carousel .project-carousel-control {
-  /*
-   * IMPORTANTE:
-   * la flecha solo ocupa la altura
-   * reservada para la imagen.
-   */
+.project-carousel-control {
   top: 0;
-  bottom: auto;
+  bottom: 0;
 
-  height: var(--project-carousel-height);
-
+  height: 100%;
   width: clamp(45px, 8%, 80px);
 
   opacity: 0.75;
@@ -1742,35 +1751,29 @@ details[open] .accordion-icon {
 }
 
 
-.project-modal-carousel .project-carousel-control:hover {
+.project-carousel-control:hover {
   opacity: 1;
 }
 
-
-/* Flecha izquierda */
 
 .project-modal-carousel .carousel-control-prev {
   left: 0;
 }
 
 
-/* Flecha derecha */
-
 .project-modal-carousel .carousel-control-next {
   right: 0;
 }
 
-
-/* Iconos */
 
 .project-modal-carousel .carousel-control-prev-icon,
 .project-modal-carousel .carousel-control-next-icon {
   width: 2rem;
   height: 2rem;
 
-  filter: invert(1);
-
   background-size: 70%;
+
+  filter: invert(1);
 }
 
 
@@ -1791,7 +1794,7 @@ details[open] .accordion-icon {
 }
 
 
-/* Punto */
+/* PUNTO */
 
 .project-carousel-indicators [data-bs-target] {
   width: 8px;
@@ -1813,101 +1816,128 @@ details[open] .accordion-icon {
 }
 
 
-/* Punto activo */
+/* PUNTO ACTIVO */
 
 .project-carousel-indicators .active {
   background-color: var(--accent);
   transform: scale(1.35);
 }
 
-/* MÓVIL */
 
-@media (max-width: 767px) {
-  .project-modal-content {
-    padding: 0.25rem;
-  }
+/* ==========================================================================
+   MODAL
+   ========================================================================== */
 
-  .project-modal-intro {
-    margin-bottom: 2rem;
-  }
-
-  .project-modal-title {
-    font-size: 2.4rem;
-  }
-
-  .project-modal-subtitle {
-    margin-bottom: 1.25rem;
-    font-size: 1.25rem;
-  }
-
-  .project-modal-description,
-  .project-concept p {
-    font-size: 0.9rem;
-  }
-
-  .project-software-list {
-    gap: 1.25rem;
-  }
-
-  .project-software-item img {
-    width: 28px;
-    height: 28px;
-  }
-
-  .project-modal-carousel .carousel-item img {
-    max-height: 65vh;
-    border-radius: 0.9rem;
-  }
-}
 .modal-content {
-  border-radius: 1.5rem;
   border: none;
+  border-radius: 1.5rem;
+
   overflow: hidden;
+
   background-color: var(--bg-main);
+
   max-height: 90vh;
+
   display: flex;
   flex-direction: column;
 }
 
-/* SCROLL DEL MODAL */
+
+/* ==========================================================================
+   SCROLL DEL MODAL
+   ========================================================================== */
 
 body.modal-open {
   overflow: hidden !important;
   overscroll-behavior: none;
 }
 
+
 .modal {
   overscroll-behavior: contain;
 }
+
 
 .modal-body {
   overflow-y: auto;
   overscroll-behavior: contain;
 
   -webkit-overflow-scrolling: touch;
+
   touch-action: pan-y;
 }
 
-.carousel-item {
-  text-align: center;
-  background-color: transparent;
-}
 
-.carousel-item img {
-  border-radius: 1rem;
-  object-fit: contain;
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  max-height: 60vh;
-  margin: 0 auto;
-}
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  filter: invert(1);
-}
+@media (max-width: 767px) {
 
+  .project-modal-content {
+    padding: 0.25rem;
+  }
+
+
+  .project-modal-intro {
+    margin-bottom: 2rem;
+  }
+
+
+  .project-modal-title {
+    font-size: 2.4rem;
+  }
+
+
+  .project-modal-subtitle {
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+  }
+
+
+  .project-modal-description,
+  .project-concept p {
+    font-size: 0.9rem;
+  }
+
+
+  .project-software-list {
+    gap: 1.25rem;
+  }
+
+
+  .project-software-item img {
+    width: 28px;
+    height: 28px;
+  }
+
+
+  /*
+   * En móvil damos un poco más de altura
+   * al marco, pero TODAS siguen compartiendo
+   * exactamente la misma.
+   */
+  .project-carousel-stage {
+    aspect-ratio: 4 / 3;
+    border-radius: 0.9rem;
+  }
+
+
+  .project-slide-frame {
+    padding: 0.35rem;
+  }
+
+
+  .project-modal-carousel .project-slide-frame img {
+    border-radius: 0.9rem;
+  }
+
+
+  .project-carousel-control {
+    width: 45px;
+  }
+
+}
 /* --- MOTION SHOWREEL DESTACADO --- */
 
 .featured-motion {
