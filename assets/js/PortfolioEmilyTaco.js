@@ -594,7 +594,6 @@ function initErrorPage() {
   });
 }
 
-
 /* ==========================================================================
    11. MODALES DE PROYECTOS
    ========================================================================== */
@@ -602,155 +601,272 @@ function initErrorPage() {
 function initProjectModals() {
   const projectModals = document.querySelectorAll(".modal");
 
+
   projectModals.forEach((modal) => {
-    const modalBody = modal.querySelector(".modal-body");
-    const carouselElement = modal.querySelector(
-      ".project-modal-carousel"
-    );
+
+    const modalBody =
+      modal.querySelector(".modal-body");
+
+    const carouselElement =
+      modal.querySelector(".project-modal-carousel");
+
+    const modalVideos =
+      modal.querySelectorAll("video");
+
+
+    /* ======================================================================
+       LENIS
+       ====================================================================== */
 
     /*
-     * LENIS
-     * -------------------------------------------------------
-     * Evita que el scroll realizado dentro del modal
-     * se envíe a la página principal.
+     * El scroll realizado dentro del modal
+     * no afecta a la página situada detrás.
      */
+
     if (modalBody) {
-      modalBody.setAttribute("data-lenis-prevent", "");
+      modalBody.setAttribute(
+        "data-lenis-prevent",
+        ""
+      );
     }
 
 
-    /*
-     * SCROLL CON RUEDA
-     * -------------------------------------------------------
-     * Cuando el cursor está sobre el popup, la rueda
-     * controla el contenido del modal.
-     *
-     * Incluso si el cursor está encima del header,
-     * márgenes u otras zonas del popup.
-     */
+    /* ======================================================================
+       RUEDA DEL RATÓN
+       ====================================================================== */
+
     modal.addEventListener(
       "wheel",
       (event) => {
+
         if (!modalBody) return;
 
+
         /*
-         * Si ya estamos directamente sobre modal-body,
-         * dejamos que el navegador haga el scroll normal.
+         * Si el cursor ya está sobre modal-body,
+         * dejamos que el navegador gestione
+         * el scroll normalmente.
          */
+
         if (event.target.closest(".modal-body")) {
           return;
         }
 
+
         event.preventDefault();
 
         modalBody.scrollTop += event.deltaY;
+
       },
-      { passive: false }
+      {
+        passive: false,
+      }
     );
 
 
-    /*
-     * ABRIENDO MODAL
-     * -------------------------------------------------------
-     * Congelamos el scroll de la página principal.
-     */
-    modal.addEventListener("show.bs.modal", () => {
-      if (lenis) {
-        lenis.stop();
+    /* ======================================================================
+       ABRIENDO MODAL
+       ====================================================================== */
+
+    modal.addEventListener(
+      "show.bs.modal",
+      () => {
+
+        /*
+         * Congelamos la página principal.
+         */
+
+        if (lenis) {
+          lenis.stop();
+        }
+
       }
-    });
+    );
 
 
-    /*
-     * MODAL ABIERTO
-     * -------------------------------------------------------
-     * Volvemos arriba del proyecto y activamos
-     * el carrusel automático.
-     */
-    modal.addEventListener("shown.bs.modal", () => {
-      if (modalBody) {
-        modalBody.scrollTop = 0;
+    /* ======================================================================
+       MODAL ABIERTO
+       ====================================================================== */
+
+    modal.addEventListener(
+      "shown.bs.modal",
+      () => {
+
+        /*
+         * Cada proyecto empieza desde arriba.
+         */
+
+        if (modalBody) {
+          modalBody.scrollTop = 0;
+        }
+
+
+        /*
+         * Configuramos el carrusel.
+         *
+         * IMPORTANTE:
+         * interval: false hace que NO
+         * cambie automáticamente.
+         */
+
+        if (carouselElement) {
+
+          const carousel =
+            bootstrap.Carousel.getOrCreateInstance(
+              carouselElement,
+              {
+                interval: false,
+                pause: true,
+                touch: true,
+                wrap: true,
+              }
+            );
+
+
+          /*
+           * Nos aseguramos de que permanezca
+           * completamente detenido.
+           */
+
+          carousel.pause();
+        }
+
       }
-
-      if (!carouselElement) return;
-
-      const carousel =
-        bootstrap.Carousel.getOrCreateInstance(
-          carouselElement,
-          {
-            /*
-             * Cambia de imagen cada 4 segundos.
-             */
-            interval: 4000,
-
-            /*
-             * No se detiene por dejar el cursor
-             * encima de la imagen.
-             */
-            pause: false,
-
-            /*
-             * Permite deslizar con el dedo
-             * en móvil y tablet.
-             */
-            touch: true,
-
-            /*
-             * Al llegar a la última imagen
-             * vuelve a la primera.
-             */
-            wrap: true,
-          }
-        );
-
-      carousel.cycle();
-    });
+    );
 
 
-    /*
-     * CERRANDO MODAL
-     * -------------------------------------------------------
-     * Pausamos el carrusel.
-     */
-    modal.addEventListener("hide.bs.modal", () => {
-      if (!carouselElement) return;
+    /* ======================================================================
+       CAMBIO DE SLIDE
+       ====================================================================== */
 
-      const carousel =
-        bootstrap.Carousel.getInstance(
-          carouselElement
-        );
+    if (carouselElement) {
 
-      if (carousel) {
-        carousel.pause();
-      }
-    });
+      carouselElement.addEventListener(
+        "slide.bs.carousel",
+        () => {
+
+          /*
+           * Si hay un vídeo reproduciéndose
+           * y pulsamos una flecha para cambiar
+           * de slide, lo pausamos.
+           *
+           * Así el audio no sigue sonando
+           * mientras vemos otra imagen.
+           */
+
+          modalVideos.forEach((video) => {
+            video.pause();
+          });
+
+        }
+      );
+
+    }
 
 
-    /*
-     * MODAL CERRADO
-     * -------------------------------------------------------
-     * Volvemos a la primera imagen y recuperamos
-     * el scroll normal de la página.
-     */
-    modal.addEventListener("hidden.bs.modal", () => {
-      if (carouselElement) {
+    /* ======================================================================
+       CERRANDO MODAL
+       ====================================================================== */
+
+    modal.addEventListener(
+      "hide.bs.modal",
+      () => {
+
+        /*
+         * Pausamos cualquier vídeo.
+         */
+
+        modalVideos.forEach((video) => {
+          video.pause();
+        });
+
+
+        /*
+         * Pausamos también el carrusel.
+         */
+
+        if (!carouselElement) return;
+
+
         const carousel =
           bootstrap.Carousel.getInstance(
             carouselElement
           );
 
-        if (carousel) {
-          carousel.to(0);
-        }
-      }
 
-      if (lenis) {
-        lenis.start();
+        if (carousel) {
+          carousel.pause();
+        }
+
       }
-    });
+    );
+
+
+    /* ======================================================================
+       MODAL CERRADO
+       ====================================================================== */
+
+    modal.addEventListener(
+      "hidden.bs.modal",
+      () => {
+
+
+        /*
+         * Al volver a abrir un proyecto,
+         * empezará otra vez por el primer slide.
+         */
+
+        if (carouselElement) {
+
+          const carousel =
+            bootstrap.Carousel.getInstance(
+              carouselElement
+            );
+
+
+          if (carousel) {
+            carousel.to(0);
+            carousel.pause();
+          }
+
+        }
+
+
+        /*
+         * Reiniciamos los vídeos para que
+         * vuelvan a empezar desde 00:00.
+         */
+
+        modalVideos.forEach((video) => {
+
+          video.pause();
+
+          try {
+            video.currentTime = 0;
+          } catch (error) {
+            /*
+             * Algunos navegadores pueden impedir
+             * cambiar currentTime antes de cargar
+             * los metadatos. No pasa nada.
+             */
+          }
+
+        });
+
+
+        /*
+         * Recuperamos el scroll de la página.
+         */
+
+        if (lenis) {
+          lenis.start();
+        }
+
+      }
+    );
+
   });
 }
-
 
 /* ==========================================================================
    INIT
