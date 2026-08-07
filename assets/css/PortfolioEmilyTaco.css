@@ -1250,87 +1250,225 @@ details[open] .accordion-icon {
    -------------------------------------------------------------------------- */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
   width: 100%;
 }
 
+
+/* TARJETA */
+
 .project-card {
-  position: relative;
-  border-radius: 1.5rem;
-  overflow: hidden;
+  min-width: 0;
   cursor: pointer;
+}
+
+
+/* IMAGEN */
+
+.project-card-media {
+  position: relative;
+  width: 100%;
   aspect-ratio: 4 / 3;
+
+  overflow: hidden;
+  border-radius: 1.5rem;
+
   background-color: #000;
 }
 
-.project-card img {
+.project-card-media img {
+  display: block;
   width: 100%;
   height: 100%;
+
   object-fit: cover;
-  transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-  filter: grayscale(100%) brightness(0.9);
+
+  /*
+   * Por defecto el proyecto se ve a color.
+   */
+  filter: grayscale(0%) brightness(1);
+
+  transform: scale(1);
+
+  transition:
+    filter 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.project-card:hover img {
-  filter: grayscale(0%) blur(4px) brightness(0.6);
-  transform: scale(1.1);
+
+/* HOVER: AHORA PASA A BLANCO Y NEGRO */
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card-media img {
+    filter: grayscale(100%) brightness(0.55);
+    transform: scale(1.05);
+  }
 }
+
+
+/* INFORMACIÓN SOBRE LA IMAGEN */
 
 .project-overlay {
   position: absolute;
   inset: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 2rem;
+
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.4s ease;
+  transform: translateY(16px);
+
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
   z-index: 2;
 }
 
-.project-card:hover .project-overlay {
-  opacity: 1;
-  transform: translateY(0);
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 
 .project-category {
-  font-family: var(--font-sans);
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  color: #fff;
-  margin-bottom: 0.5rem;
   display: block;
-  opacity: 0.8;
+  margin-bottom: 0.6rem;
+
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  color: rgba(255, 255, 255, 0.8);
 }
+
 
 .project-title {
+  margin: 0 0 1.25rem;
+
   font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-style: italic;
-  font-size: 2rem;
+  font-weight: 500;
+
   color: #fff;
-  margin-bottom: 1rem;
 }
+
 
 .project-more {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.5rem 1.5rem;
-  border-radius: 50px;
   display: inline-block;
-  transition: background 0.3s;
+  margin: 0;
+
+  padding: 0.55rem 1.35rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  color: #fff;
 }
 
-.project-more:hover {
-  background-color: #fff;
-  color: #000;
+
+/* INFORMACIÓN PARA MÓVIL */
+
+.project-mobile-info {
+  display: none;
+}
+
+/* TABLET */
+
+@media (max-width: 991px) {
+  .projects-grid {
+    gap: 1.25rem;
+  }
+
+  .project-card-media {
+    border-radius: 1.25rem;
+  }
+}
+
+
+/* MÓVIL */
+
+@media (max-width: 767px) {
+  .projects-grid {
+    /*
+     * IMPORTANTE:
+     * seguimos manteniendo 2 proyectos por fila.
+     */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 0.75rem;
+  }
+
+
+  .project-card-media {
+    /*
+     * Un poco más vertical en móvil.
+     * Da más presencia a la portada aunque
+     * tengamos dos columnas.
+     */
+    aspect-ratio: 4 / 5;
+    border-radius: 0.9rem;
+  }
+
+
+  /*
+   * En móvil no mostramos la información
+   * encima de la fotografía.
+   */
+  .project-overlay {
+    display: none;
+  }
+
+
+  /*
+   * Nombre y categoría debajo de la imagen.
+   */
+  .project-mobile-info {
+    display: block;
+    padding: 0.65rem 0.1rem 0;
+  }
+
+  .project-mobile-info span {
+    display: block;
+    margin-bottom: 0.2rem;
+
+    font-size: 0.58rem;
+    font-weight: 700;
+
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+
+    color: rgba(28, 20, 16, 0.48);
+  }
+
+  .project-mobile-info h3 {
+    margin: 0;
+
+    font-family: var(--font-sans);
+    font-size: clamp(0.82rem, 3.5vw, 1rem);
+    font-weight: 600;
+
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+
+    color: var(--text-dark);
+  }
 }
 
 .modal-content {
@@ -1366,72 +1504,201 @@ details[open] .accordion-icon {
 .carousel-control-next-icon {
   filter: invert(1);
 }
-/* --- ESTILOS EXCLUSIVOS PARA EL VIDEO CENTRADO --- */
 
-.video-standalone-section {
-  display: flex;
-  justify-content: center;
+/* --- MOTION SHOWREEL DESTACADO --- */
+
+.featured-motion {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.8fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 6rem);
+
   width: 100%;
-  margin-top: 4rem;
+  margin-bottom: clamp(4rem, 8vw, 7rem);
 }
 
-.video-card-direct {
-  width: 100%;
-  max-width: 550px;
-  text-align: center;
-}
+/* VIDEO */
 
-.video-container-inline {
+.featured-motion-media {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 1.5rem;
+
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  background: #000;
+  border-radius: 1.5rem;
+
+  background-color: #000;
 }
 
 .inline-video-element {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-.project-video-info {
-  margin-top: 1.5rem;
+/* INFORMACIÓN */
+
+.featured-motion-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.video-category-label {
-  display: block;
-  color: var(--text-dark);
-  opacity: 0.5;
-  font-size: 0.75rem;
+.featured-motion-category {
+  margin-bottom: 1rem;
+
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin-bottom: 0.4rem;
+
+  color: var(--accent);
 }
 
-.video-title-label {
+.featured-motion-title {
+  margin: 0 0 1.5rem;
+
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  font-weight: 600;
+
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+
   color: var(--text-dark);
-  font-size: 1.8rem;
-  font-family: var(--font-serif);
-  font-style: italic;
+}
+
+.featured-motion-description {
+  max-width: 430px;
   margin: 0;
+
+  font-size: 1rem;
+  line-height: 1.55;
+
+  color: rgba(28, 20, 16, 0.72);
 }
 
-@media (max-width: 768px) {
-  .video-card-direct {
-    max-width: 90%;
+/* SOFTWARE */
+
+.featured-motion-tools {
+  width: 100%;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+
+  border-top: 1px solid rgba(28, 20, 16, 0.12);
+}
+
+.featured-motion-tools-label {
+  display: block;
+  margin-bottom: 1rem;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: rgba(28, 20, 16, 0.5);
+}
+
+.featured-motion-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.featured-motion-tool {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.featured-motion-tool img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.featured-motion-tool span {
+  font-size: 0.78rem;
+  font-weight: 500;
+
+  color: rgba(28, 20, 16, 0.68);
+}
+
+
+/* TABLET */
+
+@media (max-width: 991px) {
+  .featured-motion {
+    grid-template-columns: minmax(0, 1.4fr) minmax(230px, 0.8fr);
+    gap: 2rem;
   }
 
-  .video-title-label {
-    font-size: 1.5rem;
+  .featured-motion-title {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
   }
 
-  .video-standalone-section {
-    margin-top: 2.5rem;
+  .featured-motion-description {
+    font-size: 0.95rem;
   }
 }
+
+
+/* MÓVIL */
+
+@media (max-width: 767px) {
+  .featured-motion {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    margin-bottom: 3.5rem;
+  }
+
+  .featured-motion-media {
+    border-radius: 1.25rem;
+  }
+
+  .featured-motion-info {
+    padding-inline: 0.25rem;
+  }
+
+  .featured-motion-category {
+    margin-bottom: 0.65rem;
+  }
+
+  .featured-motion-title {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+
+  .featured-motion-description {
+    max-width: none;
+    font-size: 0.9rem;
+  }
+
+  .featured-motion-tools {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+  }
+
+  .featured-motion-icons {
+    gap: 1rem;
+  }
+
+  .featured-motion-tool img {
+    width: 25px;
+    height: 25px;
+  }
+
+  .featured-motion-tool span {
+    font-size: 0.72rem;
+  }
+}
+
 /* 12. CONTACT SECTION
    -------------------------------------------------------------------------- */
 .contact-grid {
