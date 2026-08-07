@@ -1950,6 +1950,22 @@ body.modal-open {
    COTIVA · VIDEO DENTRO DEL CARRUSEL
    ========================================================================== */
 
+.project-video-wrapper {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+
+/* VIDEO */
+
 .project-carousel-video {
   display: block;
 
@@ -1964,6 +1980,220 @@ body.modal-open {
 
   border: 0;
   border-radius: 0;
+}
+
+
+/* ==========================================================================
+   BOTÓN CENTRAL PLAY / PAUSA
+   ========================================================================== */
+
+.project-video-toggle {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: clamp(64px, 7vw, 82px);
+  height: clamp(64px, 7vw, 82px);
+
+  padding: 0;
+
+  border: 1px solid rgba(28, 20, 16, 0.08);
+  border-radius: 50%;
+
+  background-color: rgba(255, 250, 239, 0.94);
+  color: var(--text-dark);
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.16);
+
+  cursor: pointer;
+
+  z-index: 10;
+
+  opacity: 1;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease;
+}
+
+
+.project-video-toggle:hover {
+  transform:
+    translate(-50%, -50%)
+    scale(1.07);
+
+  background-color: #fff;
+}
+
+
+/* ICONOS */
+
+.project-video-icon {
+  width: 30%;
+  height: 30%;
+}
+
+
+.project-video-icon-play {
+  /*
+   * Compensa visualmente la forma triangular.
+   */
+  transform: translateX(2px);
+}
+
+
+.project-video-icon-pause {
+  display: none;
+}
+
+
+/* ==========================================================================
+   ESTADO · VÍDEO REPRODUCIÉNDOSE
+   ========================================================================== */
+
+/*
+ * Cuando empieza el vídeo ocultamos
+ * suavemente el botón central.
+ */
+
+.project-video-toggle.is-playing {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/*
+ * Al volver a colocar el ratón encima,
+ * aparece el botón de pausa.
+ */
+
+.project-video-wrapper:hover
+.project-video-toggle.is-playing {
+  opacity: 0.9;
+
+  pointer-events: auto;
+}
+
+
+/* Cambiamos PLAY por PAUSA */
+
+.project-video-toggle.is-playing
+.project-video-icon-play {
+  display: none;
+}
+
+
+.project-video-toggle.is-playing
+.project-video-icon-pause {
+  display: block;
+}
+
+
+/* ==========================================================================
+   FLECHAS DEL CARRUSEL · ZONA CLICABLE CORREGIDA
+   ========================================================================== */
+
+/*
+ * IMPORTANTE:
+ *
+ * Antes las flechas ocupaban TODA la altura
+ * del carrusel.
+ *
+ * Ahora solo son botones pequeños centrados,
+ * por lo que nunca pisan los controles
+ * inferiores del vídeo.
+ */
+
+.project-carousel-control {
+  top: 50%;
+  bottom: auto;
+
+  width: 48px;
+  height: 48px;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  opacity: 0.8;
+
+  z-index: 8;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+.project-carousel-control:hover {
+  opacity: 1;
+}
+
+
+.project-modal-carousel .carousel-control-prev {
+  left: 0.75rem;
+}
+
+
+.project-modal-carousel .carousel-control-next {
+  right: 0.75rem;
+}
+
+
+.project-modal-carousel
+.carousel-control-prev-icon,
+.project-modal-carousel
+.carousel-control-next-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+
+  background-size: 70%;
+
+  filter: invert(1);
+}
+
+
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
+
+@media (max-width: 767px) {
+
+  .project-video-toggle {
+    width: 58px;
+    height: 58px;
+  }
+
+
+  .project-carousel-control {
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .project-modal-carousel .carousel-control-prev {
+    left: 0.35rem;
+  }
+
+
+  .project-modal-carousel .carousel-control-next {
+    right: 0.35rem;
+  }
+
 }
 
 

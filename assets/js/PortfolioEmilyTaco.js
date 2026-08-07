@@ -593,46 +593,166 @@ function initErrorPage() {
     delay: 0.5,
   });
 }
-
 /* ==========================================================================
    11. MODALES DE PROYECTOS
    ========================================================================== */
 
 function initProjectModals() {
-  const projectModals = document.querySelectorAll(".modal");
+
+  const projectModals =
+    document.querySelectorAll(".modal");
 
 
   projectModals.forEach((modal) => {
 
+
     const modalBody =
       modal.querySelector(".modal-body");
 
+
     const carouselElement =
-      modal.querySelector(".project-modal-carousel");
+      modal.querySelector(
+        ".project-modal-carousel"
+      );
+
 
     const modalVideos =
-      modal.querySelectorAll("video");
+      modal.querySelectorAll(
+        ".project-carousel-video"
+      );
 
 
     /* ======================================================================
        LENIS
        ====================================================================== */
 
-    /*
-     * El scroll realizado dentro del modal
-     * no afecta a la página situada detrás.
-     */
-
     if (modalBody) {
+
       modalBody.setAttribute(
         "data-lenis-prevent",
         ""
       );
+
     }
 
 
     /* ======================================================================
-       RUEDA DEL RATÓN
+       CONTROLES PERSONALIZADOS DE VÍDEO
+       ====================================================================== */
+
+    modalVideos.forEach((video) => {
+
+
+      const wrapper =
+        video.closest(
+          ".project-video-wrapper"
+        );
+
+
+      if (!wrapper) return;
+
+
+      const toggleButton =
+        wrapper.querySelector(
+          ".project-video-toggle"
+        );
+
+
+      if (!toggleButton) return;
+
+
+      /*
+       * Actualiza visualmente el botón
+       * dependiendo de si está reproduciendo
+       * o pausado.
+       */
+
+      function updateVideoButton() {
+
+        const isPlaying =
+          !video.paused &&
+          !video.ended;
+
+
+        toggleButton.classList.toggle(
+          "is-playing",
+          isPlaying
+        );
+
+
+        toggleButton.setAttribute(
+          "aria-label",
+          isPlaying
+            ? "Pausar vídeo"
+            : "Reproducir vídeo"
+        );
+
+      }
+
+
+      /*
+       * CLICK EN EL BOTÓN CENTRAL
+       */
+
+      toggleButton.addEventListener(
+        "click",
+        (event) => {
+
+          /*
+           * Evita que Bootstrap interprete
+           * este clic como interacción
+           * con el carrusel.
+           */
+
+          event.preventDefault();
+          event.stopPropagation();
+
+
+          if (video.paused) {
+
+            video.play();
+
+          } else {
+
+            video.pause();
+
+          }
+
+        }
+      );
+
+
+      /*
+       * Sincronizamos el icono aunque
+       * el usuario utilice los controles
+       * nativos del navegador.
+       */
+
+      video.addEventListener(
+        "play",
+        updateVideoButton
+      );
+
+
+      video.addEventListener(
+        "pause",
+        updateVideoButton
+      );
+
+
+      video.addEventListener(
+        "ended",
+        updateVideoButton
+      );
+
+
+      updateVideoButton();
+
+    });
+
+
+    /* ======================================================================
+       SCROLL CON RUEDA
        ====================================================================== */
 
     modal.addEventListener(
@@ -642,20 +762,21 @@ function initProjectModals() {
         if (!modalBody) return;
 
 
-        /*
-         * Si el cursor ya está sobre modal-body,
-         * dejamos que el navegador gestione
-         * el scroll normalmente.
-         */
+        if (
+          event.target.closest(
+            ".modal-body"
+          )
+        ) {
 
-        if (event.target.closest(".modal-body")) {
           return;
+
         }
 
 
         event.preventDefault();
 
-        modalBody.scrollTop += event.deltaY;
+        modalBody.scrollTop +=
+          event.deltaY;
 
       },
       {
@@ -673,11 +794,14 @@ function initProjectModals() {
       () => {
 
         /*
-         * Congelamos la página principal.
+         * Bloquea completamente el scroll
+         * de la página situada detrás.
          */
 
         if (lenis) {
+
           lenis.stop();
+
         }
 
       }
@@ -692,43 +816,41 @@ function initProjectModals() {
       "shown.bs.modal",
       () => {
 
+
         /*
-         * Cada proyecto empieza desde arriba.
+         * Siempre empieza arriba.
          */
 
         if (modalBody) {
+
           modalBody.scrollTop = 0;
+
         }
 
 
         /*
-         * Configuramos el carrusel.
+         * CARRUSEL MANUAL.
          *
-         * IMPORTANTE:
-         * interval: false hace que NO
-         * cambie automáticamente.
+         * No avanza automáticamente.
          */
 
         if (carouselElement) {
 
           const carousel =
-            bootstrap.Carousel.getOrCreateInstance(
-              carouselElement,
-              {
-                interval: false,
-                pause: true,
-                touch: true,
-                wrap: true,
-              }
-            );
+            bootstrap.Carousel
+              .getOrCreateInstance(
+                carouselElement,
+                {
+                  interval: false,
+                  pause: true,
+                  touch: true,
+                  wrap: true,
+                }
+              );
 
-
-          /*
-           * Nos aseguramos de que permanezca
-           * completamente detenido.
-           */
 
           carousel.pause();
+
         }
 
       }
@@ -745,18 +867,20 @@ function initProjectModals() {
         "slide.bs.carousel",
         () => {
 
+
           /*
-           * Si hay un vídeo reproduciéndose
-           * y pulsamos una flecha para cambiar
-           * de slide, lo pausamos.
-           *
-           * Así el audio no sigue sonando
-           * mientras vemos otra imagen.
+           * Al cambiar de slide pausamos
+           * cualquier vídeo que estuviera
+           * reproduciéndose.
            */
 
-          modalVideos.forEach((video) => {
-            video.pause();
-          });
+          modalVideos.forEach(
+            (video) => {
+
+              video.pause();
+
+            }
+          );
 
         }
       );
@@ -772,30 +896,38 @@ function initProjectModals() {
       "hide.bs.modal",
       () => {
 
+
         /*
-         * Pausamos cualquier vídeo.
+         * Pausa los vídeos.
          */
 
-        modalVideos.forEach((video) => {
-          video.pause();
-        });
+        modalVideos.forEach(
+          (video) => {
+
+            video.pause();
+
+          }
+        );
 
 
         /*
-         * Pausamos también el carrusel.
+         * Pausa también el carrusel.
          */
 
         if (!carouselElement) return;
 
 
         const carousel =
-          bootstrap.Carousel.getInstance(
-            carouselElement
-          );
+          bootstrap.Carousel
+            .getInstance(
+              carouselElement
+            );
 
 
         if (carousel) {
+
           carousel.pause();
+
         }
 
       }
@@ -812,60 +944,73 @@ function initProjectModals() {
 
 
         /*
-         * Al volver a abrir un proyecto,
-         * empezará otra vez por el primer slide.
+         * Al volver a abrir el proyecto
+         * empezamos de nuevo por el slide 1.
          */
 
         if (carouselElement) {
 
           const carousel =
-            bootstrap.Carousel.getInstance(
-              carouselElement
-            );
+            bootstrap.Carousel
+              .getInstance(
+                carouselElement
+              );
 
 
           if (carousel) {
+
             carousel.to(0);
             carousel.pause();
+
           }
 
         }
 
 
         /*
-         * Reiniciamos los vídeos para que
-         * vuelvan a empezar desde 00:00.
+         * Reinicia los vídeos.
          */
 
-        modalVideos.forEach((video) => {
+        modalVideos.forEach(
+          (video) => {
 
-          video.pause();
 
-          try {
-            video.currentTime = 0;
-          } catch (error) {
-            /*
-             * Algunos navegadores pueden impedir
-             * cambiar currentTime antes de cargar
-             * los metadatos. No pasa nada.
-             */
+            video.pause();
+
+
+            try {
+
+              video.currentTime = 0;
+
+            } catch (error) {
+
+              /*
+               * No hacemos nada si el navegador
+               * todavía no ha cargado metadatos.
+               */
+
+            }
+
           }
-
-        });
+        );
 
 
         /*
-         * Recuperamos el scroll de la página.
+         * Recupera el scroll de la web.
          */
 
         if (lenis) {
+
           lenis.start();
+
         }
 
       }
     );
 
+
   });
+
 }
 
 /* ==========================================================================
