@@ -578,6 +578,109 @@ function initErrorPage() {
   }
 }
 
+
+/* 10. MODALES DE PROYECTOS
+   -------------------------------------------------------------------------- */
+
+function initProjectModals() {
+  const projectModals = document.querySelectorAll(".modal");
+
+  projectModals.forEach((modal) => {
+    const modalBody = modal.querySelector(".modal-body");
+    const carouselElement = modal.querySelector(
+      ".project-modal-carousel"
+    );
+
+    /*
+     * Hace que Lenis ignore el scroll
+     * producido dentro del modal.
+     */
+    if (modalBody) {
+      modalBody.setAttribute("data-lenis-prevent", "");
+    }
+
+
+    /*
+     * Antes de abrir:
+     * detenemos completamente el scroll
+     * de la página principal.
+     */
+    modal.addEventListener("show.bs.modal", () => {
+      if (lenis) {
+        lenis.stop();
+      }
+    });
+
+
+    /*
+     * Cuando termina de abrirse:
+     * empezamos el carrusel automático.
+     */
+    modal.addEventListener("shown.bs.modal", () => {
+
+      if (modalBody) {
+        modalBody.scrollTop = 0;
+      }
+
+      if (carouselElement) {
+        const carousel =
+          bootstrap.Carousel.getOrCreateInstance(
+            carouselElement,
+            {
+              interval: 4000,
+              pause: "hover",
+              touch: true,
+              wrap: true,
+            }
+          );
+
+        carousel.cycle();
+      }
+    });
+
+
+    /*
+     * Paramos el carrusel antes
+     * de cerrar el proyecto.
+     */
+    modal.addEventListener("hide.bs.modal", () => {
+      if (!carouselElement) return;
+
+      const carousel =
+        bootstrap.Carousel.getInstance(
+          carouselElement
+        );
+
+      if (carousel) {
+        carousel.pause();
+      }
+    });
+
+
+    /*
+     * Al cerrar:
+     * reiniciamos el carrusel
+     * y devolvemos el scroll a la web.
+     */
+    modal.addEventListener("hidden.bs.modal", () => {
+
+      if (carouselElement) {
+        const carousel =
+          bootstrap.Carousel.getInstance(
+            carouselElement
+          );
+
+        if (carousel) {
+          carousel.to(0);
+        }
+      }
+
+      if (lenis) {
+        lenis.start();
+      }
+    });
+  });
+}
 /* --- INIT --- */
 window.addEventListener("DOMContentLoaded", () => {
   setup3D();

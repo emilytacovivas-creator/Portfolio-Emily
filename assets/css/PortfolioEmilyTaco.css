@@ -1381,8 +1381,20 @@ details[open] .accordion-icon {
   text-transform: uppercase;
 
   color: #fff;
+
+   transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
 }
 
+.project-more:hover {
+  background-color: #fff;
+  border-color: #fff;
+  color: var(--text-dark);
+  transform: translateY(-2px);
+}
 
 /* INFORMACIÓN PARA MÓVIL */
 
@@ -1607,28 +1619,120 @@ details[open] .accordion-icon {
 }
 
 
-/* GALERÍA DEL MODAL */
+/* GALERÍA DEL MODAL
+   -------------------------------------------------------------------------- */
 
 .project-modal-carousel {
   width: 100%;
   margin-top: 1rem;
 }
 
-.project-modal-carousel .carousel-item {
-  text-align: center;
+
+/*
+ * El área del carrusel mantiene siempre
+ * la misma altura.
+ *
+ * Así el modal no pega saltos al llegar
+ * al desplegable vertical.
+ */
+.project-modal-carousel .carousel-inner {
+  height: clamp(360px, 62vh, 680px);
+  border-radius: 1.25rem;
 }
 
-.project-modal-carousel .carousel-item img {
+
+/*
+ * Cada slide ocupa exactamente
+ * el mismo espacio.
+ */
+.project-modal-carousel .carousel-item {
+  height: 100%;
+}
+
+
+/*
+ * Frame interior.
+ *
+ * El padding lateral genera una pequeña
+ * separación visual entre una imagen
+ * y la siguiente durante la transición.
+ */
+.project-slide-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  padding-inline: clamp(0.4rem, 1vw, 0.75rem);
+}
+
+
+/* IMAGEN */
+
+.project-slide-frame img {
+  display: block;
+
   width: auto !important;
+  height: auto;
+
   max-width: 100%;
-  max-height: 72vh;
+  max-height: 100%;
 
   margin: 0 auto;
 
   object-fit: contain;
+
   border-radius: 1.25rem;
 }
 
+/* INDICADORES DEL CARRUSEL */
+
+.project-carousel-indicators {
+  position: static;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 0.6rem;
+
+  margin: 1.15rem 0 0;
+}
+
+
+/* PUNTO */
+
+.project-carousel-indicators [data-bs-target] {
+  width: 8px;
+  height: 8px;
+
+  margin: 0;
+
+  padding: 0;
+
+  border: 0;
+  border-top: 0;
+  border-bottom: 0;
+  border-radius: 50%;
+
+  background-color: rgba(28, 20, 16, 0.2);
+
+  opacity: 1;
+
+  transition:
+    background-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* PUNTO ACTIVO */
+
+.project-carousel-indicators .active {
+  background-color: var(--accent);
+  transform: scale(1.35);
+}
 
 /* MÓVIL */
 
@@ -1679,8 +1783,23 @@ details[open] .accordion-icon {
   flex-direction: column;
 }
 
+/* SCROLL DEL MODAL */
+
+body.modal-open {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.modal {
+  overscroll-behavior: contain;
+}
+
 .modal-body {
   overflow-y: auto;
+  overscroll-behavior: contain;
+
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .carousel-item {
