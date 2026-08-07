@@ -2004,14 +2004,23 @@ body.modal-open {
 
   padding: 0;
 
-  border: 1px solid rgba(28, 20, 16, 0.08);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.28);
+
   border-radius: 50%;
 
-  background-color: rgba(255, 250, 239, 0.94);
-  color: var(--text-dark);
+  background-color:
+    rgba(35, 35, 35, 0.55);
+
+  color: #fff;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   box-shadow:
-    0 10px 35px rgba(0, 0, 0, 0.16);
+    0 8px 30px
+    rgba(0, 0, 0, 0.22);
 
   cursor: pointer;
 
@@ -2020,22 +2029,28 @@ body.modal-open {
   opacity: 1;
 
   transition:
-    opacity 0.3s ease,
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease,
+    transform 0.35s
+      cubic-bezier(0.16, 1, 0.3, 1),
     background-color 0.3s ease;
 }
 
 
-.project-video-toggle:hover {
+/* HOVER SOLO CUANDO ESTÁ PAUSADO */
+
+.project-video-toggle:not(.is-playing):hover {
   transform:
     translate(-50%, -50%)
     scale(1.07);
 
-  background-color: #fff;
+  background-color:
+    rgba(25, 25, 25, 0.72);
 }
 
 
-/* ICONOS */
+/* ==========================================================================
+   ICONOS PLAY / PAUSA
+   ========================================================================== */
 
 .project-video-icon {
   width: 30%;
@@ -2044,9 +2059,6 @@ body.modal-open {
 
 
 .project-video-icon-play {
-  /*
-   * Compensa visualmente la forma triangular.
-   */
   transform: translateX(2px);
 }
 
@@ -2057,12 +2069,13 @@ body.modal-open {
 
 
 /* ==========================================================================
-   ESTADO · VÍDEO REPRODUCIÉNDOSE
+   ESTADO · REPRODUCIENDO
    ========================================================================== */
 
 /*
- * Cuando empieza el vídeo ocultamos
- * suavemente el botón central.
+ * Cuando empieza el vídeo,
+ * el botón central desaparece
+ * completamente.
  */
 
 .project-video-toggle.is-playing {
@@ -2073,19 +2086,15 @@ body.modal-open {
 
 
 /*
- * Al volver a colocar el ratón encima,
- * aparece el botón de pausa.
+ * Mientras está reproduciendo
+ * NO lo volvemos a mostrar con hover.
+ *
+ * Para pausar se pueden utilizar
+ * los controles inferiores del vídeo.
  */
 
-.project-video-wrapper:hover
-.project-video-toggle.is-playing {
-  opacity: 0.9;
 
-  pointer-events: auto;
-}
-
-
-/* Cambiamos PLAY por PAUSA */
+/* PLAY / PAUSA */
 
 .project-video-toggle.is-playing
 .project-video-icon-play {
@@ -2100,18 +2109,15 @@ body.modal-open {
 
 
 /* ==========================================================================
-   FLECHAS DEL CARRUSEL · ZONA CLICABLE CORREGIDA
+   FLECHAS DEL CARRUSEL
    ========================================================================== */
 
 /*
- * IMPORTANTE:
+ * Botones circulares gris oscuro
+ * semitransparentes.
  *
- * Antes las flechas ocupaban TODA la altura
- * del carrusel.
- *
- * Ahora solo son botones pequeños centrados,
- * por lo que nunca pisan los controles
- * inferiores del vídeo.
+ * Así las flechas se distinguen sobre
+ * imágenes claras, oscuras o vídeos.
  */
 
 .project-carousel-control {
@@ -2127,45 +2133,130 @@ body.modal-open {
   align-items: center;
   justify-content: center;
 
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.2);
+
   border-radius: 50%;
 
-  opacity: 0.8;
+  background-color:
+    rgba(35, 35, 35, 0.42);
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+
+  box-shadow:
+    0 5px 18px
+    rgba(0, 0, 0, 0.18);
+
+  opacity: 1;
 
   z-index: 8;
 
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
+
+/* HOVER */
 
 .project-carousel-control:hover {
-  opacity: 1;
+  background-color:
+    rgba(25, 25, 25, 0.68);
+
+  border-color:
+    rgba(255, 255, 255, 0.34);
+
+  transform:
+    translateY(-50%)
+    scale(1.07);
+
+  box-shadow:
+    0 7px 22px
+    rgba(0, 0, 0, 0.25);
 }
 
 
-.project-modal-carousel .carousel-control-prev {
+/* POSICIÓN */
+
+.project-modal-carousel
+.carousel-control-prev {
   left: 0.75rem;
 }
 
 
-.project-modal-carousel .carousel-control-next {
+.project-modal-carousel
+.carousel-control-next {
   right: 0.75rem;
 }
 
+
+/* ICONO DE LAS FLECHAS */
 
 .project-modal-carousel
 .carousel-control-prev-icon,
 .project-modal-carousel
 .carousel-control-next-icon {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 1.6rem;
+  height: 1.6rem;
 
   background-size: 70%;
 
-  filter: invert(1);
+  filter: none;
 }
 
+
+/* ==========================================================================
+   AJUSTE ICONO CINEMA 4D
+   ========================================================================== */
+
+.project-software-item img.cinema4d-icon {
+  transform: scale(1.8);
+  transform-origin: center;
+}
+
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
+
+@media (max-width: 767px) {
+
+  .project-video-toggle {
+    width: 58px;
+    height: 58px;
+  }
+
+
+  .project-carousel-control {
+    width: 42px;
+    height: 42px;
+  }
+
+
+  .project-modal-carousel
+  .carousel-control-prev {
+    left: 0.35rem;
+  }
+
+
+  .project-modal-carousel
+  .carousel-control-next {
+    right: 0.35rem;
+  }
+
+
+  .project-modal-carousel
+  .carousel-control-prev-icon,
+  .project-modal-carousel
+  .carousel-control-next-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+}
 
 /* ==========================================================================
    MÓVIL
