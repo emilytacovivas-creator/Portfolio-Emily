@@ -2679,23 +2679,53 @@ body.modal-open {
    TÍTULO
    ========================================================================== */
 
+/* ==========================================================================
+   TÍTULO CONTACTO · SIEMPRE 2 LÍNEAS
+   ========================================================================== */
+
 .contact-card-title {
-  max-width: 560px;
+  width: 100%;
+  max-width: none;
 
   margin: 0;
 
   font-family: var(--font-sans);
 
-  font-size:
-    clamp(3.3rem, 6vw, 5rem);
-
+  font-size: clamp(2.2rem, 4.6vw, 4rem);
   font-weight: 600;
 
-  line-height: 0.9;
-
+  line-height: 0.92;
   letter-spacing: -0.07em;
 
   color: var(--text-dark);
+}
+
+
+/* PRIMERA LÍNEA */
+
+.contact-title-line {
+  display: block;
+
+  white-space: nowrap;
+}
+
+
+/* SEGUNDA LÍNEA */
+
+.contact-card-title .accent-serif {
+  display: block;
+
+  margin-top: 0.16em;
+
+  white-space: nowrap;
+
+  font-size: 1.02em;
+}
+
+.contact-card-title .accent-serif {
+  display: block;
+  margin-top: 0.14em;
+  font-size: 1.02em;
 }
 
 
