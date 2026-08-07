@@ -3804,3 +3804,458 @@ body.modal-open {
     gap: 20px;
   }
 }
+/* ==========================================================================
+   AJUSTES RESPONSIVE · MÓVIL · V2
+   ========================================================================== */
+
+@media (max-width: 767px) {
+
+
+  /* ========================================================================
+     1. HERO · PRIMERA FOTO
+     Menos aire por encima de la cabeza
+     ======================================================================== */
+
+  .card-front img {
+    object-position: center 30% !important;
+  }
+
+
+  .tilt-card {
+    width: 70vw !important;
+    height: 85vw !important;
+  }
+
+
+
+  /* ========================================================================
+     2. SERVICIOS · TEXTO "TE AYUDO..."
+     ======================================================================== */
+
+  .services-text .lead {
+    font-size: 0.95rem !important;
+    line-height: 1.45;
+    max-width: 100%;
+  }
+
+
+  /* Mismo tamaño que los textos del acordeón */
+
+  .accordion-content li {
+    font-size: 0.95rem;
+  }
+
+
+
+  /* ========================================================================
+     3. MENOS ESPACIO ENTRE SERVICIOS Y SOFTWARE
+     ======================================================================== */
+
+  .services-accordion {
+    margin-bottom: 1rem !important;
+  }
+
+
+  #master-stage {
+    padding-bottom: 0 !important;
+  }
+
+
+  #software {
+    padding-top: 1.25rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+
+  #software .container {
+    margin-bottom: 0.75rem !important;
+  }
+
+
+  .software-badge {
+    margin-bottom: 0 !important;
+    font-size: 1rem;
+  }
+
+
+
+  /* ========================================================================
+     4. SOFTWARE · CARRUSEL INFINITO
+     ======================================================================== */
+
+  .software-marquee {
+    width: 100%;
+
+    padding-block: 0.65rem;
+
+    overflow: hidden;
+  }
+
+
+  /*
+   * Los dos grupos idénticos del HTML
+   * se colocan uno inmediatamente detrás del otro.
+   */
+
+  .marquee-track {
+    display: flex;
+
+    align-items: center;
+
+    width: max-content;
+
+    gap: 1.4rem;
+
+    animation:
+      software-mobile-loop
+      24s
+      linear
+      infinite;
+
+    will-change: transform;
+  }
+
+
+  .marquee-group {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    flex-shrink: 0;
+
+    min-width: max-content;
+
+    gap: 1.4rem;
+  }
+
+
+  /*
+   * Iconos algo más pequeños,
+   * manteniendo aire entre ellos.
+   */
+
+  .marquee-group img {
+    flex-shrink: 0;
+
+    height: 39px;
+    width: auto;
+  }
+
+
+  @keyframes software-mobile-loop {
+
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform:
+        translateX(
+          calc(-50% - 0.7rem)
+        );
+    }
+
+  }
+
+
+
+  /* ========================================================================
+     5. SOBRE MÍ · TÍTULO
+     ======================================================================== */
+
+  #about h2.display-3 {
+    font-size:
+      clamp(2.15rem, 10vw, 3rem)
+      !important;
+
+    line-height: 0.95;
+
+    margin-bottom: 1.4rem !important;
+  }
+
+
+  /*
+   * Mantiene:
+   *
+   * Encantada,
+   * me llamo Emily
+   */
+
+  #about h2.display-3 > .d-block {
+    white-space: nowrap;
+  }
+
+
+
+  /* ========================================================================
+     6. SOBRE MÍ · COMPOSICIÓN MÓVIL
+     ======================================================================== */
+
+  /*
+   * COMPOSICIÓN:
+   *
+   * ┌───────────────────────────────┐
+   * │          ASÍ EMPEZÓ           │
+   * └───────────────────────────────┘
+   *
+   * ┌──────────────┬────────────────┐
+   * │ FORMACIÓN    │                │
+   * │ UDIT         │                │
+   * ├──────────────┤      FOTO      │
+   * │ UBICACIÓN    │                │
+   * │ Madrid       │                │
+   * └──────────────┴────────────────┘
+   *
+   * ┌───────────────────────────────┐
+   * │     EMPEZAR UN PROYECTO       │
+   * └───────────────────────────────┘
+   */
+
+
+  .hybrid-grid {
+    display: grid !important;
+
+    /*
+     * Información algo más estrecha
+     * y foto ligeramente más protagonista.
+     */
+
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(0, 1.1fr)
+      !important;
+
+    grid-template-rows:
+      auto
+      1fr
+      1fr
+      auto;
+
+    gap: 0.85rem !important;
+  }
+
+
+
+  /* ========================================================================
+     BIO · ANCHO COMPLETO
+     ======================================================================== */
+
+  .bio-area {
+    order: initial !important;
+
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+
+
+  /* ========================================================================
+     FOTO · DERECHA
+     ======================================================================== */
+
+  .photo-area {
+    order: initial !important;
+
+    grid-column: 2 / 3;
+    grid-row: 2 / 4;
+
+    height: auto !important;
+
+    min-height: 245px !important;
+    max-height: none !important;
+  }
+
+
+  .photo-area img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center top;
+  }
+
+
+
+  /* ========================================================================
+     FORMACIÓN · IZQUIERDA ARRIBA
+     ======================================================================== */
+
+  .info-area-1 {
+    order: initial !important;
+
+    grid-column: 1 / 2;
+    grid-row: 2;
+  }
+
+
+
+  /* ========================================================================
+     UBICACIÓN · IZQUIERDA ABAJO
+     ======================================================================== */
+
+  .info-area-2 {
+    order: initial !important;
+
+    grid-column: 1 / 2;
+    grid-row: 3;
+  }
+
+
+
+  /* ========================================================================
+     TARJETAS PEQUEÑAS · FORMACIÓN Y UBICACIÓN
+     ======================================================================== */
+
+  .info-area-1 .p-4,
+  .info-area-2 .p-4 {
+    padding: 1rem !important;
+  }
+
+
+  .info-area-1 h5,
+  .info-area-2 h5 {
+    font-size: 0.95rem;
+
+    line-height: 1.1;
+  }
+
+
+  .info-area-1 p,
+  .info-area-2 p {
+    font-size: 0.7rem !important;
+
+    line-height: 1.3;
+  }
+
+
+  .info-area-1 .editorial-label,
+  .info-area-2 .editorial-label {
+    font-size: 0.58rem;
+  }
+
+
+
+  /* ========================================================================
+     CTA · ANCHO COMPLETO
+     ======================================================================== */
+
+  .cta-area {
+    order: initial !important;
+
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+
+
+  .cta-link-rounded {
+    padding:
+      1.15rem
+      1.4rem;
+
+    font-size: 0.95rem;
+  }
+
+
+  .cta-link-rounded svg {
+    width: 26px;
+    height: 26px;
+  }
+
+
+
+  /* ========================================================================
+     7. EXPERIENCIA · TÍTULO EN DOS LÍNEAS
+     ======================================================================== */
+
+  /*
+   * Mi recorrido
+   * profesional
+   */
+
+  .experience-title {
+    width: 100%;
+
+    font-size:
+      clamp(2.4rem, 11vw, 3.2rem)
+      !important;
+
+    line-height: 0.92;
+  }
+
+
+  .experience-title .accent-serif {
+    display: block;
+
+    margin-top: 0.08em;
+
+    white-space: nowrap;
+  }
+
+
+
+  /* ========================================================================
+     8. CONTACTO · TÍTULO MÁS PEQUEÑO
+     ======================================================================== */
+
+  /*
+   * Hagamos tu
+   * idea realidad.
+   */
+
+  .contact-card-title {
+    font-size:
+      clamp(1.9rem, 9vw, 2.55rem)
+      !important;
+
+    line-height: 0.94;
+  }
+
+
+  .contact-title-line,
+  .contact-card-title .accent-serif {
+    white-space: nowrap;
+  }
+
+
+
+  /* ========================================================================
+     9. FOOTER · FRASE SIEMPRE EN DOS LÍNEAS
+     ======================================================================== */
+
+  /*
+   * El buen diseño impulsa
+   * el crecimiento.
+   */
+
+  .footer-content-wrapper
+  .footer-box:first-child {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+
+  .footer-tagline-medium {
+    margin:
+      0
+      auto
+      1rem;
+
+    font-size:
+      clamp(1.35rem, 6.6vw, 1.7rem);
+
+    line-height: 1.22;
+
+    text-align: center;
+  }
+
+
+  .footer-tagline-line {
+    display: block;
+
+    white-space: nowrap;
+  }
+
+}
