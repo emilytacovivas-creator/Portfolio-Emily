@@ -1641,36 +1641,23 @@ details[open] .accordion-icon {
    ÁREA DE IMAGEN
    ========================================================================== */
 
-/*
- * Todas las imágenes del proyecto comparten
- * exactamente la misma altura.
- */
-.project-modal-carousel {
-  --project-image-height: clamp(360px, 55vh, 600px);
-}
-
-
-/* Contenedor estable */
-
 .project-modal-carousel .carousel-inner {
-  height: var(--project-image-height);
-
+  height: var(--project-carousel-height);
   overflow: hidden;
-
   border-radius: 1.25rem;
 }
 
 
-/* Todos los slides tienen la misma altura */
+/* TODOS LOS SLIDES */
 
 .project-modal-carousel .carousel-item {
   height: 100%;
 }
 
 
-/* Frame de cada imagen */
+/* CONTENEDOR DE LAS IMÁGENES */
 
-.project-slide-frame {
+.project-modal-carousel .project-slide-frame {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1678,54 +1665,61 @@ details[open] .accordion-icon {
   width: 100%;
   height: 100%;
 
-  padding-inline: clamp(0.5rem, 1.2vw, 0.9rem);
+  padding: 0.6rem;
 }
 
 
-/*
- * TODAS LAS IMÁGENES
- *
- * La altura es idéntica.
- * El ancho se calcula automáticamente
- * para no deformarlas.
- */
+/* ==========================================================================
+   TODAS LAS IMÁGENES
+   ========================================================================== */
 
 .project-modal-carousel .project-slide-frame img {
   display: block;
 
-  height: var(--project-image-height) !important;
-  width: auto !important;
+  width: 100% !important;
+  height: 100% !important;
 
-  max-height: var(--project-image-height) !important;
   max-width: 100% !important;
+  max-height: 100% !important;
 
   object-fit: contain;
 
-  margin: 0 auto;
+  margin: 0;
 
   border-radius: 1.25rem;
 }
 
 
 /* ==========================================================================
-   AJUSTE MÓVIL
+   DESPLEGABLE
+   ========================================================================== */
+
+.project-modal-carousel
+.project-slide-vertical
+.project-slide-frame img {
+  width: auto !important;
+  height: 100% !important;
+
+  max-width: 100% !important;
+  max-height: 100% !important;
+
+  object-fit: contain;
+
+  margin: 0 auto;
+}
+
+
+/* ==========================================================================
+   MÓVIL
    ========================================================================== */
 
 @media (max-width: 767px) {
 
   .project-modal-carousel {
-    --project-image-height: clamp(280px, 45vh, 420px);
-  }
-
-  .project-modal-carousel .project-slide-frame img {
-    border-radius: 0.9rem;
+    --project-carousel-height: 420px;
   }
 
 }
-
-/* ==========================================================================
-   FLECHAS
-   ========================================================================== */
 
 .project-modal-carousel .project-carousel-control {
   /*
