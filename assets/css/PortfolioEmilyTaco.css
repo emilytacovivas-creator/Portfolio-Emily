@@ -1693,6 +1693,19 @@ details[open] .accordion-icon {
   border-radius: 1.25rem;
 }
 
+/* IMAGEN VERTICAL · DESPLEGABLE */
+
+.project-modal-carousel
+.project-slide-vertical
+.project-slide-frame img {
+  height: 100% !important;
+  width: auto !important;
+
+  max-height: 100% !important;
+  max-width: 100% !important;
+
+  object-fit: contain;
+}
 
 /* ==========================================================================
    FLECHAS
