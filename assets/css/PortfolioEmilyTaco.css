@@ -1471,6 +1471,204 @@ details[open] .accordion-icon {
   }
 }
 
+/* INFORMACIÓN INTERIOR DEL MODAL
+   -------------------------------------------------------------------------- */
+
+.project-modal-content {
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+.project-modal-intro {
+  max-width: 900px;
+  margin: 0 auto clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.project-modal-category {
+  display: block;
+  margin-bottom: 1rem;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  color: var(--accent);
+}
+
+.project-modal-title {
+  margin: 0;
+
+  font-family: var(--font-sans);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 600;
+
+  line-height: 0.95;
+  letter-spacing: -0.065em;
+
+  color: var(--text-dark);
+}
+
+.project-modal-subtitle {
+  margin: 0.8rem 0 2rem;
+
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  font-style: italic;
+
+  color: var(--accent);
+}
+
+.project-modal-description {
+  max-width: 760px;
+  margin: 0;
+
+  font-size: 1rem;
+  line-height: 1.6;
+
+  color: rgba(28, 20, 16, 0.72);
+}
+
+
+/* CONCEPTO */
+
+.project-concept {
+  max-width: 760px;
+  margin-top: 2.5rem;
+}
+
+.project-modal-label {
+  display: block;
+  margin-bottom: 0.8rem;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: rgba(28, 20, 16, 0.5);
+}
+
+.project-concept p {
+  margin: 0 0 0.8rem;
+
+  font-size: 0.95rem;
+  line-height: 1.6;
+
+  color: rgba(28, 20, 16, 0.7);
+}
+
+
+/* SOFTWARE */
+
+.project-modal-software {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+
+  border-top: 1px solid rgba(28, 20, 16, 0.12);
+}
+
+.project-software-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.project-software-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.project-software-item img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.project-software-item div {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-software-item span {
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  color: var(--text-dark);
+}
+
+.project-software-item small {
+  margin-top: 0.1rem;
+
+  font-size: 0.7rem;
+
+  color: rgba(28, 20, 16, 0.5);
+}
+
+
+/* GALERÍA DEL MODAL */
+
+.project-modal-carousel {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.project-modal-carousel .carousel-item {
+  text-align: center;
+}
+
+.project-modal-carousel .carousel-item img {
+  width: auto !important;
+  max-width: 100%;
+  max-height: 72vh;
+
+  margin: 0 auto;
+
+  object-fit: contain;
+  border-radius: 1.25rem;
+}
+
+
+/* MÓVIL */
+
+@media (max-width: 767px) {
+  .project-modal-content {
+    padding: 0.25rem;
+  }
+
+  .project-modal-intro {
+    margin-bottom: 2rem;
+  }
+
+  .project-modal-title {
+    font-size: 2.4rem;
+  }
+
+  .project-modal-subtitle {
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+  }
+
+  .project-modal-description,
+  .project-concept p {
+    font-size: 0.9rem;
+  }
+
+  .project-software-list {
+    gap: 1.25rem;
+  }
+
+  .project-software-item img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .project-modal-carousel .carousel-item img {
+    max-height: 65vh;
+    border-radius: 0.9rem;
+  }
+}
 .modal-content {
   border-radius: 1.5rem;
   border: none;
@@ -2367,9 +2565,7 @@ details[open] .accordion-icon {
     order: 5;
   }
 
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
+
 
   .visual-element-recta {
     max-height: 200px;
