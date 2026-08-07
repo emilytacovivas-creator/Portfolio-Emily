@@ -1001,179 +1001,248 @@
       </section>
       <!-- FIN · #PROJECTS -->
 
-      <section id="contact" class="py-5 mb-5" style="margin-top: 100px">
-        <div class="container">
-          <div class="contact-grid gsap-reveal">
-            <div class="contact-panel text-panel">
-              <div class="icon-box-top">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"
-                  />
-                </svg>
-              </div>
+<!-- ==========================================================================
+     CONTACTO
+     ========================================================================== -->
 
-              <div class="text-center mb-4 mt-3">
-                <span class="badge-editorial">Hablemos</span>
-              </div>
+<section
+  id="contact"
+  class="py-5 mb-5"
+  style="margin-top: 100px"
+>
 
-              <h2 class="display-3 fw-medium mb-4 text-center">
-                Hagamos realidad <br />
-                <span class="accent-serif fst-italic">tu idea.</span>
-              </h2>
+  <div class="container">
 
-              <form id="contactForm" class="w-100">
-                <div class="row g-2 mb-2">
-                  <div class="col-md-6">
-                    <label
-                      for="fullName"
-                      class="form-label small fw-bold text-uppercase mb-1"
-                      >Nombre</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control bg-light border-0 py-2"
-                      id="fullName"
-                      placeholder="Ej. Ana García"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    <label
-                      for="emailAddr"
-                      class="form-label small fw-bold text-uppercase mb-1"
-                      >Email</label
-                    >
-                    <input
-                      type="email"
-                      class="form-control bg-light border-0 py-2"
-                      id="emailAddr"
-                      placeholder="ana@ejemplo.com"
-                      required
-                    />
-                  </div>
-                </div>
 
-                <div class="mb-3">
-                  <label
-                    for="projectDesc"
-                    class="form-label small fw-bold text-uppercase mb-1"
-                    >Proyecto</label
-                  >
-                  <textarea
-                    class="form-control bg-light border-0 py-2"
-                    id="projectDesc"
-                    rows="3"
-                    placeholder="¿En qué puedo ayudarte?"
-                    required
-                  ></textarea>
-                </div>
+    <div class="contact-single-card gsap-reveal">
 
-                <button
-                  type="submit"
-                  id="submitBtn"
-                  class="btn btn-dark w-100 rounded-pill py-3"
-                >
-                  ENVIAR MENSAJE
-                </button>
+  <!-- ================================================================
+       ICONO SUPERIOR
+       ================================================================ -->
 
-                <div
-                  id="formFeedback"
-                  class="mt-2 text-center text-success fw-bold d-none"
-                  style="font-size: 0.8rem"
-                >
-                  ¡Mensaje enviado con éxito!
-                </div>
-              </form>
-            </div>
+  <div class="icon-box-top">
 
-            <div class="contact-panel visual-panel">
-              <div class="visual-content-wrapper">
-                <div class="image-flex-container">
-                  <img
-                    src="https://ik.imagekit.io/emytv/Portfolio-Emily/telefono-contacto.jpg"
-                    alt="Contacto"
-                    class="img-fluid visual-element-recta"
-                  />
-                </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"
+      />
+    </svg>
 
-                <div class="contact-buttons-wrapper">
-                  <div class="d-flex flex-column gap-2">
-                    <button
-                      class="btn-contact-copy"
-                      data-copy-text="+34 653 60 32 61"
-                    >
-                      <span class="btn-text">+34 653 60 32 61</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        class="ms-2 icon-copy"
-                      >
-                        <rect
-                          x="9"
-                          y="9"
-                          width="13"
-                          height="13"
-                          rx="2"
-                          ry="2"
-                        ></rect>
-                        <path
-                          d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
-                        ></path>
-                      </svg>
-                    </button>
-                    <button
-                      class="btn-contact-copy"
-                      data-copy-text="emilytacovivas@gmail.com"
-                    >
-                      <span class="btn-text small-email"
-                        >emilytacovivas@gmail.com</span
-                      >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        class="ms-2 icon-copy"
-                      >
-                        <rect
-                          x="9"
-                          y="9"
-                          width="13"
-                          height="13"
-                          rx="2"
-                          ry="2"
-                        ></rect>
-                        <path
-                          d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
-                        ></path>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+  </div>
+
+
+  <!-- ================================================================
+       PARTE SUPERIOR · TEXTO + FOTO
+       ================================================================ -->
+
+  <div class="contact-profile-layout">
+
+
+    <!-- TEXTO -->
+
+    <div class="contact-single-intro">
+
+      <span class="badge-editorial">
+        Hablemos
+      </span>
+
+
+      <h2 class="contact-single-title">
+
+        Hagamos realidad
+
+        <span class="accent-serif">
+          tu idea.
+        </span>
+
+      </h2>
+
+
+      <p class="contact-single-description">
+        Si crees que mi perfil puede encajar en tu equipo,
+        quieres trabajar conmigo o tienes una propuesta,
+        estaré encantada de leerte.
+      </p>
+
+    </div>
+
+
+    <!-- FOTO -->
+
+    <div class="contact-profile-photo-wrapper">
+
+      <img
+        src="https://ik.imagekit.io/emytv/Portfolio-Emily/Emy-35.jpg"
+        alt="Emily Taco"
+        class="contact-profile-photo"
+      />
+
+    </div>
+
+
+  </div>
+
+
+  <!-- ================================================================
+       CONTACTO
+       ================================================================ -->
+
+  <div class="contact-single-actions">
+
+
+    <!-- EMAIL -->
+
+    <button
+      class="btn-contact-copy contact-action"
+      type="button"
+      data-copy-text="emilytacovivas@gmail.com"
+    >
+
+      <span class="contact-action-content">
+
+        <span class="contact-action-label">
+          Email
+        </span>
+
+        <span class="btn-text contact-action-value">
+          emilytacovivas@gmail.com
+        </span>
+
+      </span>
+
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        class="icon-copy"
+        aria-hidden="true"
+      >
+        <rect
+          x="9"
+          y="9"
+          width="13"
+          height="13"
+          rx="2"
+          ry="2"
+        ></rect>
+
+        <path
+          d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+        ></path>
+      </svg>
+
+    </button>
+
+
+    <!-- TELÉFONO -->
+
+    <button
+      class="btn-contact-copy contact-action"
+      type="button"
+      data-copy-text="+34 653 60 32 61"
+    >
+
+      <span class="contact-action-content">
+
+        <span class="contact-action-label">
+          Teléfono
+        </span>
+
+        <span class="btn-text contact-action-value">
+          +34 653 60 32 61
+        </span>
+
+      </span>
+
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        class="icon-copy"
+        aria-hidden="true"
+      >
+        <rect
+          x="9"
+          y="9"
+          width="13"
+          height="13"
+          rx="2"
+          ry="2"
+        ></rect>
+
+        <path
+          d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+        ></path>
+      </svg>
+
+    </button>
+
+
+    <!-- LINKEDIN -->
+
+    <a
+      href="https://www.linkedin.com/in/emily-taco-vivas-a32582337"
+      class="contact-action contact-action-linkedin"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+
+      <span class="contact-action-content">
+
+        <span class="contact-action-label">
+          LinkedIn
+        </span>
+
+        <span class="contact-action-value">
+          Emily Taco Vivas
+        </span>
+
+      </span>
+
+
+      <span
+        class="contact-action-arrow"
+        aria-hidden="true"
+      >
+        ↗
+      </span>
+
+    </a>
+
+
+  </div>
+
+
+  <p class="contact-copy-hint">
+    Pulsa sobre el email o teléfono para copiarlo.
+  </p>
+
+</div>
+
+  </div>
+
+</section>
 
      <!-- ==========================================================================
      MODAL · CATA LA LATA 2026
