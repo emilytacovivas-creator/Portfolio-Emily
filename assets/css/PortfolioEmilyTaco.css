@@ -1619,44 +1619,46 @@ details[open] .accordion-icon {
 }
 
 
-/* GALERÍA DEL MODAL
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   GALERÍA DEL MODAL
+   ========================================================================== */
 
 .project-modal-carousel {
+  position: relative;
+
   width: 100%;
   margin-top: 1rem;
+
+  /*
+   * Altura que utilizaremos también
+   * para centrar las flechas.
+   */
+  --project-carousel-height: clamp(360px, 62vh, 680px);
 }
 
 
-/*
- * El área del carrusel mantiene siempre
- * la misma altura.
- *
- * Así el modal no pega saltos al llegar
- * al desplegable vertical.
- */
+/* ==========================================================================
+   ÁREA DE IMAGEN
+   ========================================================================== */
+
 .project-modal-carousel .carousel-inner {
-  height: clamp(360px, 62vh, 680px);
+  height: var(--project-carousel-height);
+
+  overflow: hidden;
+
   border-radius: 1.25rem;
 }
 
 
-/*
- * Cada slide ocupa exactamente
- * el mismo espacio.
- */
+/* Cada slide ocupa exactamente la misma altura */
+
 .project-modal-carousel .carousel-item {
   height: 100%;
 }
 
 
-/*
- * Frame interior.
- *
- * El padding lateral genera una pequeña
- * separación visual entre una imagen
- * y la siguiente durante la transición.
- */
+/* Frame de cada fotografía */
+
 .project-slide-frame {
   display: flex;
   align-items: center;
@@ -1665,20 +1667,24 @@ details[open] .accordion-icon {
   width: 100%;
   height: 100%;
 
-  padding-inline: clamp(0.4rem, 1vw, 0.75rem);
+  /*
+   * Deja una pequeña separación entre slides
+   * durante la transición.
+   */
+  padding-inline: clamp(0.5rem, 1.2vw, 0.9rem);
 }
 
 
-/* IMAGEN */
+/* Imagen */
 
-.project-slide-frame img {
+.project-modal-carousel .project-slide-frame img {
   display: block;
 
   width: auto !important;
-  height: auto;
+  height: auto !important;
 
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 100% !important;
+  max-height: 100% !important;
 
   margin: 0 auto;
 
@@ -1687,7 +1693,67 @@ details[open] .accordion-icon {
   border-radius: 1.25rem;
 }
 
-/* INDICADORES DEL CARRUSEL */
+
+/* ==========================================================================
+   FLECHAS
+   ========================================================================== */
+
+.project-modal-carousel .project-carousel-control {
+  /*
+   * IMPORTANTE:
+   * la flecha solo ocupa la altura
+   * reservada para la imagen.
+   */
+  top: 0;
+  bottom: auto;
+
+  height: var(--project-carousel-height);
+
+  width: clamp(45px, 8%, 80px);
+
+  opacity: 0.75;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+.project-modal-carousel .project-carousel-control:hover {
+  opacity: 1;
+}
+
+
+/* Flecha izquierda */
+
+.project-modal-carousel .carousel-control-prev {
+  left: 0;
+}
+
+
+/* Flecha derecha */
+
+.project-modal-carousel .carousel-control-next {
+  right: 0;
+}
+
+
+/* Iconos */
+
+.project-modal-carousel .carousel-control-prev-icon,
+.project-modal-carousel .carousel-control-next-icon {
+  width: 2rem;
+  height: 2rem;
+
+  filter: invert(1);
+
+  background-size: 70%;
+}
+
+
+/* ==========================================================================
+   INDICADORES
+   ========================================================================== */
 
 .project-carousel-indicators {
   position: static;
@@ -1702,19 +1768,16 @@ details[open] .accordion-icon {
 }
 
 
-/* PUNTO */
+/* Punto */
 
 .project-carousel-indicators [data-bs-target] {
   width: 8px;
   height: 8px;
 
   margin: 0;
-
   padding: 0;
 
   border: 0;
-  border-top: 0;
-  border-bottom: 0;
   border-radius: 50%;
 
   background-color: rgba(28, 20, 16, 0.2);
@@ -1727,7 +1790,7 @@ details[open] .accordion-icon {
 }
 
 
-/* PUNTO ACTIVO */
+/* Punto activo */
 
 .project-carousel-indicators .active {
   background-color: var(--accent);

@@ -543,11 +543,16 @@ function initExperienceHover() {
     });
   });
 }
-/* 9. COPIAR */
+
+/* ==========================================================================
+   9. COPIAR DATOS DE CONTACTO
+   ========================================================================== */
+
 function initContactCopy() {
   document.querySelectorAll(".btn-contact-copy").forEach((btn) => {
     btn.addEventListener("click", () => {
       const textToCopy = btn.getAttribute("data-copy-text");
+
       navigator.clipboard.writeText(textToCopy);
 
       const btnText = btn.querySelector(".btn-text");
@@ -564,23 +569,35 @@ function initContactCopy() {
   });
 }
 
-/* 10. ERROR 404 */
+
+/* ==========================================================================
+   10. PÁGINA ERROR 404
+   ========================================================================== */
+
 function initErrorPage() {
   const errorContainer = document.querySelector(".error-container");
-  if (errorContainer) {
-    gsap.from(errorContainer, {
-      opacity: 0,
-      y: 30,
-      duration: 1,
-      ease: "power2.out",
-    });
-    gsap.to(".gsap-reveal", { opacity: 1, y: 0, duration: 1, delay: 0.5 });
-  }
+
+  if (!errorContainer) return;
+
+  gsap.from(errorContainer, {
+    opacity: 0,
+    y: 30,
+    duration: 1,
+    ease: "power2.out",
+  });
+
+  gsap.to(".gsap-reveal", {
+    opacity: 1,
+    y: 0,
+    duration: 1,
+    delay: 0.5,
+  });
 }
 
 
-/* 10. MODALES DE PROYECTOS
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   11. MODALES DE PROYECTOS
+   ========================================================================== */
 
 function initProjectModals() {
   const projectModals = document.querySelectorAll(".modal");
@@ -592,8 +609,10 @@ function initProjectModals() {
     );
 
     /*
-     * Hace que Lenis ignore el scroll
-     * producido dentro del modal.
+     * LENIS
+     * -------------------------------------------------------
+     * Evita que el scroll realizado dentro del modal
+     * se envíe a la página principal.
      */
     if (modalBody) {
       modalBody.setAttribute("data-lenis-prevent", "");
@@ -601,9 +620,39 @@ function initProjectModals() {
 
 
     /*
-     * Antes de abrir:
-     * detenemos completamente el scroll
-     * de la página principal.
+     * SCROLL CON RUEDA
+     * -------------------------------------------------------
+     * Cuando el cursor está sobre el popup, la rueda
+     * controla el contenido del modal.
+     *
+     * Incluso si el cursor está encima del header,
+     * márgenes u otras zonas del popup.
+     */
+    modal.addEventListener(
+      "wheel",
+      (event) => {
+        if (!modalBody) return;
+
+        /*
+         * Si ya estamos directamente sobre modal-body,
+         * dejamos que el navegador haga el scroll normal.
+         */
+        if (event.target.closest(".modal-body")) {
+          return;
+        }
+
+        event.preventDefault();
+
+        modalBody.scrollTop += event.deltaY;
+      },
+      { passive: false }
+    );
+
+
+    /*
+     * ABRIENDO MODAL
+     * -------------------------------------------------------
+     * Congelamos el scroll de la página principal.
      */
     modal.addEventListener("show.bs.modal", () => {
       if (lenis) {
@@ -613,35 +662,55 @@ function initProjectModals() {
 
 
     /*
-     * Cuando termina de abrirse:
-     * empezamos el carrusel automático.
+     * MODAL ABIERTO
+     * -------------------------------------------------------
+     * Volvemos arriba del proyecto y activamos
+     * el carrusel automático.
      */
     modal.addEventListener("shown.bs.modal", () => {
-
       if (modalBody) {
         modalBody.scrollTop = 0;
       }
 
-      if (carouselElement) {
-        const carousel =
-          bootstrap.Carousel.getOrCreateInstance(
-            carouselElement,
-            {
-              interval: 4000,
-              pause: "hover",
-              touch: true,
-              wrap: true,
-            }
-          );
+      if (!carouselElement) return;
 
-        carousel.cycle();
-      }
+      const carousel =
+        bootstrap.Carousel.getOrCreateInstance(
+          carouselElement,
+          {
+            /*
+             * Cambia de imagen cada 4 segundos.
+             */
+            interval: 4000,
+
+            /*
+             * No se detiene por dejar el cursor
+             * encima de la imagen.
+             */
+            pause: false,
+
+            /*
+             * Permite deslizar con el dedo
+             * en móvil y tablet.
+             */
+            touch: true,
+
+            /*
+             * Al llegar a la última imagen
+             * vuelve a la primera.
+             */
+            wrap: true,
+          }
+        );
+
+      carousel.cycle();
     });
 
 
     /*
-     * Paramos el carrusel antes
-     * de cerrar el proyecto.
+     * CERRANDO MODAL
+     * -------------------------------------------------------
+     * Pausamos el carrusel.
      */
     modal.addEventListener("hide.bs.modal", () => {
       if (!carouselElement) return;
@@ -658,12 +727,12 @@ function initProjectModals() {
 
 
     /*
-     * Al cerrar:
-     * reiniciamos el carrusel
-     * y devolvemos el scroll a la web.
+     * MODAL CERRADO
+     * -------------------------------------------------------
+     * Volvemos a la primera imagen y recuperamos
+     * el scroll normal de la página.
      */
     modal.addEventListener("hidden.bs.modal", () => {
-
       if (carouselElement) {
         const carousel =
           bootstrap.Carousel.getInstance(
@@ -681,7 +750,12 @@ function initProjectModals() {
     });
   });
 }
-/* --- INIT --- */
+
+
+/* ==========================================================================
+   INIT
+   ========================================================================== */
+
 window.addEventListener("DOMContentLoaded", () => {
   setup3D();
   initNavLogic();
@@ -689,6 +763,13 @@ window.addEventListener("DOMContentLoaded", () => {
   initExperienceHover();
   initContactCopy();
   initErrorPage();
+
+  /*
+   * IMPORTANTE:
+   * inicializa el comportamiento de los modales.
+   */
+  initProjectModals();
+
   intro();
 });
 
