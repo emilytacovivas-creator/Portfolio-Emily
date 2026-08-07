@@ -1720,9 +1720,9 @@ details[open] .accordion-icon {
 
   margin: 0 !important;
 
-  border-radius: 1.25rem;
-}
 
+  border-radius: 0;
+}
 
 /* ==========================================================================
    FLECHAS
@@ -1927,10 +1927,6 @@ body.modal-open {
     padding: 0.35rem;
   }
 
-
-  .project-modal-carousel .project-slide-frame img {
-    border-radius: 0.9rem;
-  }
 
 
   .project-carousel-control {
