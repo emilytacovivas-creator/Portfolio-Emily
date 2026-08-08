@@ -1,515 +1,956 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Emily Taco · Portfolio</title>
-    <meta
-      name="description"
-      content="Portfolio de Emily Taco: fotografía, videografía y diseño gráfico con un enfoque editorial."
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <title>Emily Taco · Portfolio</title>
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+  <meta
+    name="description"
+    content="Portfolio de Emily Taco: fotografía, videografía y diseño gráfico con un enfoque editorial."
+  />
 
-    <link rel="stylesheet" href="./assets/css/PortfolioEmilyTaco.css" />
-  </head>
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
 
-  <body>
-    <nav
-      id="navbar"
-      class="navbar navbar-expand-lg fixed-top navbar-custom navbar-light"
-    >
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="#master-stage">Emily Taco</a>
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
 
-        <button
-          class="navbar-toggler custom-toggler border-0 collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Abrir menú"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#master-stage" aria-current="page"
-                >Home</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#services-layer">Servicios</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#about">Sobre mi</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#projects">Proyectos</a>
-            </li>
-            <li class="nav-item cta-button-wrapper">
-              <a class="nav-link btn-navbar-cta" href="#contact">Contacto</a>
-            </li>
-          </ul>
-        </div>
+  <link
+    rel="stylesheet"
+    href="./assets/css/PortfolioEmilyTaco.css"
+  />
+</head>
+
+
+<body>
+
+
+  <!-- ==========================================================================
+       NAVEGACIÓN
+       ========================================================================== -->
+
+  <nav
+    id="navbar"
+    class="navbar navbar-expand-lg fixed-top navbar-custom navbar-light"
+  >
+
+    <div class="container">
+
+      <a
+        class="navbar-brand"
+        href="#master-stage"
+      >
+        Emily Taco
+      </a>
+
+
+      <button
+        class="navbar-toggler border-0 collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Abrir menú"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+
+      <div
+        class="collapse navbar-collapse"
+        id="navbarNav"
+      >
+
+        <ul class="navbar-nav ms-auto">
+
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#master-stage"
+              aria-current="page"
+            >
+              Home
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#services-layer"
+            >
+              Servicios
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#about"
+            >
+              Sobre mí
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="#projects"
+            >
+              Proyectos
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link btn-navbar-cta"
+              href="#contact"
+            >
+              Contacto
+            </a>
+          </li>
+
+        </ul>
+
       </div>
-    </nav>
 
-    <main>
-      <section id="master-stage">
-        <div class="container stage-inner">
-          <div class="card-layer">
-            <div class="tilt-stage">
-              <div class="tilt-card" id="tiltCard">
-                <div class="card-face card-front">
-                  <img
-                    src="https://ik.imagekit.io/emytv/Portfolio-Emily/Emy-27.jpg"
-                    alt="Trabajo frontal"
-                  />
-                </div>
+    </div>
 
-                <div class="card-face card-back">
-                  <img
-                    src="https://ik.imagekit.io/emytv/Portfolio-Emily/Emy-21.jpg"
-                    alt="Trabajo trasero"
-                  />
-                </div>
+  </nav>
 
-                <button class="wave-badge" type="button" aria-label="Saludar">
-                  <svg
-                    class="wave-icon wave-hand"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 256 256"
-                    fill="currentColor"
-                  >
-                    <path
-                      d="M220.17,100,202.86,70a28,28,0,0,0-38.24-10.25,27.69,27.69,0,0,0-9,8.34L138.2,38a28,28,0,0,0-48.48,0A28,28,0,0,0,48.15,74l1.59,2.76A27.67,27.67,0,0,0,38,80.41a28,28,0,0,0-10.24,38.25l40,69.32a87.47,87.47,0,0,0,53.43,41,88.56,88.56,0,0,0,22.92,3,88,88,0,0,0,76.06-132Zm-6.66,62.64A72,72,0,0,1,81.62,180l-40-69.32a12,12,0,0,1,20.78-12L81.63,132a8,8,0,1,0,13.85-8L62,66A12,12,0,1,1,82.78,54L114,108a8,8,0,1,0,13.85-8L103.57,58h0a12,12,0,1,1,20.78-12l33.42,57.9a48,48,0,0,0-5.54,60.6,8,8,0,0,0,13.24-9A32,32,0,0,1,172.78,112a8,8,0,0,0,2.13-10.4L168.23,90A12,12,0,1,1,189,78l17.31,30A71.56,71.56,0,0,1,213.51,162.62ZM184.25,31.71A8,8,0,0,1,194,26a59.62,59.62,0,0,1,36.53,28l.33.57a8,8,0,1,1-13.85,8l-.33-.57a43.67,43.67,0,0,0-26.8-20.5A8,8,0,0,1,184.25,31.71ZM80.89,237a8,8,0,0,1-11.23,1.33A119.56,119.56,0,0,1,40.06,204a8,8,0,0,1,13.86-8,103.67,103.67,0,0,0,25.64,29.72A8,8,0,0,1,80.89,237Z"
-                    ></path>
-                  </svg>
-                </button>
+
+
+  <main>
+
+
+    <!-- ==========================================================================
+         HERO + SERVICIOS
+         ========================================================================== -->
+
+    <section id="master-stage">
+
+      <div class="container stage-inner">
+
+
+        <!-- FOTO CENTRAL -->
+
+        <div class="card-layer">
+
+          <div class="tilt-stage">
+
+            <div
+              class="tilt-card"
+              id="tiltCard"
+            >
+
+              <div class="card-face card-front">
+
+                <img
+                  src="https://ik.imagekit.io/emytv/Portfolio-Emily/Emy-27.jpg"
+                  alt="Emily Taco con una cámara"
+                />
+
               </div>
-            </div>
-          </div>
-          <div class="text-layer hero-text" id="heroText">
-            <div class="hero-ref-left">
-              <p class="hero-ref-name">Emily Taco</p>
-              <h1 class="hero-ref-big">DISEÑO</h1>
-            </div>
 
-            <div class="hero-ghost-center"></div>
 
-            <div class="hero-ref-right">
-              <h2 class="hero-ref-big">GRÁFICO</h2>
-              <p class="hero-ref-sub">
-                Diseñadora gráfica y fotógrafa.
-              </p>
-            </div>
-          </div>
+              <div class="card-face card-back">
 
-          <div class="text-layer services-text" id="servicesText">
-            <div class="row w-100" id="services-layer">
-              <div class="col-lg-6 pe-lg-5">
-                <div class="mb-4">
-                  <h2 class="display-3 fw-medium mb-3 title-with-accent">
-                    <span class="d-block">Lo que puedo</span>
-                    <span class="d-block">
-                      hacer
-                      <span
-                        class="accent-serif ms-1"
-                        style="letter-spacing: -0.08em"
-                        >por ti</span
-                      >
-                    </span>
-                  </h2>
-                  <p class="lead">
-                    Te ayudo a hacer crecer tu marca a través del diseño,
-                    creando propuestas visuales auténticas y profesionales que
-                    conectan con tu público.
-                  </p>
-                </div>
+                <img
+                  src="https://ik.imagekit.io/emytv/Portfolio-Emily/Emy-21.jpg"
+                  alt="Emily Taco trabajando en diseño"
+                />
 
-                <div class="services-accordion">
-                  <details>
-                    <summary>
-                      <span class="service-number">1.</span> Diseño UI/UX
-                      <span class="accordion-icon"></span>
-                    </summary>
-                    <div class="accordion-content">
-                      <ul>
-                        <li>Interfaces de usuario para web y app</li>
-                        <li>Wireframes y prototipos interactivos</li>
-                        <li>Microanimaciones e interacciones</li>
-                        <li>Diseño responsive</li>
-                      </ul>
-                    </div>
-                  </details>
-
-                  <details>
-                    <summary>
-                      <span class="service-number">2.</span> Branding
-                      <span class="accordion-icon"></span>
-                    </summary>
-                    <div class="accordion-content">
-                      <ul>
-                        <li>Manuales de marca y guías de estilo</li>
-                        <li>Logotipos, iconos y elementos gráficos</li>
-                        <li>
-                          Aplicaciones de marca en soportes digitales e impresos
-                        </li>
-                        <li>
-                          Storytelling de marca, selección tipográfica y
-                          cromática
-                        </li>
-                      </ul>
-                    </div>
-                  </details>
-
-                  <details>
-                    <summary>
-                      <span class="service-number">3.</span> Redes Sociales
-                      <span class="accordion-icon"></span>
-                    </summary>
-                    <div class="accordion-content">
-                      <ul>
-                        <li>Diseño de posts, carruseles y stories</li>
-                        <li>Edición de reels y videos cortos</li>
-                        <li>Creación de gráficos y animaciones</li>
-                        <li>
-                          Adaptación de contenido visual a distintos formatos
-                        </li>
-                      </ul>
-                    </div>
-                  </details>
-
-                  <details>
-                    <summary>
-                      <span class="service-number">4.</span> Fotografía
-                      <span class="accordion-icon"></span>
-                    </summary>
-                    <div class="accordion-content">
-                      <ul>
-                        <li>Sesiones de fotos en exterior o estudio</li>
-                        <li>
-                          Fotografía de retrato para marcas y perfiles
-                          personales
-                        </li>
-                        <li>Edición y retoque de imagen</li>
-                        <li>
-                          Integración de fotografía en piezas gráficas y
-                          contenido digital
-                        </li>
-                      </ul>
-                    </div>
-                  </details>
-                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section id="software" class="py-5">
-        <div class="container text-center mb-4 gsap-reveal">
-          <h3 class="software-badge">Software que domino</h3>
-        </div>
 
-        <div class="software-marquee gsap-reveal">
-          <div class="marquee-track">
-            <div class="marquee-group">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg"
-                alt="Photoshop"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg"
-                alt="Illustrator"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/48/Adobe_InDesign_CC_icon.svg"
-                alt="InDesign"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg"
-                alt="Premiere Pro"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg"
-                alt="After Effects"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Photoshop_Lightroom_CC_logo.svg"
-                alt="Lightroom"
-              />
-              <img
-                src="https://www.vectorlogo.zone/logos/canva/canva-icon.svg"
-                alt="Canva"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg"
-                alt="Figma"
-              />
-            </div>
-
-            <div class="marquee-group">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg"
-                alt="Photoshop"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg"
-                alt="Illustrator"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/48/Adobe_InDesign_CC_icon.svg"
-                alt="InDesign"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg"
-                alt="Premiere Pro"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg"
-                alt="After Effects"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Photoshop_Lightroom_CC_logo.svg"
-                alt="Lightroom"
-              />
-              <img
-                src="https://www.vectorlogo.zone/logos/canva/canva-icon.svg"
-                alt="Canva"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg"
-                alt="Figma"
-              />
-            </div>
-          </div>
-
-          <div class="marquee-fade"></div>
-        </div>
-      </section>
-
-      <section id="about" class="py-5">
-        <div class="container">
-          <div class="row mb-1 gsap-reveal">
-            <div class="col-12">
-              <h2
-                class="display-3 fw-medium mb-3"
-                style="letter-spacing: -0.08em"
+              <button
+                class="wave-badge"
+                type="button"
+                aria-label="Saludar"
               >
-                <span class="d-block">Encantada,</span>
-                <span class="d-block">
-                  me llamo
-                  <span
-                    class="accent-serif ms-1"
-                    style="letter-spacing: -0.08em"
-                    >Emily</span
-                  >
-                </span>
-              </h2>
-            </div>
-          </div>
 
-          <div class="hybrid-grid gsap-reveal">
-            <div class="hybrid-card bio-area">
-              <div
-                class="p-4 p-md-5 h-100 d-flex flex-column justify-content-between"
-              >
-                <span class="editorial-label">01 - Sobre mí</span>
-<div>
-  <h5 class="mb-3 fw-bold">Así empezó</h5>
-  <p class="fw-medium mb-3">
-    Desde pequeña me atraía el mundo del diseño, empecé diseñando mis propias invitaciones de cumpleaños, simplemente porque disfrutaba haciéndolo. Durante mucho tiempo fue un hobby, hasta que descubrí que podía convertir mi pasión en mi profesión. A día de hoy, sigo diseñando con la misma ilusión, ayudando a marcas y personas a dar forma a sus ideas y convertirlas en realidad.
-  </p>
-</div>
-              </div>
-            </div>
-
-            <div class="hybrid-card photo-area">
-              <img
-                src="https://ik.imagekit.io/emytv/Portfolio-Emily/Emy-10.jpg"
-                alt="Emily Taco"
-              />
-            </div>
-
-            <div class="hybrid-card info-area-1">
-              <div class="p-4 h-100 d-flex flex-column justify-content-center">
-                <span class="editorial-label mb-2">02 - Formación</span>
-                <h5 class="mb-1 fw-bold">UDIT</h5>
-                <p class="small text-muted mb-0">
-                  Graduada en Diseño gráfico y Multimedia
-                </p>
-              
-              </div>
-            </div>
-
-            <div class="hybrid-card info-area-2">
-              <div class="p-4 h-100 d-flex flex-column justify-content-center">
-                <span class="editorial-label mb-2">03 - Ubicación</span>
-                <h5 class="mb-1 fw-bold">Madrid, España</h5>
-                <p class="small text-muted mb-0">Presencial & Remoto</p>
-              </div>
-            </div>
-
-            <div class="hybrid-card cta-area">
-              <a href="#contact" class="cta-link-rounded">
-                <span>Empezar un proyecto</span>
                 <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
+                  class="wave-icon wave-hand"
                   xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 256 256"
+                  fill="currentColor"
+                  aria-hidden="true"
                 >
-                  <path
-                    d="M7 17L17 7M17 7H7M17 7V17"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="square"
-                    stroke-linejoin="miter"
-                  />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-<!-- EXPERIENCIA -->
-<section id="experience" class="experience-section">
-  <div class="container">
-    <div class="experience-heading">
-      <div>
-      
 
-        <h2 class="display-3 fw-medium experience-title">
-          Mi recorrido
-          <span class="accent-serif">profesional</span>
-        </h2>
+                  <path
+                    d="M220.17,100,202.86,70a28,28,0,0,0-38.24-10.25,27.69,27.69,0,0,0-9,8.34L138.2,38a28,28,0,0,0-48.48,0A28,28,0,0,0,48.15,74l1.59,2.76A27.67,27.67,0,0,0,38,80.41a28,28,0,0,0-10.24,38.25l40,69.32a87.47,87.47,0,0,0,53.43,41,88.56,88.56,0,0,0,22.92,3,88,88,0,0,0,76.06-132Zm-6.66,62.64A72,72,0,0,1,81.62,180l-40-69.32a12,12,0,0,1,20.78-12L81.63,132a8,8,0,1,0,13.85-8L62,66A12,12,0,1,1,82.78,54L114,108a8,8,0,1,0,13.85-8L103.57,58h0a12,12,0,1,1,20.78-12l33.42,57.9a48,48,0,0,0-5.54,60.6,8,8,0,0,0,13.24-9A32,32,0,0,1,172.78,112a8,8,0,0,0,2.13-10.4L168.23,90A12,12,0,1,1,189,78l17.31,30A71.56,71.56,0,0,1,213.51,162.62ZM184.25,31.71A8,8,0,0,1,194,26a59.62,59.62,0,0,1,36.53,28l.33.57a8,8,0,1,1-13.85,8l-.33-.57a43.67,43.67,0,0,0-26.8-20.5A8,8,0,0,1,184.25,31.71ZM80.89,237a8,8,0,0,1-11.23,1.33A119.56,119.56,0,0,1,40.06,204a8,8,0,0,1,13.86-8,103.67,103.67,0,0,0,25.64,29.72A8,8,0,0,1,80.89,237Z"
+                  ></path>
+
+                </svg>
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- DISEÑO / GRÁFICO -->
+
+        <div
+          class="text-layer hero-text"
+          id="heroText"
+        >
+
+          <div class="hero-ref-left">
+
+            <p class="hero-ref-name">
+              Emily Taco
+            </p>
+
+            <h1 class="hero-ref-big">
+              Diseño
+            </h1>
+
+          </div>
+
+
+          <div class="hero-ghost-center"></div>
+
+
+          <div class="hero-ref-right">
+
+            <h2 class="hero-ref-big">
+              Gráfico
+            </h2>
+
+            <p class="hero-ref-sub">
+              Diseñadora gráfica y fotógrafa.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- SERVICIOS -->
+
+        <div
+          class="text-layer services-text"
+          id="servicesText"
+        >
+
+          <div
+            class="row w-100"
+            id="services-layer"
+          >
+
+            <div class="col-lg-6 pe-lg-5">
+
+              <div class="mb-4">
+
+                <h2 class="display-3 fw-medium mb-3">
+
+                  <span class="d-block">
+                    Lo que puedo
+                  </span>
+
+                  <span class="d-block">
+                    hacer
+
+                    <span
+                      class="accent-serif ms-1"
+                      style="letter-spacing: -0.08em"
+                    >
+                      por ti
+                    </span>
+
+                  </span>
+
+                </h2>
+
+
+                <p class="lead">
+                  Te ayudo a hacer crecer tu marca a través del diseño,
+                  creando propuestas visuales auténticas y profesionales
+                  que conectan con tu público.
+                </p>
+
+              </div>
+
+
+
+              <div class="services-accordion">
+
+
+                <details>
+
+                  <summary>
+                    <span class="service-number">1.</span>
+                    Diseño UI/UX
+                    <span class="accordion-icon"></span>
+                  </summary>
+
+                  <div class="accordion-content">
+
+                    <ul>
+                      <li>Interfaces de usuario para web y app</li>
+                      <li>Wireframes y prototipos interactivos</li>
+                      <li>Microanimaciones e interacciones</li>
+                      <li>Diseño responsive</li>
+                    </ul>
+
+                  </div>
+
+                </details>
+
+
+
+                <details>
+
+                  <summary>
+                    <span class="service-number">2.</span>
+                    Branding
+                    <span class="accordion-icon"></span>
+                  </summary>
+
+                  <div class="accordion-content">
+
+                    <ul>
+                      <li>Manuales de marca y guías de estilo</li>
+                      <li>Logotipos, iconos y elementos gráficos</li>
+                      <li>
+                        Aplicaciones de marca en soportes digitales
+                        e impresos
+                      </li>
+                      <li>
+                        Storytelling de marca, selección tipográfica
+                        y cromática
+                      </li>
+                    </ul>
+
+                  </div>
+
+                </details>
+
+
+
+                <details>
+
+                  <summary>
+                    <span class="service-number">3.</span>
+                    Redes Sociales
+                    <span class="accordion-icon"></span>
+                  </summary>
+
+                  <div class="accordion-content">
+
+                    <ul>
+                      <li>Diseño de posts, carruseles y stories</li>
+                      <li>Edición de reels y vídeos cortos</li>
+                      <li>Creación de gráficos y animaciones</li>
+                      <li>
+                        Adaptación de contenido visual a distintos formatos
+                      </li>
+                    </ul>
+
+                  </div>
+
+                </details>
+
+
+
+                <details>
+
+                  <summary>
+                    <span class="service-number">4.</span>
+                    Fotografía
+                    <span class="accordion-icon"></span>
+                  </summary>
+
+                  <div class="accordion-content">
+
+                    <ul>
+                      <li>Sesiones de fotos en exterior o estudio</li>
+                      <li>
+                        Fotografía de retrato para marcas y perfiles personales
+                      </li>
+                      <li>Edición y retoque de imagen</li>
+                      <li>
+                        Integración de fotografía en piezas gráficas
+                        y contenido digital
+                      </li>
+                    </ul>
+
+                  </div>
+
+                </details>
+
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
-    </div>
+    </section>
 
-    <div class="experience-grid">
-      <!-- TRASTO -->
-      <article class="experience-card experience-card-featured">
-        <div class="experience-card-number">01</div>
 
-        <div class="experience-card-top">
-          <div>
-            <span class="experience-date">2024 - Actualidad</span>
 
-            <h3 class="experience-company">
-              <a
-                href="https://somostrasto.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="experience-external-link"
+    <!-- ==========================================================================
+         SOFTWARE
+         ========================================================================== -->
+
+    <section
+      id="software"
+      class="py-5"
+    >
+
+      <div class="container text-center mb-4 gsap-reveal">
+
+        <h3 class="software-badge">
+          Software que domino
+        </h3>
+
+      </div>
+
+
+      <div class="software-marquee gsap-reveal">
+
+        <div class="marquee-track">
+
+
+          <!-- GRUPO PRINCIPAL -->
+
+          <div class="marquee-group">
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg"
+              alt="Photoshop"
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg"
+              alt="Illustrator"
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/48/Adobe_InDesign_CC_icon.svg"
+              alt="InDesign"
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg"
+              alt="Premiere Pro"
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg"
+              alt="After Effects"
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Photoshop_Lightroom_CC_logo.svg"
+              alt="Lightroom"
+            />
+
+            <img
+              src="https://www.vectorlogo.zone/logos/canva/canva-icon.svg"
+              alt="Canva"
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg"
+              alt="Figma"
+            />
+
+          </div>
+
+
+
+          <!-- COPIA PARA EL LOOP INFINITO -->
+
+          <div
+            class="marquee-group"
+            aria-hidden="true"
+          >
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/a/af/Adobe_Photoshop_CC_icon.svg"
+              alt=""
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg"
+              alt=""
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/48/Adobe_InDesign_CC_icon.svg"
+              alt=""
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/40/Adobe_Premiere_Pro_CC_icon.svg"
+              alt=""
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Adobe_After_Effects_CC_icon.svg"
+              alt=""
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Adobe_Photoshop_Lightroom_CC_logo.svg"
+              alt=""
+            />
+
+            <img
+              src="https://www.vectorlogo.zone/logos/canva/canva-icon.svg"
+              alt=""
+            />
+
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg"
+              alt=""
+            />
+
+          </div>
+
+        </div>
+
+
+        <div class="marquee-fade"></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==========================================================================
+         SOBRE MÍ
+         ========================================================================== -->
+
+    <section
+      id="about"
+      class="py-5"
+    >
+
+      <div class="container">
+
+
+        <!-- TÍTULO -->
+
+        <div class="row mb-1 gsap-reveal">
+
+          <div class="col-12">
+
+            <h2
+              class="display-3 fw-medium mb-3"
+              style="letter-spacing: -0.08em"
+            >
+
+              <span class="d-block">
+                Encantada,
+              </span>
+
+              <span class="d-block">
+                me llamo
+
+                <span
+                  class="accent-serif ms-1"
+                  style="letter-spacing: -0.08em"
+                >
+                  Emily
+                </span>
+
+              </span>
+
+            </h2>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- TARJETAS -->
+
+        <div class="hybrid-grid gsap-reveal">
+
+
+          <div class="hybrid-card bio-area">
+
+            <div
+              class="p-4 p-md-5 h-100 d-flex flex-column justify-content-between"
+            >
+
+              <span class="editorial-label">
+                01 - Sobre mí
+              </span>
+
+
+              <div>
+
+                <h5 class="mb-3 fw-bold">
+                  Así empezó
+                </h5>
+
+                <p class="fw-medium mb-3">
+                  Desde pequeña me atraía el mundo del diseño.
+                  Empecé diseñando mis propias invitaciones de cumpleaños,
+                  simplemente porque disfrutaba haciéndolo. Durante mucho
+                  tiempo fue un hobby, hasta que descubrí que podía convertir
+                  mi pasión en mi profesión. A día de hoy, sigo diseñando con
+                  la misma ilusión, ayudando a marcas y personas a dar forma
+                  a sus ideas y convertirlas en realidad.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="hybrid-card photo-area">
+
+            <img
+              src="https://ik.imagekit.io/emytv/Portfolio-Emily/Emy-10.jpg"
+              alt="Emily Taco"
+              loading="lazy"
+            />
+
+          </div>
+
+
+
+          <div class="hybrid-card info-area-1">
+
+            <div
+              class="p-4 h-100 d-flex flex-column justify-content-center"
+            >
+
+              <span class="editorial-label mb-2">
+                02 - Formación
+              </span>
+
+              <h5 class="mb-1 fw-bold">
+                UDIT
+              </h5>
+
+              <p class="small text-muted mb-0">
+                Graduada en Diseño Gráfico y Multimedia
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="hybrid-card info-area-2">
+
+            <div
+              class="p-4 h-100 d-flex flex-column justify-content-center"
+            >
+
+              <span class="editorial-label mb-2">
+                03 - Ubicación
+              </span>
+
+              <h5 class="mb-1 fw-bold">
+                Madrid, España
+              </h5>
+
+              <p class="small text-muted mb-0">
+                Presencial &amp; remoto
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="hybrid-card cta-area">
+
+            <a
+              href="#contact"
+              class="cta-link-rounded"
+            >
+
+              <span>
+                Empezar un proyecto
+              </span>
+
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
-                Agencia Trasto
-                <span aria-hidden="true">↗</span>
-              </a>
-            </h3>
 
-            <p class="experience-role">
-              Creación de contenido para RRSS
-            </p>
+                <path
+                  d="M7 17L17 7M17 7H7M17 7V17"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="square"
+                  stroke-linejoin="miter"
+                />
+
+              </svg>
+
+            </a>
+
           </div>
 
-          <span class="experience-tag">Agencia</span>
+
         </div>
 
-        <div class="experience-stages">
-          <div class="experience-stage">
-            
+      </div>
 
-            <div>
-              <span class="experience-stage-date">
-                Nov. 2024 - Marzo 2025 · Prácticas
+    </section>
+
+
+
+    <!-- ==========================================================================
+         EXPERIENCIA
+         ========================================================================== -->
+
+    <section
+      id="experience"
+      class="experience-section"
+    >
+
+      <div class="container">
+
+
+        <!-- TÍTULO -->
+
+        <div class="experience-heading">
+
+          <h2 class="display-3 fw-medium experience-title">
+            Mi recorrido
+            <span class="accent-serif">
+              profesional
+            </span>
+          </h2>
+
+        </div>
+
+
+
+        <!-- EXPERIENCIAS -->
+
+        <div class="experience-grid">
+
+
+          <!-- TRASTO -->
+
+          <article class="experience-card experience-card-featured">
+
+            <div class="experience-card-number">
+              01
+            </div>
+
+
+            <div class="experience-card-top">
+
+              <div>
+
+                <span class="experience-date">
+                  2024 - Actualidad
+                </span>
+
+
+                <h3 class="experience-company">
+
+                  <a
+                    href="https://somostrasto.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="experience-external-link"
+                  >
+                    Agencia Trasto
+                    <span aria-hidden="true">↗</span>
+                  </a>
+
+                </h3>
+
+
+                <p class="experience-role">
+                  Creación de contenido para RRSS
+                </p>
+
+              </div>
+
+
+              <span class="experience-tag">
+                Agencia
               </span>
 
-              <p>
-                Ideación y creación de contenido para redes sociales,
-                incluyendo posts, carruseles, stories y edición de vídeos
-                cortos.
-              </p>
             </div>
-          </div>
 
-          <div class="experience-stage">
 
-            <div>
-              <span class="experience-stage-date">
-                2025 - Actualidad · Trabajo por proyectos
+
+            <div class="experience-stages">
+
+
+              <div class="experience-stage">
+
+                <span class="experience-stage-date">
+                  Nov. 2024 - Marzo 2025 · Prácticas
+                </span>
+
+                <p>
+                  Ideación y creación de contenido para redes sociales,
+                  incluyendo posts, carruseles, stories y edición de vídeos
+                  cortos.
+                </p>
+
+              </div>
+
+
+
+              <div class="experience-stage">
+
+                <span class="experience-stage-date">
+                  2025 - Actualidad · Trabajo por proyectos
+                </span>
+
+                <p>
+                  Tras finalizar mis prácticas, la agencia continúa contando
+                  conmigo para desarrollar proyectos puntuales de diseño.
+                </p>
+
+              </div>
+
+
+            </div>
+
+          </article>
+
+
+
+          <!-- EVENTOSTEF -->
+
+          <article class="experience-card">
+
+            <div class="experience-card-number">
+              02
+            </div>
+
+
+            <div class="experience-card-top">
+
+              <div>
+
+                <span class="experience-date">
+                  2022 - Actualidad
+                </span>
+
+                <h3 class="experience-company">
+                  EventoStef
+                </h3>
+
+                <p class="experience-role">
+                  Fotografía y postproducción
+                </p>
+
+              </div>
+
+
+              <span class="experience-tag">
+                Eventos
               </span>
 
-              <p>
-                Tras finalizar mis prácticas, la agencia continua contando
-                conmigo para desarrollar proyectos puntuales de diseño.
-              </p>
             </div>
-          </div>
-        </div>
-      </article>
 
-      <!-- EVENTOSTEF -->
-      <article class="experience-card">
-        <div class="experience-card-number">02</div>
 
-        <div class="experience-card-top">
-          <div>
-            <span class="experience-date">2022 - Actualidad</span>
-
-            <h3 class="experience-company">EventoStef</h3>
-
-            <p class="experience-role">
-              Fotografía y postproducción
+            <p class="experience-description">
+              Realización de fotografía en eventos, gestionando el proceso
+              completo: selección de imágenes, edición avanzada, corrección
+              de color, retoque de piel, unificación de tonos y preparación
+              del material para su entrega final.
             </p>
-          </div>
 
-          <span class="experience-tag">Eventos</span>
-        </div>
+          </article>
 
-        <p class="experience-description">
-           Realización de fotografía en eventos, gestionando el proceso completo: selección de las imágenes, edición avanzada (corrección de color, retoque de piel, unificación de tonos) y preparación del material para su entrega final.
-        </p>
-      </article>
 
-      <!-- FREELANCE -->
-      <article class="experience-card">
-        <div class="experience-card-number">03</div>
 
-        <div class="experience-card-top">
-          <div>
-            <span class="experience-date">2024 - Actualidad</span>
+          <!-- FREELANCE -->
 
-            <h3 class="experience-company">Freelance</h3>
+          <article class="experience-card">
 
-            <p class="experience-role">
-              Diseño gráfico y fotografía
+            <div class="experience-card-number">
+              03
+            </div>
+
+
+            <div class="experience-card-top">
+
+              <div>
+
+                <span class="experience-date">
+                  2024 - Actualidad
+                </span>
+
+                <h3 class="experience-company">
+                  Freelance
+                </h3>
+
+                <p class="experience-role">
+                  Diseño gráfico y fotografía
+                </p>
+
+              </div>
+
+
+              <span class="experience-tag">
+                Clientes
+              </span>
+
+            </div>
+
+
+            <p class="experience-description">
+              Desarrollo de proyectos para marcas y clientes particulares,
+              incluyendo identidades visuales, diseño de logotipos, piezas
+              gráficas, edición de vídeo y proyectos de motion graphics.
             </p>
-          </div>
 
-          <span class="experience-tag">Clientes</span>
+          </article>
+
+
         </div>
 
-        <p class="experience-description">
-          Desarrollo de proyectos para marcas y clientes particulares,incluyendo identidades visuales, diseño de logotipos, piezas gráficas, edición de vídeo y proyectos de motion graphics.
-        </p>
-      </article>
-    </div>
-  </div>
-</section>
+      </div>
+
+    </section>
 
       <section id="projects" class="py-5">
         <div class="container">
