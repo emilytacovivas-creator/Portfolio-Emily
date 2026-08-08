@@ -6171,3 +6171,64 @@ body {
   }
 
 }
+
+/* ==========================================================================
+   RESPONSIVE · CORRECCIÓN V3.4
+   Evitar que Servicios tape el botón de la mano
+   ========================================================================== */
+
+
+/* ==========================================================================
+   TABLET · HERO
+   ========================================================================== */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  /*
+   * Todo el hero puede dejar sobresalir
+   * elementos como el círculo de la mano.
+   */
+
+  #master-stage,
+  .stage-inner,
+  .card-layer,
+  .tilt-stage,
+  .tilt-card {
+    overflow: visible !important;
+  }
+
+
+  /*
+   * La tarjeta y el botón quedan por encima
+   * de la sección de servicios.
+   */
+
+  .card-layer {
+    position: relative !important;
+
+    z-index: 30 !important;
+  }
+
+
+  /*
+   * El círculo debe poder salir
+   * por debajo de la fotografía.
+   */
+
+  .wave-badge {
+    z-index: 50 !important;
+  }
+
+
+  /*
+   * Servicios continúa debajo,
+   * pero ya no puede tapar el círculo.
+   */
+
+  .services-text {
+    position: relative !important;
+
+    z-index: 10 !important;
+  }
+
+}
