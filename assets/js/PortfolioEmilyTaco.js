@@ -1852,6 +1852,845 @@ function initProjectModals() {
 
 
 /* ==========================================================================
+   FOTOGRAFÍA · CARRUSEL 3D
+   ========================================================================== */
+
+function initPhotographyCarousel() {
+
+  const carousel =
+    document.querySelector(
+      ".photography-carousel"
+    );
+
+
+  if (!carousel) {
+    return;
+  }
+
+
+  const stage =
+    carousel.querySelector(
+      ".photography-carousel-stage"
+    );
+
+
+  const slides = [
+    ...carousel.querySelectorAll(
+      ".photography-slide"
+    ),
+  ];
+
+
+  const previousButton =
+    document.querySelector(
+      ".photography-prev"
+    );
+
+
+  const nextButton =
+    document.querySelector(
+      ".photography-next"
+    );
+
+
+  const currentCounter =
+    document.querySelector(
+      ".photography-current"
+    );
+
+
+  if (
+    !stage ||
+    slides.length < 2
+  ) {
+    return;
+  }
+
+
+  const total =
+    slides.length;
+
+
+  const reduceMotion =
+    window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+
+  let activeIndex = 0;
+
+  let autoplayTimer = null;
+
+  let isVisible = true;
+
+  let isInteracting = false;
+
+  let pointerStartX = null;
+
+
+
+  /* ========================================================================
+     POSICIÓN RELATIVA
+     ======================================================================== */
+
+  function getRelativePosition(index) {
+
+    let position =
+      index -
+      activeIndex;
+
+
+    const half =
+      Math.floor(
+        total / 2
+      );
+
+
+    if (
+      position > half
+    ) {
+
+      position -=
+        total;
+
+    }
+
+
+    if (
+      position < -half
+    ) {
+
+      position +=
+        total;
+
+    }
+
+
+    return position;
+
+  }
+
+
+
+  /* ========================================================================
+     ESTADO VISUAL
+     ======================================================================== */
+
+  function getVisualState(position) {
+
+    const distance =
+      Math.abs(position);
+
+
+    const stageWidth =
+      stage.clientWidth;
+
+
+    const isMobile =
+      window.innerWidth <= 767;
+
+
+    const spacing =
+      isMobile
+
+        ? Math.min(
+            stageWidth * 0.48,
+            210
+          )
+
+        : Math.min(
+            stageWidth * 0.27,
+            360
+          );
+
+
+    if (
+      distance === 0
+    ) {
+
+      return {
+
+        x:
+          0,
+
+        y:
+          0,
+
+        z:
+          0,
+
+        scale:
+          1,
+
+        rotationY:
+          0,
+
+        opacity:
+          1,
+
+        filter:
+          "blur(0px) brightness(1) saturate(1)",
+
+        zIndex:
+          10,
+
+      };
+
+    }
+
+
+    if (
+      distance === 1
+    ) {
+
+      return {
+
+        x:
+          position *
+          spacing,
+
+        y:
+          20,
+
+        z:
+          -120,
+
+        scale:
+          0.8,
+
+        rotationY:
+          position *
+          -7,
+
+        opacity:
+          0.72,
+
+        filter:
+          "blur(2.5px) brightness(0.82) saturate(0.9)",
+
+        zIndex:
+          5,
+
+      };
+
+    }
+
+
+    return {
+
+      x:
+        position *
+        spacing,
+
+      y:
+        46,
+
+      z:
+        -230,
+
+      scale:
+        0.63,
+
+      rotationY:
+        position *
+        -10,
+
+      opacity:
+        0.32,
+
+      filter:
+        "blur(7px) brightness(0.68) saturate(0.72)",
+
+      zIndex:
+        2,
+
+    };
+
+  }
+
+
+
+  /* ========================================================================
+     ACTUALIZAR CARRUSEL
+     ======================================================================== */
+
+  function renderCarousel(
+    animate = true
+  ) {
+
+    slides.forEach(
+      (
+        slide,
+        index
+      ) => {
+
+        const position =
+          getRelativePosition(
+            index
+          );
+
+
+        const previousPosition =
+          Number(
+            slide.dataset.position ??
+            position
+          );
+
+
+        const state =
+          getVisualState(
+            position
+          );
+
+
+        const isLoopJump =
+          Math.abs(
+            previousPosition -
+            position
+          ) > 2;
+
+
+        slide.dataset.position =
+          position;
+
+
+        slide.classList.toggle(
+          "is-active",
+          position === 0
+        );
+
+
+        slide.setAttribute(
+          "aria-hidden",
+          position === 0
+            ? "false"
+            : "true"
+        );
+
+
+        const duration =
+          animate &&
+          !reduceMotion
+            ? 1.15
+            : 0;
+
+
+        /*
+         * Cuando una imagen salta del extremo
+         * derecho al izquierdo del loop,
+         * la recolocamos mientras está oculta.
+         *
+         * Así nunca atraviesa todo el carrusel.
+         */
+
+        if (
+          isLoopJump &&
+          animate &&
+          !reduceMotion
+        ) {
+
+          gsap.set(
+            slide,
+            {
+
+              xPercent:
+                -50,
+
+              yPercent:
+                -50,
+
+              x:
+                state.x,
+
+              y:
+                state.y,
+
+              z:
+                state.z,
+
+              scale:
+                state.scale,
+
+              rotationY:
+                state.rotationY,
+
+              opacity:
+                0,
+
+              filter:
+                state.filter,
+
+              zIndex:
+                state.zIndex,
+
+            }
+          );
+
+
+          gsap.to(
+            slide,
+            {
+
+              opacity:
+                state.opacity,
+
+              duration:
+                0.55,
+
+              delay:
+                0.3,
+
+              ease:
+                "power2.out",
+
+              overwrite:
+                true,
+
+            }
+          );
+
+
+          return;
+
+        }
+
+
+        gsap.to(
+          slide,
+          {
+
+            xPercent:
+              -50,
+
+            yPercent:
+              -50,
+
+            x:
+              state.x,
+
+            y:
+              state.y,
+
+            z:
+              state.z,
+
+            scale:
+              state.scale,
+
+            rotationY:
+              state.rotationY,
+
+            opacity:
+              state.opacity,
+
+            filter:
+              state.filter,
+
+            zIndex:
+              state.zIndex,
+
+            duration,
+
+            ease:
+              "power4.inOut",
+
+            overwrite:
+              true,
+
+          }
+        );
+
+      }
+    );
+
+
+    if (
+      currentCounter
+    ) {
+
+      currentCounter.textContent =
+        String(
+          activeIndex + 1
+        ).padStart(
+          2,
+          "0"
+        );
+
+    }
+
+  }
+
+
+
+  /* ========================================================================
+     CAMBIAR FOTOGRAFÍA
+     ======================================================================== */
+
+  function moveCarousel(
+    direction
+  ) {
+
+    activeIndex =
+      (
+        activeIndex +
+        direction +
+        total
+      ) %
+      total;
+
+
+    renderCarousel(
+      true
+    );
+
+  }
+
+
+
+  /* ========================================================================
+     AUTOPLAY
+     ======================================================================== */
+
+  function stopAutoplay() {
+
+    if (
+      autoplayTimer
+    ) {
+
+      clearInterval(
+        autoplayTimer
+      );
+
+
+      autoplayTimer =
+        null;
+
+    }
+
+  }
+
+
+  function startAutoplay() {
+
+    stopAutoplay();
+
+
+    if (
+      reduceMotion ||
+      !isVisible ||
+      isInteracting
+    ) {
+      return;
+    }
+
+
+    autoplayTimer =
+      setInterval(
+        () => {
+
+          moveCarousel(
+            1
+          );
+
+        },
+
+        4200
+
+      );
+
+  }
+
+
+  function restartAutoplay() {
+
+    stopAutoplay();
+
+    startAutoplay();
+
+  }
+
+
+
+  /* ========================================================================
+     FLECHAS
+     ======================================================================== */
+
+  previousButton?.addEventListener(
+    "click",
+    () => {
+
+      moveCarousel(
+        -1
+      );
+
+      restartAutoplay();
+
+    }
+  );
+
+
+  nextButton?.addEventListener(
+    "click",
+    () => {
+
+      moveCarousel(
+        1
+      );
+
+      restartAutoplay();
+
+    }
+  );
+
+
+
+  /* ========================================================================
+     CLICK EN FOTOGRAFÍA LATERAL
+     ======================================================================== */
+
+  slides.forEach(
+    (
+      slide,
+      index
+    ) => {
+
+      slide.addEventListener(
+        "click",
+        () => {
+
+          if (
+            index ===
+            activeIndex
+          ) {
+            return;
+          }
+
+
+          activeIndex =
+            index;
+
+
+          renderCarousel(
+            true
+          );
+
+
+          restartAutoplay();
+
+        }
+      );
+
+    }
+  );
+
+
+
+  /* ========================================================================
+     PAUSAR AL INTERACTUAR
+     ======================================================================== */
+
+  carousel.addEventListener(
+    "mouseenter",
+    () => {
+
+      isInteracting =
+        true;
+
+      stopAutoplay();
+
+    }
+  );
+
+
+  carousel.addEventListener(
+    "mouseleave",
+    () => {
+
+      isInteracting =
+        false;
+
+      startAutoplay();
+
+    }
+  );
+
+
+  carousel.addEventListener(
+    "focusin",
+    () => {
+
+      isInteracting =
+        true;
+
+      stopAutoplay();
+
+    }
+  );
+
+
+  carousel.addEventListener(
+    "focusout",
+    () => {
+
+      isInteracting =
+        false;
+
+      startAutoplay();
+
+    }
+  );
+
+
+
+  /* ========================================================================
+     SWIPE EN MÓVIL
+     ======================================================================== */
+
+  stage.addEventListener(
+    "pointerdown",
+    (event) => {
+
+      pointerStartX =
+        event.clientX;
+
+    }
+  );
+
+
+  stage.addEventListener(
+    "pointerup",
+    (event) => {
+
+      if (
+        pointerStartX ===
+        null
+      ) {
+        return;
+      }
+
+
+      const difference =
+        event.clientX -
+        pointerStartX;
+
+
+      pointerStartX =
+        null;
+
+
+      if (
+        Math.abs(
+          difference
+        ) < 45
+      ) {
+        return;
+      }
+
+
+      moveCarousel(
+        difference < 0
+          ? 1
+          : -1
+      );
+
+
+      restartAutoplay();
+
+    }
+  );
+
+
+
+  /* ========================================================================
+     PAUSAR CUANDO NO ESTÁ EN PANTALLA
+     ======================================================================== */
+
+  const observer =
+    new IntersectionObserver(
+
+      (
+        entries
+      ) => {
+
+        isVisible =
+          entries[0]
+            .isIntersecting;
+
+
+        if (
+          isVisible
+        ) {
+
+          startAutoplay();
+
+        } else {
+
+          stopAutoplay();
+
+        }
+
+      },
+
+      {
+        threshold:
+          0.25,
+      }
+
+    );
+
+
+  observer.observe(
+    carousel
+  );
+
+
+
+  /* ========================================================================
+     RESPONSIVE
+     ======================================================================== */
+
+  let resizeTimer;
+
+
+  window.addEventListener(
+    "resize",
+    () => {
+
+      clearTimeout(
+        resizeTimer
+      );
+
+
+      resizeTimer =
+        setTimeout(
+          () => {
+
+            renderCarousel(
+              false
+            );
+
+          },
+
+          120
+
+        );
+
+    }
+  );
+
+
+
+  /* ========================================================================
+     INICIO
+     ======================================================================== */
+
+  renderCarousel(
+    false
+  );
+
+}
+
+/* ==========================================================================
    13. INICIALIZACIÓN
    ========================================================================== */
 
@@ -1872,6 +2711,8 @@ window.addEventListener(
     initErrorPage();
 
     initProjectModals();
+    
+    initPhotographyCarousel();
 
     intro();
 

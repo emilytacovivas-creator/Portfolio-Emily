@@ -1663,6 +1663,395 @@ body.modal-open {
   font-weight: 500;
 }
 
+/* ==========================================================================
+   FOTOGRAFÍA · CARRUSEL 3D
+   ========================================================================== */
+
+.photography-showcase {
+  width: 100%;
+
+  margin-top:
+    clamp(6rem, 11vw, 10rem);
+
+  margin-bottom:
+    clamp(3rem, 6vw, 6rem);
+}
+
+
+
+/* ==========================================================================
+   CABECERA
+   ========================================================================== */
+
+.photography-showcase-header {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 2rem;
+
+  margin-bottom:
+    clamp(2rem, 5vw, 4rem);
+}
+
+
+.photography-kicker {
+  display: block;
+
+  margin-bottom: 0.8rem;
+
+  color: var(--accent);
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  letter-spacing: 0.13em;
+
+  text-transform: uppercase;
+}
+
+
+.photography-heading {
+  max-width: 650px;
+
+  font-family: var(--font-sans);
+
+  font-size:
+    clamp(2.5rem, 5vw, 4.5rem);
+
+  font-weight: 600;
+
+  line-height: 0.94;
+
+  letter-spacing: -0.065em;
+}
+
+
+.photography-heading .accent-serif {
+  font-size: 1.05em;
+}
+
+
+
+/* ==========================================================================
+   CONTROLES
+   ========================================================================== */
+
+.photography-controls {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.8rem;
+
+  flex-shrink: 0;
+}
+
+
+.photography-arrow {
+  display: grid;
+
+  place-items: center;
+
+  width: 48px;
+  height: 48px;
+
+  padding: 0;
+
+  border:
+    1px solid
+    rgba(28, 20, 16, 0.14);
+
+  border-radius: 50%;
+
+  background-color:
+    var(--bg-tertiary);
+
+  color:
+    var(--text-dark);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+
+.photography-arrow svg {
+  width: 21px;
+  height: 21px;
+}
+
+
+.photography-arrow:hover {
+  background-color:
+    var(--accent);
+
+  border-color:
+    var(--accent);
+
+  color:
+    var(--bg-main);
+
+  transform:
+    scale(1.08);
+}
+
+
+.photography-arrow:active {
+  transform:
+    scale(0.94);
+}
+
+
+.photography-counter {
+  min-width: 58px;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  letter-spacing: 0.08em;
+
+  text-align: center;
+
+  color:
+    rgba(28, 20, 16, 0.5);
+}
+
+
+.photography-current {
+  color:
+    var(--text-dark);
+}
+
+
+
+/* ==========================================================================
+   ESCENARIO
+   ========================================================================== */
+
+.photography-carousel {
+  position: relative;
+
+  width: 100%;
+}
+
+
+.photography-carousel-stage {
+  position: relative;
+
+  left: 50%;
+
+  width:
+    min(100vw, 1500px);
+
+  height:
+    clamp(420px, 48vw, 650px);
+
+  margin-left:
+    -50vw;
+
+  overflow: hidden;
+
+  perspective:
+    1600px;
+
+  transform-style:
+    preserve-3d;
+}
+
+
+/*
+ * Corrige el centrado cuando el viewport
+ * es más ancho de 1500px.
+ */
+
+@media (min-width: 1500px) {
+
+  .photography-carousel-stage {
+    left: 50%;
+
+    margin-left:
+      -750px;
+  }
+
+}
+
+
+
+/* ==========================================================================
+   FOTOGRAFÍAS
+   ========================================================================== */
+
+.photography-slide {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width:
+    clamp(250px, 31vw, 430px);
+
+  aspect-ratio:
+    4 / 5;
+
+  margin: 0;
+
+  overflow: hidden;
+
+  border-radius:
+    1.6rem;
+
+  background-color:
+    var(--bg-tertiary);
+
+  box-shadow:
+    0 20px 60px
+    rgba(28, 20, 16, 0.12);
+
+  transform-style:
+    preserve-3d;
+
+  transform-origin:
+    center;
+
+  cursor: pointer;
+
+  will-change:
+    transform,
+    filter,
+    opacity;
+
+  backface-visibility:
+    hidden;
+}
+
+
+.photography-slide img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: none;
+}
+
+
+.photography-slide.is-active {
+  cursor: default;
+
+  box-shadow:
+    0 35px 90px
+    rgba(28, 20, 16, 0.22);
+}
+
+
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+
+  .photography-carousel-stage {
+    height:
+      clamp(410px, 61vw, 590px);
+  }
+
+
+  .photography-slide {
+    width:
+      clamp(245px, 37vw, 350px);
+  }
+
+}
+
+
+
+/* ==========================================================================
+   MÓVIL
+   ========================================================================== */
+
+@media (max-width: 767px) {
+
+  .photography-showcase {
+    margin-top:
+      5rem;
+  }
+
+
+  .photography-showcase-header {
+    align-items:
+      flex-end;
+
+    gap:
+      1rem;
+
+    margin-bottom:
+      1.5rem;
+  }
+
+
+  .photography-kicker {
+    margin-bottom:
+      0.5rem;
+
+    font-size:
+      0.6rem;
+  }
+
+
+  .photography-heading {
+    font-size:
+      clamp(2rem, 9vw, 2.75rem);
+  }
+
+
+  .photography-controls {
+    gap:
+      0.4rem;
+  }
+
+
+  .photography-arrow {
+    width:
+      42px;
+
+    height:
+      42px;
+  }
+
+
+  .photography-counter {
+    display: none;
+  }
+
+
+  .photography-carousel-stage {
+    width:
+      100vw;
+
+    height:
+      clamp(370px, 115vw, 500px);
+  }
+
+
+  .photography-slide {
+    width:
+      min(70vw, 310px);
+
+    border-radius:
+      1.25rem;
+  }
+
+}
+
 
 /* ==========================================================================
    12. CONTACTO
