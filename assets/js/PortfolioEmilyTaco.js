@@ -291,6 +291,24 @@ function initMasterScroll() {
       );
 
 
+      /* ========================================================================
+   LIMPIEZA DE LOS ELEMENTOS INTERNOS DEL HERO
+   ======================================================================== */
+
+gsap.set(
+  [
+    ".hero-ref-left",
+    ".hero-ref-right",
+    ".hero-ref-big",
+    ".hero-ref-name",
+    ".hero-ref-sub"
+  ],
+  {
+    clearProps:
+      "transform,opacity,visibility"
+  }
+);
+
 
       /*
        * El hero debe estar siempre visible
@@ -305,6 +323,25 @@ function initMasterScroll() {
         }
       );
 
+/* ========================================================================
+   GARANTIZAR QUE DISEÑO / GRÁFICO ESTÁN VISIBLES
+   ======================================================================== */
+
+gsap.set(
+  [
+    ".hero-ref-left",
+    ".hero-ref-right",
+    ".hero-ref-big",
+    ".hero-ref-name",
+    ".hero-ref-sub"
+  ],
+  {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    visibility: "visible"
+  }
+);
 
       gsap.set(
         card,
@@ -658,6 +695,8 @@ function initAccordion() {
     });
   });
 }
+
+
 /* 9. LUZ ELÁSTICA DE EXPERIENCIA */
 function initExperienceHover() {
   const cards = document.querySelectorAll(".experience-card");

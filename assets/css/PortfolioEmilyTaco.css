@@ -4839,3 +4839,693 @@ body.modal-open {
   }
 
 }
+
+/* ==========================================================================
+   RESPONSIVE · CORRECCIONES V3.1
+   Software + proyectos táctiles + hero tablet
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. SOFTWARE · ESPACIADO PROGRESIVO MÓVIL / TABLET
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+
+  .software-marquee {
+
+    /*
+     * El espacio crece junto con la pantalla:
+     *
+     * móvil pequeño → aprox. 26px
+     * móvil grande  → aprox. 28px
+     * iPad vertical → aprox. 34px
+     * tablet grande → aprox. 44px
+     */
+
+    --software-gap:
+      clamp(
+        1.6rem,
+        4.4vw,
+        2.8rem
+      );
+
+
+    /*
+     * Mitad exacta del gap.
+     * Se utiliza para que el loop
+     * siga siendo perfectamente continuo.
+     */
+
+    --software-gap-half:
+      clamp(
+        0.8rem,
+        2.2vw,
+        1.4rem
+      );
+
+
+    width: 100%;
+
+    overflow: hidden;
+
+    padding-block: 0.7rem;
+  }
+
+
+
+  .marquee-track {
+    display: flex;
+
+    align-items: center;
+
+    width: max-content;
+
+    gap:
+      var(--software-gap)
+      !important;
+
+    animation:
+      software-responsive-loop
+      25s
+      linear
+      infinite
+      !important;
+
+    will-change: transform;
+  }
+
+
+
+  .marquee-group {
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+      flex-start;
+
+    flex-shrink: 0;
+
+    min-width:
+      max-content;
+
+    gap:
+      var(--software-gap)
+      !important;
+  }
+
+
+
+  /*
+   * El icono también crece muy
+   * ligeramente según la pantalla,
+   * pero sin volver a verse demasiado grande.
+   */
+
+  .marquee-group img {
+    flex-shrink: 0;
+
+    height:
+      clamp(
+        38px,
+        4.7vw,
+        44px
+      )
+      !important;
+
+    width: auto;
+  }
+
+
+
+  @keyframes software-responsive-loop {
+
+    from {
+      transform:
+        translateX(0);
+    }
+
+    to {
+      transform:
+        translateX(
+          calc(
+            -50%
+            - var(--software-gap-half)
+          )
+        );
+    }
+
+  }
+
+}
+
+
+
+/* ==========================================================================
+   2. PROYECTOS · TÍTULOS EN DISPOSITIVOS TÁCTILES
+   ========================================================================== */
+
+@media (hover: none) and (max-width: 1024px) {
+
+
+  /*
+   * En móvil / tablet táctil:
+   *
+   * FOTO
+   * Categoría
+   * Título
+   *
+   * sin textos encima de la imagen.
+   */
+
+
+  .project-mobile-info {
+    display:
+      block
+      !important;
+
+    padding:
+      0.5rem
+      0.05rem
+      0;
+  }
+
+
+
+  /* CATEGORÍA */
+
+  .project-mobile-info span {
+    display: block;
+
+    margin-bottom:
+      0.18rem;
+
+    font-size:
+      clamp(
+        0.56rem,
+        1.25vw,
+        0.68rem
+      )
+      !important;
+
+    font-weight: 600;
+
+    line-height: 1.2;
+
+    letter-spacing:
+      0.04em;
+
+    color:
+      rgba(
+        28,
+        20,
+        16,
+        0.56
+      );
+  }
+
+
+
+  /* TÍTULO */
+
+  .project-mobile-info h3 {
+    margin: 0;
+
+    font-family:
+      var(--font-sans);
+
+    font-size:
+      clamp(
+        0.9rem,
+        2vw,
+        1.15rem
+      )
+      !important;
+
+    font-weight: 600;
+
+    line-height: 1.08;
+
+    letter-spacing:
+      -0.035em;
+
+    color:
+      var(--text-dark);
+  }
+
+}
+
+
+
+/* ==========================================================================
+   3. HERO · TABLET HORIZONTAL ESTABLE
+   768px — 1024px
+   ========================================================================== */
+
+@media
+  (min-width: 768px)
+  and (max-width: 1024px)
+  and (orientation: landscape) {
+
+
+  /*
+   * La composición sigue siendo:
+   *
+   * DISEÑO   [ FOTO ]   GRÁFICO
+   *
+   * pero reservamos mejor el espacio.
+   */
+
+
+  .stage-inner {
+
+    --tablet-card-width:
+      clamp(
+        200px,
+        25vw,
+        280px
+      );
+
+
+    display:
+      grid
+      !important;
+
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      var(--tablet-card-width)
+      minmax(0, 1fr)
+      !important;
+
+
+    column-gap:
+      clamp(
+        0.8rem,
+        2vw,
+        1.5rem
+      )
+      !important;
+
+
+    overflow:
+      visible
+      !important;
+  }
+
+
+
+  /* ========================================================================
+     FOTO
+     ======================================================================== */
+
+  .card-layer {
+    grid-column: 2;
+
+    grid-row: 1;
+
+    width:
+      var(--tablet-card-width)
+      !important;
+
+    height:
+      auto
+      !important;
+
+    z-index: 10;
+
+    overflow:
+      visible
+      !important;
+  }
+
+
+
+  .tilt-stage {
+    width:
+      100%
+      !important;
+
+    height:
+      auto
+      !important;
+
+    overflow:
+      visible
+      !important;
+  }
+
+
+
+  .tilt-card {
+    width:
+      100%
+      !important;
+
+    height:
+      clamp(
+        300px,
+        36vw,
+        400px
+      )
+      !important;
+
+    min-height:
+      0
+      !important;
+
+    max-width:
+      none
+      !important;
+
+    max-height:
+      none
+      !important;
+
+    margin:
+      0 auto
+      !important;
+
+    transform:
+      none
+      !important;
+
+    visibility:
+      visible
+      !important;
+
+    opacity:
+      1
+      !important;
+  }
+
+
+
+  /* ========================================================================
+     TEXTO COMPLETO
+     ======================================================================== */
+
+  #heroText,
+  .hero-text {
+
+    display:
+      grid
+      !important;
+
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      var(--tablet-card-width)
+      minmax(0, 1fr)
+      !important;
+
+
+    grid-column:
+      1 / -1;
+
+    grid-row: 1;
+
+
+    width:
+      100%
+      !important;
+
+    height:
+      auto
+      !important;
+
+
+    min-width:
+      0;
+
+
+    overflow:
+      visible
+      !important;
+
+
+    opacity:
+      1
+      !important;
+
+    visibility:
+      visible
+      !important;
+
+    transform:
+      none
+      !important;
+
+
+    z-index: 11;
+  }
+
+
+
+  /* ========================================================================
+     HUECO DE LA FOTO
+     ======================================================================== */
+
+  .hero-ghost-center {
+
+    display:
+      block
+      !important;
+
+
+    width:
+      var(--tablet-card-width)
+      !important;
+
+
+    height:
+      1px
+      !important;
+
+
+    min-height:
+      0
+      !important;
+
+
+    visibility:
+      hidden
+      !important;
+  }
+
+
+
+  /* ========================================================================
+     BLOQUES DISEÑO / GRÁFICO
+     ======================================================================== */
+
+  .hero-ref-left,
+  .hero-ref-right {
+
+    width:
+      auto
+      !important;
+
+    min-width:
+      0
+      !important;
+
+
+    opacity:
+      1
+      !important;
+
+    visibility:
+      visible
+      !important;
+
+
+    transform:
+      none
+      !important;
+
+
+    position:
+      relative;
+
+    z-index:
+      12;
+  }
+
+
+
+  /* DISEÑO */
+
+  .hero-ref-left {
+
+    justify-self:
+      end;
+
+    align-items:
+      flex-end
+      !important;
+
+    text-align:
+      right
+      !important;
+
+    padding:
+      0
+      !important;
+  }
+
+
+
+  /* GRÁFICO */
+
+  .hero-ref-right {
+
+    justify-self:
+      start;
+
+    align-items:
+      flex-start
+      !important;
+
+    text-align:
+      left
+      !important;
+
+    padding-top:
+      1.7rem
+      !important;
+  }
+
+
+
+  /* ========================================================================
+     DISEÑO / GRÁFICO · TAMAÑO
+     ======================================================================== */
+
+  .hero-ref-left
+  .hero-ref-big,
+
+  .hero-ref-right
+  .hero-ref-big {
+
+    width:
+      auto
+      !important;
+
+
+    max-width:
+      none
+      !important;
+
+
+    margin:
+      0
+      !important;
+
+
+    font-size:
+      clamp(
+        2.6rem,
+        6vw,
+        4.25rem
+      )
+      !important;
+
+
+    line-height:
+      0.9;
+
+
+    white-space:
+      nowrap;
+
+
+    opacity:
+      1
+      !important;
+
+    visibility:
+      visible
+      !important;
+
+
+    transform:
+      none
+      !important;
+  }
+
+
+
+  /* Emily Taco */
+
+  .hero-ref-name {
+
+    width:
+      auto
+      !important;
+
+    margin-bottom:
+      0.4rem;
+
+    padding: 0;
+
+    font-size:
+      0.92rem;
+
+
+    opacity:
+      1
+      !important;
+
+    visibility:
+      visible
+      !important;
+
+    transform:
+      none
+      !important;
+  }
+
+
+
+  /* Diseñadora gráfica y fotógrafa */
+
+  .hero-ref-sub {
+
+    width:
+      auto
+      !important;
+
+
+    margin-top:
+      0.65rem;
+
+
+    padding:
+      0
+      !important;
+
+
+    font-size:
+      0.86rem;
+
+
+    white-space:
+      nowrap;
+
+
+    opacity:
+      1
+      !important;
+
+    visibility:
+      visible
+      !important;
+
+    transform:
+      none
+      !important;
+  }
+
+}
