@@ -6232,3 +6232,194 @@ body {
   }
 
 }
+
+/* ==========================================================================
+   RESPONSIVE · CORRECCIÓN V3.2
+   Equilibrio óptico del hero horizontal
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. HORIZONTAL · EQUILIBRIO DISEÑO / GRÁFICO
+   ========================================================================== */
+
+/*
+ * La fotografía permanece perfectamente centrada.
+ *
+ * Como "GRÁFICO" es más ancho que "DISEÑO",
+ * desplazamos ligeramente el bloque izquierdo hacia fuera.
+ *
+ * Así los márgenes visuales exteriores quedan equilibrados:
+ *
+ *
+ *     |   DISEÑO      [ FOTO ]      GRÁFICO   |
+ *     ↑                                      ↑
+ *        margen visual prácticamente igual
+ *
+ */
+
+@media
+  (min-width: 768px)
+  and (orientation: landscape) {
+
+  .hero-ref-left {
+    position: relative;
+
+    left:
+      calc(
+        -1 *
+        clamp(
+          1.5rem,
+          3vw,
+          3rem
+        )
+      );
+  }
+
+}
+
+
+
+/* ==========================================================================
+   2. ESCRITORIO · FOTO Y HUECO CENTRAL DEL MISMO TAMAÑO
+   ========================================================================== */
+
+/*
+ * En el CSS original:
+ *
+ * tarjeta = 65vh
+ * hueco   = 75vh
+ *
+ * No deberían utilizar dos medidas distintas.
+ *
+ * El hueco invisible tiene que medir exactamente
+ * lo mismo que la tarjeta.
+ */
+
+@media (min-width: 1025px) {
+
+  .hero-ghost-center {
+    width:
+      calc(
+        clamp(
+          350px,
+          65vh,
+          800px
+        )
+        * 0.68
+      );
+
+    height: 1px;
+
+    min-height: 0;
+  }
+
+}
+
+
+
+/* ==========================================================================
+   3. PORTÁTILES DE POCA ALTURA
+   Mantenemos también tarjeta y hueco idénticos
+   ========================================================================== */
+
+@media
+  (min-width: 1025px)
+  and (max-height: 850px) {
+
+  .tilt-card {
+    height:
+      clamp(
+        430px,
+        68vh,
+        590px
+      )
+      !important;
+
+    width:
+      calc(
+        clamp(
+          430px,
+          68vh,
+          590px
+        )
+        * 0.68
+      )
+      !important;
+  }
+
+
+  .hero-ghost-center {
+    width:
+      calc(
+        clamp(
+          430px,
+          68vh,
+          590px
+        )
+        * 0.68
+      )
+      !important;
+
+    height:
+      1px
+      !important;
+
+    min-height:
+      0
+      !important;
+  }
+
+}
+
+
+
+/* ==========================================================================
+   4. EMILY TACO · SIEMPRE ALINEADO CON DISEÑO
+   ========================================================================== */
+
+@media
+  (min-width: 768px)
+  and (orientation: landscape) {
+
+  .hero-ref-left {
+    align-items:
+      flex-start
+      !important;
+
+    text-align:
+      left
+      !important;
+  }
+
+
+  .hero-ref-name {
+    width:
+      100%
+      !important;
+
+    margin:
+      0
+      0
+      0.45rem
+      0
+      !important;
+
+    padding:
+      0
+      !important;
+
+    text-align:
+      left
+      !important;
+  }
+
+
+  .hero-ref-left
+  .hero-ref-big {
+    text-align:
+      left
+      !important;
+  }
+
+}
