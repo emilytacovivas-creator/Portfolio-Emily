@@ -43,75 +43,406 @@ function updateActiveNav(id) {
   });
 }
 
-/* 4. ANIMACIÓN PRINCIPAL (FIX IPAD: CAMBIADO A 1025PX) */
+/* ==========================================================================
+   4. ANIMACIÓN PRINCIPAL · RESPONSIVE ESTABLE
+   ========================================================================== */
+
 function initMasterScroll() {
-  const stage = document.querySelector("#master-stage");
-  if (!stage) return;
+
+  const stage =
+    document.querySelector("#master-stage");
+
+  const card =
+    document.querySelector("#tiltCard");
+
+  const heroText =
+    document.querySelector("#heroText");
+
+  const servicesText =
+    document.querySelector("#servicesText");
+
+
+  if (
+    !stage ||
+    !card ||
+    !heroText ||
+    !servicesText
+  ) {
+    return;
+  }
+
+
+
+  /* ========================================================================
+     BREAKPOINTS
+     ======================================================================== */
 
   ScrollTrigger.matchMedia({
-    /* ESCRITORIO (SOLO PANTALLAS GRANDES) - CON PIN */
+
+
+    /* ======================================================================
+       ESCRITORIO · 1025PX EN ADELANTE
+       ====================================================================== */
+
     "(min-width: 1025px)": function () {
-      const card = document.querySelector("#tiltCard");
-      const heroText = document.querySelector("#heroText");
-      const servicesText = document.querySelector("#servicesText");
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: stage,
-          start: "top top",
-          end: "+=150%",
-          scrub: 1,
-          pin: true,
-          onUpdate: (self) => {
-            if (self.progress > 0.4) {
-              updateActiveNav("#services-layer");
-            } else {
-              updateActiveNav("#master-stage");
-            }
-          },
-        },
-      });
 
-      tl.to(heroText, { y: -100, opacity: 0, duration: 1 }, "start")
-        .to(
+      /*
+       * Limpiamos cualquier estado
+       * heredado de tablet/móvil.
+       */
+
+      gsap.set(
+        [
           card,
-          {
-            rotationY: -180,
-            x: () => window.innerWidth * 0.25,
-            scale: 0.85,
-            duration: 1.5,
+          heroText,
+          servicesText
+        ],
+        {
+          clearProps:
+            "transform,opacity"
+        }
+      );
+
+
+
+      /* --------------------------------------------------------------------
+         TIMELINE PRINCIPAL
+         -------------------------------------------------------------------- */
+
+      const tl =
+        gsap.timeline({
+
+          scrollTrigger: {
+
+            trigger: stage,
+
+            start:
+              "top top",
+
+            end:
+              "+=150%",
+
+            scrub: 1,
+
+            pin: true,
+
+
+            onUpdate: (self) => {
+
+              if (
+                self.progress > 0.4
+              ) {
+
+                updateActiveNav(
+                  "#services-layer"
+                );
+
+              } else {
+
+                updateActiveNav(
+                  "#master-stage"
+                );
+
+              }
+
+            },
+
           },
-          "start"
-        )
-        .fromTo(
-          servicesText,
-          { y: 100, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.5 },
-          "start+=0.2"
+
+        });
+
+
+
+      /* --------------------------------------------------------------------
+         HERO DESAPARECE
+         -------------------------------------------------------------------- */
+
+      tl.to(
+
+        heroText,
+
+        {
+          y: -100,
+          opacity: 0,
+          duration: 1,
+        },
+
+        "start"
+
+      )
+
+
+
+      /* --------------------------------------------------------------------
+         TARJETA GIRA
+         -------------------------------------------------------------------- */
+
+      .to(
+
+        card,
+
+        {
+          rotationY: -180,
+
+          x: () =>
+            window.innerWidth * 0.25,
+
+          scale: 0.85,
+
+          duration: 1.5,
+        },
+
+        "start"
+
+      )
+
+
+
+      /* --------------------------------------------------------------------
+         SERVICIOS APARECEN
+         -------------------------------------------------------------------- */
+
+      .fromTo(
+
+        servicesText,
+
+        {
+          y: 100,
+          opacity: 0,
+        },
+
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.5,
+        },
+
+        "start+=0.2"
+
+      );
+
+
+
+      /* --------------------------------------------------------------------
+         LIMPIEZA AL SALIR DE ESTE BREAKPOINT
+         -------------------------------------------------------------------- */
+
+      return function () {
+
+        if (
+          tl.scrollTrigger
+        ) {
+
+          tl.scrollTrigger.kill();
+
+        }
+
+
+        tl.kill();
+
+
+        /*
+         * MUY IMPORTANTE:
+         * elimina transformaciones y opacidades
+         * cuando pasamos de escritorio a tablet.
+         */
+
+        gsap.set(
+          [
+            card,
+            heroText,
+            servicesText
+          ],
+          {
+            clearProps:
+              "transform,opacity"
+          }
         );
+
+      };
+
     },
-    /* TABLET Y MÓVIL (IPAD INCLUIDO) - SIN PIN (SCROLL NORMAL) */
+
+
+
+    /* ======================================================================
+       TABLET + MÓVIL · 1024PX O MENOS
+       ====================================================================== */
+
     "(max-width: 1024px)": function () {
-      ScrollTrigger.create({
-        trigger: "#services-layer",
-        start: "top 20%",
-        onToggle: (self) => self.isActive && updateActiveNav("#services-layer"),
-      });
+
+
+      /*
+       * Nos aseguramos de que nunca queden
+       * restos de la animación de escritorio.
+       */
+
+      gsap.set(
+        [
+          card,
+          heroText,
+          servicesText
+        ],
+        {
+          clearProps:
+            "transform,opacity"
+        }
+      );
+
+
+
+      /*
+       * El hero debe estar siempre visible
+       * en estos dispositivos.
+       */
+
+      gsap.set(
+        heroText,
+        {
+          opacity: 1,
+          y: 0
+        }
+      );
+
+
+      gsap.set(
+        card,
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          rotationY: 0,
+          scale: 1
+        }
+      );
+
+
+      gsap.set(
+        servicesText,
+        {
+          opacity: 1,
+          x: 0,
+          y: 0
+        }
+      );
+
+
+
+      /* --------------------------------------------------------------------
+         NAVEGACIÓN
+         -------------------------------------------------------------------- */
+
+      const servicesTrigger =
+        ScrollTrigger.create({
+
+          trigger:
+            "#services-layer",
+
+          start:
+            "top 20%",
+
+          onToggle:
+            (self) => {
+
+              if (
+                self.isActive
+              ) {
+
+                updateActiveNav(
+                  "#services-layer"
+                );
+
+              }
+
+            },
+
+        });
+
+
+
+      /* --------------------------------------------------------------------
+         LIMPIEZA
+         -------------------------------------------------------------------- */
+
+      return function () {
+
+        servicesTrigger.kill();
+
+
+        gsap.set(
+          [
+            card,
+            heroText,
+            servicesText
+          ],
+          {
+            clearProps:
+              "transform,opacity"
+          }
+        );
+
+      };
+
     },
+
   });
 
-  ["#about", "#projects", "#contact"].forEach((id) => {
-    const el = document.querySelector(id);
-    if (el) {
-      ScrollTrigger.create({
-        trigger: id,
-        start: "top 40%",
-        end: "bottom 40%",
-        onEnter: () => updateActiveNav(id),
-        onEnterBack: () => updateActiveNav(id),
-      });
+
+
+  /* ========================================================================
+     NAVEGACIÓN DEL RESTO DE SECCIONES
+     ======================================================================== */
+
+  [
+    "#about",
+    "#projects",
+    "#contact"
+  ].forEach((id) => {
+
+    const el =
+      document.querySelector(id);
+
+
+    if (!el) {
+      return;
     }
+
+
+    ScrollTrigger.create({
+
+      trigger: id,
+
+      start:
+        "top 40%",
+
+      end:
+        "bottom 40%",
+
+      onEnter:
+        () =>
+          updateActiveNav(id),
+
+      onEnterBack:
+        () =>
+          updateActiveNav(id),
+
+    });
+
   });
+
+
+
+  /* ========================================================================
+     RECALCULAR POSICIONES
+     ======================================================================== */
+
+  requestAnimationFrame(
+    () => {
+      ScrollTrigger.refresh();
+    }
+  );
+
 }
 
 /* 5. INTRO */
