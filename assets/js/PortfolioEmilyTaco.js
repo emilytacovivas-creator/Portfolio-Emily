@@ -1,54 +1,89 @@
 /* ==========================================================================
-   Emily Taco · Portfolio 
+   Emily Taco · Portfolio
    ========================================================================== */
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+
 window.scrollTo(0, 0);
 
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
-/* 1. LENIS */
+
+/* ==========================================================================
+   1. SCROLL SUAVE · LENIS
+   ========================================================================== */
+
 let lenis = null;
+
 if (!prefersReducedMotion && typeof Lenis !== "undefined") {
-  lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+  lenis = new Lenis({
+    lerp: 0.1,
+    smoothWheel: true,
+  });
+
   lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
 }
 
-/* 2. SETUP 3D */
+
+/* ==========================================================================
+   2. HERO · SETUP 3D
+   ========================================================================== */
+
 function setup3D() {
   if (!document.querySelector(".tilt-stage")) return;
-  gsap.set(".tilt-stage", { perspective: 1600, transformStyle: "preserve-3d" });
+
+  gsap.set(".tilt-stage", {
+    perspective: 1600,
+    transformStyle: "preserve-3d",
+  });
+
   gsap.set("#tiltCard", {
     transformStyle: "preserve-3d",
     transformOrigin: "50% 50%",
     force3D: true,
   });
-  gsap.set(".wave-badge", { z: 40 });
-  gsap.set(".gsap-reveal", { opacity: 1, y: 0 });
-}
 
-/* 3. NAVEGACIÓN ACTIVA */
-function updateActiveNav(id) {
-  const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-  navLinks.forEach((link) => {
-    link.classList.toggle(
-      "active",
-      link.getAttribute("href") === id || link.getAttribute("href").includes(id)
-    );
+  gsap.set(".wave-badge", {
+    z: 40,
+  });
+
+  gsap.set(".gsap-reveal", {
+    opacity: 1,
+    y: 0,
   });
 }
 
+
 /* ==========================================================================
-   4. ANIMACIÓN PRINCIPAL · RESPONSIVE ESTABLE
+   3. NAVEGACIÓN ACTIVA
+   ========================================================================== */
+
+function updateActiveNav(id) {
+  document
+    .querySelectorAll(".navbar-nav .nav-link")
+    .forEach((link) => {
+      const href = link.getAttribute("href") || "";
+
+      link.classList.toggle(
+        "active",
+        href === id || href.includes(id)
+      );
+    });
+}
+
+
+/* ==========================================================================
+   4. HERO + SERVICIOS · SCROLL RESPONSIVE
    ========================================================================== */
 
 function initMasterScroll() {
-
   const stage =
     document.querySelector("#master-stage");
 
@@ -72,50 +107,47 @@ function initMasterScroll() {
   }
 
 
+  const mainElements = [
+    card,
+    heroText,
+    servicesText,
+  ];
 
-  /* ========================================================================
-     BREAKPOINTS
-     ======================================================================== */
+
+  const heroElements = [
+    ".hero-ref-left",
+    ".hero-ref-right",
+    ".hero-ref-big",
+    ".hero-ref-name",
+    ".hero-ref-sub",
+  ];
+
 
   ScrollTrigger.matchMedia({
 
 
     /* ======================================================================
-       ESCRITORIO · 1025PX EN ADELANTE
+       ESCRITORIO
        ====================================================================== */
 
     "(min-width: 1025px)": function () {
 
-
-      /*
-       * Limpiamos cualquier estado
-       * heredado de tablet/móvil.
-       */
-
       gsap.set(
-        [
-          card,
-          heroText,
-          servicesText
-        ],
+        mainElements,
         {
           clearProps:
-            "transform,opacity"
+            "transform,opacity",
         }
       );
 
 
-
-      /* --------------------------------------------------------------------
-         TIMELINE PRINCIPAL
-         -------------------------------------------------------------------- */
-
-      const tl =
+      const timeline =
         gsap.timeline({
 
           scrollTrigger: {
 
-            trigger: stage,
+            trigger:
+              stage,
 
             start:
               "top top",
@@ -123,140 +155,100 @@ function initMasterScroll() {
             end:
               "+=150%",
 
-            scrub: 1,
+            scrub:
+              1,
 
-            pin: true,
+            pin:
+              true,
 
-
-            onUpdate: (self) => {
-
-              if (
-                self.progress > 0.4
-              ) {
+            onUpdate:
+              (self) => {
 
                 updateActiveNav(
-                  "#services-layer"
+                  self.progress > 0.4
+                    ? "#services-layer"
+                    : "#master-stage"
                 );
 
-              } else {
-
-                updateActiveNav(
-                  "#master-stage"
-                );
-
-              }
-
-            },
+              },
 
           },
 
         });
 
 
+      timeline
 
-      /* --------------------------------------------------------------------
-         HERO DESAPARECE
-         -------------------------------------------------------------------- */
+        .to(
 
-      tl.to(
+          heroText,
 
-        heroText,
+          {
+            y: -100,
+            opacity: 0,
+            duration: 1,
+          },
 
-        {
-          y: -100,
-          opacity: 0,
-          duration: 1,
-        },
+          "start"
 
-        "start"
+        )
 
-      )
+        .to(
 
+          card,
 
+          {
+            rotationY: -180,
 
-      /* --------------------------------------------------------------------
-         TARJETA GIRA
-         -------------------------------------------------------------------- */
+            x: () =>
+              window.innerWidth * 0.25,
 
-      .to(
+            scale: 0.85,
 
-        card,
+            duration: 1.5,
+          },
 
-        {
-          rotationY: -180,
+          "start"
 
-          x: () =>
-            window.innerWidth * 0.25,
+        )
 
-          scale: 0.85,
+        .fromTo(
 
-          duration: 1.5,
-        },
+          servicesText,
 
-        "start"
+          {
+            y: 100,
+            opacity: 0,
+          },
 
-      )
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1.5,
+          },
 
+          "start+=0.2"
 
-
-      /* --------------------------------------------------------------------
-         SERVICIOS APARECEN
-         -------------------------------------------------------------------- */
-
-      .fromTo(
-
-        servicesText,
-
-        {
-          y: 100,
-          opacity: 0,
-        },
-
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.5,
-        },
-
-        "start+=0.2"
-
-      );
+        );
 
 
-
-      /* --------------------------------------------------------------------
-         LIMPIEZA AL SALIR DE ESTE BREAKPOINT
-         -------------------------------------------------------------------- */
-
-      return function () {
+      return () => {
 
         if (
-          tl.scrollTrigger
+          timeline.scrollTrigger
         ) {
-
-          tl.scrollTrigger.kill();
-
+          timeline.scrollTrigger.kill();
         }
 
 
-        tl.kill();
+        timeline.kill();
 
-
-        /*
-         * MUY IMPORTANTE:
-         * elimina transformaciones y opacidades
-         * cuando pasamos de escritorio a tablet.
-         */
 
         gsap.set(
-          [
-            card,
-            heroText,
-            servicesText
-          ],
+          mainElements,
           {
             clearProps:
-              "transform,opacity"
+              "transform,opacity",
           }
         );
 
@@ -265,83 +257,49 @@ function initMasterScroll() {
     },
 
 
-
     /* ======================================================================
-       TABLET + MÓVIL · 1024PX O MENOS
+       TABLET + MÓVIL
        ====================================================================== */
 
     "(max-width: 1024px)": function () {
 
-
-      /*
-       * Nos aseguramos de que nunca queden
-       * restos de la animación de escritorio.
-       */
-
       gsap.set(
-        [
-          card,
-          heroText,
-          servicesText
-        ],
+        mainElements,
         {
           clearProps:
-            "transform,opacity"
+            "transform,opacity",
         }
       );
 
 
-      /* ========================================================================
-   LIMPIEZA DE LOS ELEMENTOS INTERNOS DEL HERO
-   ======================================================================== */
+      gsap.set(
+        heroElements,
+        {
+          clearProps:
+            "transform,opacity,visibility",
+        }
+      );
 
-gsap.set(
-  [
-    ".hero-ref-left",
-    ".hero-ref-right",
-    ".hero-ref-big",
-    ".hero-ref-name",
-    ".hero-ref-sub"
-  ],
-  {
-    clearProps:
-      "transform,opacity,visibility"
-  }
-);
-
-
-      /*
-       * El hero debe estar siempre visible
-       * en estos dispositivos.
-       */
 
       gsap.set(
         heroText,
         {
           opacity: 1,
-          y: 0
+          y: 0,
         }
       );
 
-/* ========================================================================
-   GARANTIZAR QUE DISEÑO / GRÁFICO ESTÁN VISIBLES
-   ======================================================================== */
 
-gsap.set(
-  [
-    ".hero-ref-left",
-    ".hero-ref-right",
-    ".hero-ref-big",
-    ".hero-ref-name",
-    ".hero-ref-sub"
-  ],
-  {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    visibility: "visible"
-  }
-);
+      gsap.set(
+        heroElements,
+        {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          visibility: "visible",
+        }
+      );
+
 
       gsap.set(
         card,
@@ -350,7 +308,7 @@ gsap.set(
           x: 0,
           y: 0,
           rotationY: 0,
-          scale: 1
+          scale: 1,
         }
       );
 
@@ -360,15 +318,10 @@ gsap.set(
         {
           opacity: 1,
           x: 0,
-          y: 0
+          y: 0,
         }
       );
 
-
-
-      /* --------------------------------------------------------------------
-         NAVEGACIÓN
-         -------------------------------------------------------------------- */
 
       const servicesTrigger =
         ScrollTrigger.create({
@@ -397,25 +350,16 @@ gsap.set(
         });
 
 
-
-      /* --------------------------------------------------------------------
-         LIMPIEZA
-         -------------------------------------------------------------------- */
-
-      return function () {
+      return () => {
 
         servicesTrigger.kill();
 
 
         gsap.set(
-          [
-            card,
-            heroText,
-            servicesText
-          ],
+          mainElements,
           {
             clearProps:
-              "transform,opacity"
+              "transform,opacity",
           }
         );
 
@@ -426,29 +370,23 @@ gsap.set(
   });
 
 
-
-  /* ========================================================================
-     NAVEGACIÓN DEL RESTO DE SECCIONES
-     ======================================================================== */
-
   [
     "#about",
     "#projects",
-    "#contact"
+    "#contact",
   ].forEach((id) => {
 
-    const el =
-      document.querySelector(id);
-
-
-    if (!el) {
+    if (
+      !document.querySelector(id)
+    ) {
       return;
     }
 
 
     ScrollTrigger.create({
 
-      trigger: id,
+      trigger:
+        id,
 
       start:
         "top 40%",
@@ -469,961 +407,1473 @@ gsap.set(
   });
 
 
-
-  /* ========================================================================
-     RECALCULAR POSICIONES
-     ======================================================================== */
-
   requestAnimationFrame(
-    () => {
-      ScrollTrigger.refresh();
-    }
+    () =>
+      ScrollTrigger.refresh()
   );
-
 }
 
-/* 5. INTRO */
+
+/* ==========================================================================
+   5. INTRO DEL HERO
+   ========================================================================== */
+
 function intro() {
-  const tiltCard = document.querySelector("#tiltCard");
+  const tiltCard =
+    document.querySelector("#tiltCard");
+
+
   if (!tiltCard) {
+
     revealRestOfSite();
+
     return;
+
   }
 
-  const heroTl = gsap.timeline({
-    onComplete: () => {
-      if (lenis) lenis.start();
-      initMasterScroll();
-      revealRestOfSite();
-      ScrollTrigger.refresh();
-    },
-  });
 
-  heroTl
+  const timeline =
+    gsap.timeline({
+
+      onComplete: () => {
+
+        if (lenis) {
+          lenis.start();
+        }
+
+
+        initMasterScroll();
+
+        revealRestOfSite();
+
+        ScrollTrigger.refresh();
+
+      },
+
+    });
+
+
+  timeline
+
     .fromTo(
+
       "#tiltCard",
-      { opacity: 0, scale: 0.8, y: 50 },
-      { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: "expo.out" }
-    )
-    .fromTo(
-      ".hero-ref-big",
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, stagger: 0.1, duration: 1 },
-      "-=0.8"
-    )
-    .fromTo(
-      ".hero-ref-name, .hero-ref-sub",
-      { opacity: 0 },
-      { opacity: 1 },
-      "-=0.5"
-    )
-    .fromTo(
-      ".wave-badge",
-      { scale: 0 },
-      { scale: 1, duration: 0.5, ease: "back.out" },
-      "-=0.5"
-    );
-}
 
-/* 6. REVEAL */
-function revealRestOfSite() {
-  gsap.utils.toArray(".gsap-reveal").forEach((el) => {
-    gsap.fromTo(
-      el,
-      { opacity: 0, y: 50 },
+      {
+        opacity: 0,
+        scale: 0.8,
+        y: 50,
+      },
+
       {
         opacity: 1,
+        scale: 1,
         y: 0,
+        duration: 1.2,
+        ease: "expo.out",
+      }
+
+    )
+
+    .fromTo(
+
+      ".hero-ref-big",
+
+      {
+        y: 40,
+        opacity: 0,
+      },
+
+      {
+        y: 0,
+        opacity: 1,
+        stagger: 0.1,
         duration: 1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 95%",
-          toggleActions: "play none none none",
+      },
+
+      "-=0.8"
+
+    )
+
+    .fromTo(
+
+      ".hero-ref-name, .hero-ref-sub",
+
+      {
+        opacity: 0,
+      },
+
+      {
+        opacity: 1,
+      },
+
+      "-=0.5"
+
+    )
+
+    .fromTo(
+
+      ".wave-badge",
+
+      {
+        scale: 0,
+      },
+
+      {
+        scale: 1,
+        duration: 0.5,
+        ease: "back.out",
+      },
+
+      "-=0.5"
+
+    );
+}
+
+
+/* ==========================================================================
+   6. REVEAL DE SECCIONES
+   ========================================================================== */
+
+function revealRestOfSite() {
+
+  gsap.utils
+    .toArray(".gsap-reveal")
+    .forEach((element) => {
+
+      gsap.fromTo(
+
+        element,
+
+        {
+          opacity: 0,
+          y: 50,
         },
+
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power2.out",
+
+          scrollTrigger: {
+
+            trigger:
+              element,
+
+            start:
+              "top 95%",
+
+            toggleActions:
+              "play none none none",
+
+          },
+
+        }
+
+      );
+
+    });
+
+}
+
+
+/* ==========================================================================
+   7. NAVEGACIÓN
+   ========================================================================== */
+
+function initNavLogic() {
+  const navbar =
+    document.getElementById("navbar");
+
+  const navCollapse =
+    document.getElementById("navbarNav");
+
+  const navLinks =
+    document.querySelectorAll(
+      ".navbar-nav .nav-link, .navbar-brand"
+    );
+
+
+  if (
+    navbar &&
+    navCollapse
+  ) {
+
+    navCollapse.addEventListener(
+      "show.bs.collapse",
+      () => {
+
+        navbar.classList.add(
+          "menu-open"
+        );
+
       }
     );
-  });
-}
 
-/* 7. NAV LOGIC */
-function initNavLogic() {
-  const navbar = document.getElementById("navbar");
-  const navCollapse = document.getElementById("navbarNav");
-  const navLinks = document.querySelectorAll(
-    ".navbar-nav .nav-link, .navbar-brand"
-  );
 
-  if (navCollapse && navbar) {
-    navCollapse.addEventListener("show.bs.collapse", () => {
-      navbar.classList.add("menu-open");
-    });
-    navCollapse.addEventListener("hide.bs.collapse", () => {
-      navbar.classList.remove("menu-open");
-    });
+    navCollapse.addEventListener(
+      "hide.bs.collapse",
+      () => {
+
+        navbar.classList.remove(
+          "menu-open"
+        );
+
+      }
+    );
+
   }
 
+
   navLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const targetId = link.getAttribute("href");
 
-      if (targetId.includes("#")) {
-        e.preventDefault();
-        const pureId = targetId.includes(".html")
-          ? targetId.split("#")[1]
-          : targetId.replace("#", "");
-        const targetElement = document.getElementById(pureId);
-
-        let scrollTarget = 0;
-        if (pureId !== "master-stage" && targetElement) {
-          scrollTarget = targetElement;
-          if (pureId === "services-layer" && window.innerWidth >= 1025) {
-            scrollTarget = window.innerHeight * 1.2;
-          }
-        }
-
-        if (typeof lenis !== "undefined" && lenis) {
-          lenis.scrollTo(scrollTarget, { offset: -80 });
-        } else {
-          const top =
-            typeof scrollTarget === "number"
-              ? scrollTarget
-              : scrollTarget.offsetTop - 80;
-          window.scrollTo({ top, behavior: "smooth" });
-        }
-      }
-
-      if (navCollapse && navCollapse.classList.contains("show")) {
-        const bsCollapse = bootstrap.Collapse.getInstance(navCollapse);
-        if (bsCollapse) bsCollapse.hide();
-      }
-    });
-  });
-}
-
-/* 8. ACORDEÓN */
-function initAccordion() {
-  const accordions = [
-    ...document.querySelectorAll(".services-accordion details"),
-  ];
-
-  accordions.forEach((det) => {
-    const summary = det.querySelector("summary");
-    const content = det.querySelector(".accordion-content");
-
-    summary.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      // Evita conflictos si se pulsa rápidamente varias veces.
-      gsap.killTweensOf(content);
-
-      // Si pulsamos el desplegable que ya está abierto, lo cerramos.
-      if (det.hasAttribute("open")) {
-        gsap.to(content, {
-          height: 0,
-          opacity: 0,
-          duration: 0.45,
-          ease: "power2.inOut",
-          onComplete: () => {
-            det.removeAttribute("open");
-            gsap.set(content, {
-              clearProps: "height,opacity",
-            });
-          },
-        });
-
-        return;
-      }
-
-      // Busca otro desplegable que estuviera abierto.
-      const previousOpen = accordions.find(
-        (item) => item !== det && item.hasAttribute("open")
-      );
-
-      const timeline = gsap.timeline();
-
-      // Cierra suavemente el desplegable anterior.
-      if (previousOpen) {
-        const previousContent = previousOpen.querySelector(
-          ".accordion-content"
-        );
-
-        gsap.killTweensOf(previousContent);
-
-        timeline.to(
-          previousContent,
-          {
-            height: 0,
-            opacity: 0,
-            duration: 0.45,
-            ease: "power2.inOut",
-            onComplete: () => {
-              previousOpen.removeAttribute("open");
-
-              gsap.set(previousContent, {
-                clearProps: "height,opacity",
-              });
-            },
-          },
-          0
-        );
-      }
-
-      // Abre suavemente el nuevo desplegable.
-      det.setAttribute("open", "");
-
-      gsap.set(content, {
-        height: 0,
-        opacity: 0,
-      });
-
-      timeline.to(
-        content,
-        {
-          height: "auto",
-          opacity: 1,
-          duration: 0.45,
-          ease: "power2.inOut",
-          onComplete: () => {
-            gsap.set(content, {
-              clearProps: "height,opacity",
-            });
-          },
-        },
-        0
-      );
-    });
-  });
-}
-
-
-/* 9. LUZ ELÁSTICA DE EXPERIENCIA */
-function initExperienceHover() {
-  const cards = document.querySelectorAll(".experience-card");
-
-  const supportsHover = window.matchMedia(
-    "(hover: hover) and (pointer: fine)"
-  ).matches;
-
-  if (prefersReducedMotion || !supportsHover) return;
-
-  cards.forEach((card) => {
-    let targetX = 0;
-    let targetY = 0;
-
-    let currentX = 0;
-    let currentY = 0;
-
-    let previousX = 0;
-    let previousY = 0;
-
-    let stretch = 1;
-    let squash = 1;
-    let angle = 0;
-
-    let animationFrame = null;
-    let resetTimer = null;
-
-    function updateBlob() {
-      /*
-       * La luz avanza hacia el cursor con retraso.
-       * Un valor menor produce más inercia.
-       */
-      currentX += (targetX - currentX) * 0.12;
-      currentY += (targetY - currentY) * 0.12
-
-      /*
-       * Calculamos cuánto se ha movido la luz
-       * durante este fotograma.
-       */
-      const velocityX = currentX - previousX;
-      const velocityY = currentY - previousY;
-
-      const speed = Math.min(
-        Math.hypot(velocityX, velocityY),
-        28
-      );
-
-      /*
-       * Cuanto más rápido se mueve:
-       * más se estira horizontalmente
-       * y más se comprime verticalmente.
-       */
-      const targetStretch =
-        1 + Math.min(speed * 0.09, 1.2);
-
-      const targetSquash =
-        1 - Math.min(speed * 0.024, 0.27);
-
-      /*
-       * Suavizamos también la deformación.
-       */
-      stretch += (targetStretch - stretch) * 0.2;
-      squash += (targetSquash - squash) * 0.2;
-
-      /*
-       * La masa gira hacia la dirección
-       * en la que se está desplazando.
-       */
-      if (speed > 0.05) {
-        const targetAngle =
-          Math.atan2(velocityY, velocityX) *
-          (180 / Math.PI);
-
-        const angleDifference =
-          ((targetAngle - angle + 540) % 360) - 180;
-
-        angle += angleDifference * 0.18;
-      }
-
-      card.style.setProperty(
-        "--trail-x",
-        `${currentX}px`
-      );
-
-      card.style.setProperty(
-        "--trail-y",
-        `${currentY}px`
-      );
-
-      card.style.setProperty(
-        "--blob-angle",
-        `${angle}deg`
-      );
-
-      card.style.setProperty(
-        "--blob-stretch",
-        stretch.toFixed(3)
-      );
-
-      card.style.setProperty(
-        "--blob-squash",
-        squash.toFixed(3)
-      );
-
-      previousX = currentX;
-      previousY = currentY;
-
-      /*
-       * Continúa hasta llegar al cursor
-       * y recuperar la forma circular.
-       */
-      const positionIsMoving =
-        Math.abs(targetX - currentX) > 0.1 ||
-        Math.abs(targetY - currentY) > 0.1;
-
-      const shapeIsMoving =
-        Math.abs(stretch - 1) > 0.002 ||
-        Math.abs(squash - 1) > 0.002;
-
-      if (positionIsMoving || shapeIsMoving) {
-        animationFrame =
-          requestAnimationFrame(updateBlob);
-      } else {
-        animationFrame = null;
-      }
-    }
-
-    function startAnimation() {
-      if (animationFrame === null) {
-        animationFrame =
-          requestAnimationFrame(updateBlob);
-      }
-    }
-
-    card.addEventListener("pointerenter", (event) => {
-      clearTimeout(resetTimer);
-
-      const rect = card.getBoundingClientRect();
-
-      targetX = event.clientX - rect.left;
-      targetY = event.clientY - rect.top;
-
-      /*
-       * Al entrar aparece directamente
-       * debajo del cursor.
-       */
-      currentX = targetX;
-      currentY = targetY;
-
-      previousX = currentX;
-      previousY = currentY;
-
-      stretch = 1;
-      squash = 1;
-
-      card.style.setProperty(
-        "--trail-x",
-        `${currentX}px`
-      );
-
-      card.style.setProperty(
-        "--trail-y",
-        `${currentY}px`
-      );
-
-      card.style.setProperty("--blob-stretch", "1");
-      card.style.setProperty("--blob-squash", "1");
-
-      startAnimation();
-    });
-
-    card.addEventListener("pointermove", (event) => {
-      const rect = card.getBoundingClientRect();
-
-      targetX = event.clientX - rect.left;
-      targetY = event.clientY - rect.top;
-
-      startAnimation();
-    });
-
-    card.addEventListener("pointerleave", () => {
-      /*
-       * La luz desaparece en la última posición.
-       * Después se reinicia sin que se vea.
-       */
-      resetTimer = setTimeout(() => {
-        if (animationFrame !== null) {
-          cancelAnimationFrame(animationFrame);
-          animationFrame = null;
-        }
-
-        const centerX = card.clientWidth / 2;
-        const centerY = card.clientHeight / 2;
-
-        targetX = centerX;
-        targetY = centerY;
-
-        currentX = centerX;
-        currentY = centerY;
-
-        previousX = centerX;
-        previousY = centerY;
-
-        stretch = 1;
-        squash = 1;
-        angle = 0;
-
-        card.style.setProperty("--trail-x", "50%");
-        card.style.setProperty("--trail-y", "50%");
-        card.style.setProperty("--blob-angle", "0deg");
-        card.style.setProperty("--blob-stretch", "1");
-        card.style.setProperty("--blob-squash", "1");
-      }, 500);
-    });
-  });
-}
-
-/* ==========================================================================
-   9. COPIAR DATOS DE CONTACTO
-   ========================================================================== */
-
-function initContactCopy() {
-  document.querySelectorAll(".btn-contact-copy").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const textToCopy = btn.getAttribute("data-copy-text");
-
-      navigator.clipboard.writeText(textToCopy);
-
-      const btnText = btn.querySelector(".btn-text");
-      const original = btnText.innerText;
-
-      btnText.innerText = "¡Copiado!";
-      btn.classList.add("copied");
-
-      setTimeout(() => {
-        btnText.innerText = original;
-        btn.classList.remove("copied");
-      }, 2000);
-    });
-  });
-}
-
-
-/* ==========================================================================
-   10. PÁGINA ERROR 404
-   ========================================================================== */
-
-function initErrorPage() {
-  const errorContainer = document.querySelector(".error-container");
-
-  if (!errorContainer) return;
-
-  gsap.from(errorContainer, {
-    opacity: 0,
-    y: 30,
-    duration: 1,
-    ease: "power2.out",
-  });
-
-  gsap.to(".gsap-reveal", {
-    opacity: 1,
-    y: 0,
-    duration: 1,
-    delay: 0.5,
-  });
-}
-/* ==========================================================================
-   11. MODALES DE PROYECTOS
-   ========================================================================== */
-
-function initProjectModals() {
-
-  const projectModals =
-    document.querySelectorAll(".modal");
-
-
-  projectModals.forEach((modal) => {
-
-
-    const modalBody =
-      modal.querySelector(".modal-body");
-
-
-    const carouselElement =
-      modal.querySelector(
-        ".project-modal-carousel"
-      );
-
-
-    const modalVideos =
-      modal.querySelectorAll(
-        ".project-carousel-video"
-      );
-
-
-    /* ======================================================================
-       LENIS
-       ====================================================================== */
-
-    if (modalBody) {
-
-      modalBody.setAttribute(
-        "data-lenis-prevent",
-        ""
-      );
-
-    }
-
-
-    /* ======================================================================
-       CONTROLES PERSONALIZADOS DE VÍDEO
-       ====================================================================== */
-
-    modalVideos.forEach((video) => {
-
-
-      const wrapper =
-        video.closest(
-          ".project-video-wrapper"
-        );
-
-
-      if (!wrapper) return;
-
-
-      const toggleButton =
-        wrapper.querySelector(
-          ".project-video-toggle"
-        );
-
-
-      if (!toggleButton) return;
-
-
-      /*
-       * Actualiza visualmente el botón
-       * dependiendo de si está reproduciendo
-       * o pausado.
-       */
-
-      function updateVideoButton() {
-
-        const isPlaying =
-          !video.paused &&
-          !video.ended;
-
-
-        toggleButton.classList.toggle(
-          "is-playing",
-          isPlaying
-        );
-
-
-        toggleButton.setAttribute(
-          "aria-label",
-          isPlaying
-            ? "Pausar vídeo"
-            : "Reproducir vídeo"
-        );
-
-      }
-
-
-      /*
-       * CLICK EN EL BOTÓN CENTRAL
-       */
-
-      toggleButton.addEventListener(
-        "click",
-        (event) => {
-
-          /*
-           * Evita que Bootstrap interprete
-           * este clic como interacción
-           * con el carrusel.
-           */
-
-          event.preventDefault();
-          event.stopPropagation();
-
-
-          if (video.paused) {
-
-            video.play();
-
-          } else {
-
-            video.pause();
-
-          }
-
-        }
-      );
-
-
-      /*
-       * Sincronizamos el icono aunque
-       * el usuario utilice los controles
-       * nativos del navegador.
-       */
-
-      video.addEventListener(
-        "play",
-        updateVideoButton
-      );
-
-
-      video.addEventListener(
-        "pause",
-        updateVideoButton
-      );
-
-
-      video.addEventListener(
-        "ended",
-        updateVideoButton
-      );
-
-
-      updateVideoButton();
-
-    });
-
-
-    /* ======================================================================
-       SCROLL CON RUEDA
-       ====================================================================== */
-
-    modal.addEventListener(
-      "wheel",
+    link.addEventListener(
+      "click",
       (event) => {
 
-        if (!modalBody) return;
+        const targetId =
+          link.getAttribute("href") || "";
 
 
         if (
-          event.target.closest(
-            ".modal-body"
+          targetId.includes("#")
+        ) {
+
+          event.preventDefault();
+
+
+          const pureId =
+            targetId.includes(".html")
+              ? targetId.split("#")[1]
+              : targetId.replace("#", "");
+
+
+          const targetElement =
+            document.getElementById(
+              pureId
+            );
+
+
+          let scrollTarget = 0;
+
+
+          if (
+            pureId !== "master-stage" &&
+            targetElement
+          ) {
+
+            scrollTarget =
+              targetElement;
+
+
+            if (
+              pureId === "services-layer" &&
+              window.innerWidth >= 1025
+            ) {
+
+              scrollTarget =
+                window.innerHeight * 1.2;
+
+            }
+
+          }
+
+
+          if (lenis) {
+
+            lenis.scrollTo(
+              scrollTarget,
+              {
+                offset: -80,
+              }
+            );
+
+          } else {
+
+            const top =
+              typeof scrollTarget ===
+              "number"
+                ? scrollTarget
+                : scrollTarget.offsetTop -
+                  80;
+
+
+            window.scrollTo({
+
+              top,
+
+              behavior:
+                "smooth",
+
+            });
+
+          }
+
+        }
+
+
+        if (
+          navCollapse?.classList.contains(
+            "show"
           )
         ) {
 
-          return;
-
-        }
-
-
-        event.preventDefault();
-
-        modalBody.scrollTop +=
-          event.deltaY;
-
-      },
-      {
-        passive: false,
-      }
-    );
-
-
-    /* ======================================================================
-       ABRIENDO MODAL
-       ====================================================================== */
-
-    modal.addEventListener(
-      "show.bs.modal",
-      () => {
-
-        /*
-         * Bloquea completamente el scroll
-         * de la página situada detrás.
-         */
-
-        if (lenis) {
-
-          lenis.stop();
+          bootstrap.Collapse
+            .getInstance(
+              navCollapse
+            )
+            ?.hide();
 
         }
 
       }
     );
 
-
-    /* ======================================================================
-       MODAL ABIERTO
-       ====================================================================== */
-
-    modal.addEventListener(
-      "shown.bs.modal",
-      () => {
+  });
+}
 
 
-        /*
-         * Siempre empieza arriba.
-         */
+/* ==========================================================================
+   8. ACORDEÓN DE SERVICIOS
+   ========================================================================== */
 
-        if (modalBody) {
+function initAccordion() {
 
-          modalBody.scrollTop = 0;
+  const accordions = [
+    ...document.querySelectorAll(
+      ".services-accordion details"
+    ),
+  ];
 
-        }
+
+  accordions.forEach(
+    (details) => {
+
+      const summary =
+        details.querySelector(
+          "summary"
+        );
+
+      const content =
+        details.querySelector(
+          ".accordion-content"
+        );
 
 
-        /*
-         * CARRUSEL MANUAL.
-         *
-         * No avanza automáticamente.
-         */
+      if (
+        !summary ||
+        !content
+      ) {
+        return;
+      }
 
-        if (carouselElement) {
 
-          const carousel =
-            bootstrap.Carousel
-              .getOrCreateInstance(
-                carouselElement,
-                {
-                  interval: false,
-                  pause: true,
-                  touch: true,
-                  wrap: true,
-                }
+      summary.addEventListener(
+        "click",
+        (event) => {
+
+          event.preventDefault();
+
+
+          gsap.killTweensOf(
+            content
+          );
+
+
+          /* CERRAR EL ACTUAL */
+
+          if (
+            details.hasAttribute(
+              "open"
+            )
+          ) {
+
+            gsap.to(
+              content,
+              {
+
+                height: 0,
+                opacity: 0,
+
+                duration: 0.45,
+
+                ease:
+                  "power2.inOut",
+
+                onComplete: () => {
+
+                  details.removeAttribute(
+                    "open"
+                  );
+
+
+                  gsap.set(
+                    content,
+                    {
+                      clearProps:
+                        "height,opacity",
+                    }
+                  );
+
+                },
+
+              }
+            );
+
+
+            return;
+
+          }
+
+
+          /* CERRAR OTRO ACORDEÓN ABIERTO */
+
+          const previousOpen =
+            accordions.find(
+
+              (item) =>
+                item !== details &&
+                item.hasAttribute(
+                  "open"
+                )
+
+            );
+
+
+          const timeline =
+            gsap.timeline();
+
+
+          if (previousOpen) {
+
+            const previousContent =
+              previousOpen.querySelector(
+                ".accordion-content"
               );
 
 
-          carousel.pause();
+            if (previousContent) {
 
-        }
-
-      }
-    );
-
-
-    /* ======================================================================
-       CAMBIO DE SLIDE
-       ====================================================================== */
-
-    if (carouselElement) {
-
-      carouselElement.addEventListener(
-        "slide.bs.carousel",
-        () => {
+              gsap.killTweensOf(
+                previousContent
+              );
 
 
-          /*
-           * Al cambiar de slide pausamos
-           * cualquier vídeo que estuviera
-           * reproduciéndose.
-           */
+              timeline.to(
 
-          modalVideos.forEach(
-            (video) => {
+                previousContent,
 
-              video.pause();
+                {
+                  height: 0,
+                  opacity: 0,
+
+                  duration: 0.45,
+
+                  ease:
+                    "power2.inOut",
+
+                  onComplete: () => {
+
+                    previousOpen
+                      .removeAttribute(
+                        "open"
+                      );
+
+
+                    gsap.set(
+                      previousContent,
+                      {
+                        clearProps:
+                          "height,opacity",
+                      }
+                    );
+
+                  },
+
+                },
+
+                0
+
+              );
 
             }
+
+          }
+
+
+          /* ABRIR EL NUEVO */
+
+          details.setAttribute(
+            "open",
+            ""
+          );
+
+
+          gsap.set(
+            content,
+            {
+              height: 0,
+              opacity: 0,
+            }
+          );
+
+
+          timeline.to(
+
+            content,
+
+            {
+              height: "auto",
+              opacity: 1,
+
+              duration: 0.45,
+
+              ease:
+                "power2.inOut",
+
+              onComplete: () => {
+
+                gsap.set(
+                  content,
+                  {
+                    clearProps:
+                      "height,opacity",
+                  }
+                );
+
+              },
+
+            },
+
+            0
+
           );
 
         }
       );
 
     }
+  );
+
+}
 
 
-    /* ======================================================================
-       CERRANDO MODAL
-       ====================================================================== */
+/* ==========================================================================
+   9. EXPERIENCIA · LUZ ELÁSTICA
+   ========================================================================== */
 
-    modal.addEventListener(
-      "hide.bs.modal",
-      () => {
+function initExperienceHover() {
+
+  const supportsHover =
+    window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    ).matches;
 
 
-        /*
-         * Pausa los vídeos.
-         */
+  if (
+    prefersReducedMotion ||
+    !supportsHover
+  ) {
+    return;
+  }
 
-        modalVideos.forEach(
-          (video) => {
 
-            video.pause();
+  document
+    .querySelectorAll(
+      ".experience-card"
+    )
+    .forEach((card) => {
 
-          }
+      let targetX = 0;
+      let targetY = 0;
+
+      let currentX = 0;
+      let currentY = 0;
+
+      let previousX = 0;
+      let previousY = 0;
+
+      let stretch = 1;
+      let squash = 1;
+
+      let angle = 0;
+
+      let animationFrame = null;
+      let resetTimer = null;
+
+
+      const setPosition = () => {
+
+        card.style.setProperty(
+          "--trail-x",
+          `${currentX}px`
         );
 
+        card.style.setProperty(
+          "--trail-y",
+          `${currentY}px`
+        );
 
-        /*
-         * Pausa también el carrusel.
-         */
+        card.style.setProperty(
+          "--blob-angle",
+          `${angle}deg`
+        );
 
-        if (!carouselElement) return;
+        card.style.setProperty(
+          "--blob-stretch",
+          stretch.toFixed(3)
+        );
+
+        card.style.setProperty(
+          "--blob-squash",
+          squash.toFixed(3)
+        );
+
+      };
 
 
-        const carousel =
-          bootstrap.Carousel
-            .getInstance(
-              carouselElement
+      function updateBlob() {
+
+        currentX +=
+          (targetX - currentX) *
+          0.12;
+
+        currentY +=
+          (targetY - currentY) *
+          0.12;
+
+
+        const velocityX =
+          currentX -
+          previousX;
+
+        const velocityY =
+          currentY -
+          previousY;
+
+
+        const speed =
+          Math.min(
+            Math.hypot(
+              velocityX,
+              velocityY
+            ),
+            28
+          );
+
+
+        const targetStretch =
+          1 +
+          Math.min(
+            speed * 0.09,
+            1.2
+          );
+
+
+        const targetSquash =
+          1 -
+          Math.min(
+            speed * 0.024,
+            0.27
+          );
+
+
+        stretch +=
+          (targetStretch -
+            stretch) *
+          0.2;
+
+
+        squash +=
+          (targetSquash -
+            squash) *
+          0.2;
+
+
+        if (
+          speed > 0.05
+        ) {
+
+          const targetAngle =
+            Math.atan2(
+              velocityY,
+              velocityX
+            ) *
+            (180 / Math.PI);
+
+
+          const angleDifference =
+            (
+              (
+                targetAngle -
+                angle +
+                540
+              ) %
+              360
+            ) -
+            180;
+
+
+          angle +=
+            angleDifference *
+            0.18;
+
+        }
+
+
+        setPosition();
+
+
+        previousX =
+          currentX;
+
+        previousY =
+          currentY;
+
+
+        const positionIsMoving =
+          Math.abs(
+            targetX -
+              currentX
+          ) >
+            0.1 ||
+          Math.abs(
+            targetY -
+              currentY
+          ) >
+            0.1;
+
+
+        const shapeIsMoving =
+          Math.abs(
+            stretch - 1
+          ) >
+            0.002 ||
+          Math.abs(
+            squash - 1
+          ) >
+            0.002;
+
+
+        if (
+          positionIsMoving ||
+          shapeIsMoving
+        ) {
+
+          animationFrame =
+            requestAnimationFrame(
+              updateBlob
+            );
+
+        } else {
+
+          animationFrame =
+            null;
+
+        }
+
+      }
+
+
+      function startAnimation() {
+
+        if (
+          animationFrame ===
+          null
+        ) {
+
+          animationFrame =
+            requestAnimationFrame(
+              updateBlob
+            );
+
+        }
+
+      }
+
+
+      card.addEventListener(
+        "pointerenter",
+        (event) => {
+
+          clearTimeout(
+            resetTimer
+          );
+
+
+          const rect =
+            card.getBoundingClientRect();
+
+
+          targetX =
+            event.clientX -
+            rect.left;
+
+          targetY =
+            event.clientY -
+            rect.top;
+
+
+          currentX =
+            targetX;
+
+          currentY =
+            targetY;
+
+
+          previousX =
+            currentX;
+
+          previousY =
+            currentY;
+
+
+          stretch = 1;
+          squash = 1;
+
+
+          card.style.setProperty(
+            "--blob-stretch",
+            "1"
+          );
+
+          card.style.setProperty(
+            "--blob-squash",
+            "1"
+          );
+
+
+          setPosition();
+
+          startAnimation();
+
+        }
+      );
+
+
+      card.addEventListener(
+        "pointermove",
+        (event) => {
+
+          const rect =
+            card.getBoundingClientRect();
+
+
+          targetX =
+            event.clientX -
+            rect.left;
+
+          targetY =
+            event.clientY -
+            rect.top;
+
+
+          startAnimation();
+
+        }
+      );
+
+
+      card.addEventListener(
+        "pointerleave",
+        () => {
+
+          resetTimer =
+            setTimeout(
+              () => {
+
+                if (
+                  animationFrame !==
+                  null
+                ) {
+
+                  cancelAnimationFrame(
+                    animationFrame
+                  );
+
+                  animationFrame =
+                    null;
+
+                }
+
+
+                const centerX =
+                  card.clientWidth /
+                  2;
+
+                const centerY =
+                  card.clientHeight /
+                  2;
+
+
+                targetX =
+                  centerX;
+
+                targetY =
+                  centerY;
+
+                currentX =
+                  centerX;
+
+                currentY =
+                  centerY;
+
+                previousX =
+                  centerX;
+
+                previousY =
+                  centerY;
+
+
+                stretch = 1;
+                squash = 1;
+                angle = 0;
+
+
+                card.style.setProperty(
+                  "--trail-x",
+                  "50%"
+                );
+
+                card.style.setProperty(
+                  "--trail-y",
+                  "50%"
+                );
+
+                card.style.setProperty(
+                  "--blob-angle",
+                  "0deg"
+                );
+
+                card.style.setProperty(
+                  "--blob-stretch",
+                  "1"
+                );
+
+                card.style.setProperty(
+                  "--blob-squash",
+                  "1"
+                );
+
+              },
+
+              500
+
+            );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* ==========================================================================
+   10. CONTACTO · COPIAR DATOS
+   ========================================================================== */
+
+function initContactCopy() {
+
+  document
+    .querySelectorAll(
+      ".btn-contact-copy"
+    )
+    .forEach((button) => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const textToCopy =
+            button.getAttribute(
+              "data-copy-text"
             );
 
 
-        if (carousel) {
+          const buttonText =
+            button.querySelector(
+              ".btn-text"
+            );
+
+
+          if (
+            !textToCopy ||
+            !buttonText
+          ) {
+            return;
+          }
+
+
+          navigator.clipboard
+            .writeText(
+              textToCopy
+            );
+
+
+          const originalText =
+            buttonText.innerText;
+
+
+          buttonText.innerText =
+            "¡Copiado!";
+
+
+          button.classList.add(
+            "copied"
+          );
+
+
+          setTimeout(
+            () => {
+
+              buttonText.innerText =
+                originalText;
+
+
+              button.classList.remove(
+                "copied"
+              );
+
+            },
+
+            2000
+
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* ==========================================================================
+   11. PÁGINA 404
+   ========================================================================== */
+
+function initErrorPage() {
+
+  const errorContainer =
+    document.querySelector(
+      ".error-container"
+    );
+
+
+  if (!errorContainer) {
+    return;
+  }
+
+
+  gsap.from(
+    errorContainer,
+    {
+
+      opacity: 0,
+
+      y: 30,
+
+      duration: 1,
+
+      ease:
+        "power2.out",
+
+    }
+  );
+
+
+  gsap.to(
+    ".gsap-reveal",
+    {
+
+      opacity: 1,
+
+      y: 0,
+
+      duration: 1,
+
+      delay: 0.5,
+
+    }
+  );
+
+}
+
+
+/* ==========================================================================
+   12. MODALES DE PROYECTOS
+   ========================================================================== */
+
+function initProjectModals() {
+
+  document
+    .querySelectorAll(
+      ".modal"
+    )
+    .forEach((modal) => {
+
+      const modalBody =
+        modal.querySelector(
+          ".modal-body"
+        );
+
+
+      const carouselElement =
+        modal.querySelector(
+          ".project-modal-carousel"
+        );
+
+
+      const modalVideos =
+        modal.querySelectorAll(
+          ".project-carousel-video"
+        );
+
+
+      if (modalBody) {
+
+        modalBody.setAttribute(
+          "data-lenis-prevent",
+          ""
+        );
+
+      }
+
+
+      /* ====================================================================
+         CONTROLES DE VÍDEO
+         ==================================================================== */
+
+      modalVideos.forEach(
+        (video) => {
+
+          const wrapper =
+            video.closest(
+              ".project-video-wrapper"
+            );
+
+
+          const toggleButton =
+            wrapper?.querySelector(
+              ".project-video-toggle"
+            );
+
+
+          if (!toggleButton) {
+            return;
+          }
+
+
+          const updateVideoButton =
+            () => {
+
+              const isPlaying =
+                !video.paused &&
+                !video.ended;
+
+
+              toggleButton
+                .classList
+                .toggle(
+                  "is-playing",
+                  isPlaying
+                );
+
+
+              toggleButton.setAttribute(
+
+                "aria-label",
+
+                isPlaying
+                  ? "Pausar vídeo"
+                  : "Reproducir vídeo"
+
+              );
+
+            };
+
+
+          toggleButton.addEventListener(
+
+            "click",
+
+            (event) => {
+
+              event.preventDefault();
+
+              event.stopPropagation();
+
+
+              if (
+                video.paused
+              ) {
+
+                video.play();
+
+              } else {
+
+                video.pause();
+
+              }
+
+            }
+
+          );
+
+
+          [
+            "play",
+            "pause",
+            "ended",
+          ].forEach(
+            (eventName) => {
+
+              video.addEventListener(
+                eventName,
+                updateVideoButton
+              );
+
+            }
+          );
+
+
+          updateVideoButton();
+
+        }
+      );
+
+
+      /* ====================================================================
+         RUEDA FUERA DEL BODY DEL MODAL
+         ==================================================================== */
+
+      modal.addEventListener(
+
+        "wheel",
+
+        (event) => {
+
+          if (
+            !modalBody ||
+            event.target.closest(
+              ".modal-body"
+            )
+          ) {
+            return;
+          }
+
+
+          event.preventDefault();
+
+
+          modalBody.scrollTop +=
+            event.deltaY;
+
+        },
+
+        {
+          passive: false,
+        }
+
+      );
+
+
+      /* ====================================================================
+         APERTURA
+         ==================================================================== */
+
+      modal.addEventListener(
+        "show.bs.modal",
+        () => {
+
+          if (lenis) {
+            lenis.stop();
+          }
+
+        }
+      );
+
+
+      modal.addEventListener(
+        "shown.bs.modal",
+        () => {
+
+          if (modalBody) {
+
+            modalBody.scrollTop =
+              0;
+
+          }
+
+
+          if (!carouselElement) {
+            return;
+          }
+
+
+          const carousel =
+            bootstrap.Carousel
+              .getOrCreateInstance(
+
+                carouselElement,
+
+                {
+                  interval: false,
+                  pause: true,
+                  touch: true,
+                  wrap: true,
+                }
+
+              );
+
 
           carousel.pause();
 
         }
-
-      }
-    );
+      );
 
 
-    /* ======================================================================
-       MODAL CERRADO
-       ====================================================================== */
+      /* ====================================================================
+         CAMBIO DE SLIDE
+         ==================================================================== */
 
-    modal.addEventListener(
-      "hidden.bs.modal",
-      () => {
+      if (carouselElement) {
 
+        carouselElement
+          .addEventListener(
 
-        /*
-         * Al volver a abrir el proyecto
-         * empezamos de nuevo por el slide 1.
-         */
+            "slide.bs.carousel",
 
-        if (carouselElement) {
+            () => {
 
-          const carousel =
-            bootstrap.Carousel
-              .getInstance(
-                carouselElement
+              modalVideos.forEach(
+                (video) =>
+                  video.pause()
               );
 
+            }
 
-          if (carousel) {
+          );
 
-            carousel.to(0);
-            carousel.pause();
+      }
 
+
+      /* ====================================================================
+         CIERRE
+         ==================================================================== */
+
+      modal.addEventListener(
+        "hide.bs.modal",
+        () => {
+
+          modalVideos.forEach(
+            (video) =>
+              video.pause()
+          );
+
+
+          if (!carouselElement) {
+            return;
           }
 
+
+          bootstrap.Carousel
+            .getInstance(
+              carouselElement
+            )
+            ?.pause();
+
         }
+      );
 
 
-        /*
-         * Reinicia los vídeos.
-         */
+      modal.addEventListener(
+        "hidden.bs.modal",
+        () => {
 
-        modalVideos.forEach(
-          (video) => {
+          if (
+            carouselElement
+          ) {
+
+            const carousel =
+              bootstrap.Carousel
+                .getInstance(
+                  carouselElement
+                );
 
 
-            video.pause();
+            if (carousel) {
 
+              carousel.to(0);
 
-            try {
-
-              video.currentTime = 0;
-
-            } catch (error) {
-
-              /*
-               * No hacemos nada si el navegador
-               * todavía no ha cargado metadatos.
-               */
+              carousel.pause();
 
             }
 
           }
-        );
 
 
-        /*
-         * Recupera el scroll de la web.
-         */
+          modalVideos.forEach(
+            (video) => {
 
-        if (lenis) {
+              video.pause();
 
-          lenis.start();
+
+              try {
+
+                video.currentTime =
+                  0;
+
+              } catch {
+
+                /*
+                 * Puede ocurrir si el navegador
+                 * aún no ha cargado los metadatos.
+                 */
+
+              }
+
+            }
+          );
+
+
+          if (lenis) {
+            lenis.start();
+          }
 
         }
+      );
 
-      }
-    );
-
-
-  });
+    });
 
 }
+
 
 /* ==========================================================================
-   INIT
+   13. INICIALIZACIÓN
    ========================================================================== */
 
-window.addEventListener("DOMContentLoaded", () => {
-  setup3D();
-  initNavLogic();
-  initAccordion();
-  initExperienceHover();
-  initContactCopy();
-  initErrorPage();
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-  /*
-   * IMPORTANTE:
-   * inicializa el comportamiento de los modales.
-   */
-  initProjectModals();
+    setup3D();
 
-  intro();
-});
+    initNavLogic();
 
-/* FORM */
-const contactForm = document.getElementById("contactForm");
-if (contactForm) {
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const submitBtn = document.getElementById("submitBtn");
-    const formFeedback = document.getElementById("formFeedback");
+    initAccordion();
 
-    submitBtn.innerText = "Enviando...";
-    submitBtn.disabled = true;
+    initExperienceHover();
 
-    setTimeout(() => {
-      contactForm.reset();
-      submitBtn.innerText = "Enviar mensaje";
-      submitBtn.disabled = false;
-      formFeedback.classList.remove("d-none");
+    initContactCopy();
 
-      setTimeout(() => {
-        formFeedback.classList.add("d-none");
-      }, 5000);
-    }, 1500);
-  });
-}
+    initErrorPage();
+
+    initProjectModals();
+
+    intro();
+
+  }
+);
