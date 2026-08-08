@@ -1662,21 +1662,17 @@ body.modal-open {
   font-size: 0.78rem;
   font-weight: 500;
 }
-
 /* ==========================================================================
-   FOTOGRAFÍA · CARRUSEL 3D
+   11. FOTOGRAFÍA · CARRUSEL 3D
    ========================================================================== */
 
 .photography-showcase {
+  position: relative;
   width: 100%;
-
-  margin-top:
-    clamp(6rem, 11vw, 10rem);
-
-  margin-bottom:
-    clamp(3rem, 6vw, 6rem);
+  margin-top: clamp(6rem, 11vw, 10rem);
+  margin-bottom: clamp(4rem, 8vw, 7rem);
+  overflow: visible;
 }
-
 
 
 /* ==========================================================================
@@ -1685,14 +1681,11 @@ body.modal-open {
 
 .photography-showcase-header {
   display: flex;
-
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 2rem;
 
-  margin-bottom:
-    clamp(2rem, 5vw, 4rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
 }
 
 
@@ -1707,24 +1700,23 @@ body.modal-open {
   font-weight: 700;
 
   letter-spacing: 0.13em;
-
   text-transform: uppercase;
 }
 
 
 .photography-heading {
-  max-width: 650px;
+  max-width: 720px;
+  margin: 0;
 
   font-family: var(--font-sans);
 
-  font-size:
-    clamp(2.5rem, 5vw, 4.5rem);
-
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 600;
 
   line-height: 0.94;
-
   letter-spacing: -0.065em;
+
+  color: var(--text-dark);
 }
 
 
@@ -1733,16 +1725,13 @@ body.modal-open {
 }
 
 
-
 /* ==========================================================================
    CONTROLES
    ========================================================================== */
 
 .photography-controls {
   display: flex;
-
   align-items: center;
-
   gap: 0.8rem;
 
   flex-shrink: 0;
@@ -1751,7 +1740,6 @@ body.modal-open {
 
 .photography-arrow {
   display: grid;
-
   place-items: center;
 
   width: 48px;
@@ -1759,17 +1747,12 @@ body.modal-open {
 
   padding: 0;
 
-  border:
-    1px solid
-    rgba(28, 20, 16, 0.14);
-
+  border: 1px solid rgba(28, 20, 16, 0.14);
   border-radius: 50%;
 
-  background-color:
-    var(--bg-tertiary);
+  background-color: var(--bg-tertiary);
 
-  color:
-    var(--text-dark);
+  color: var(--text-dark);
 
   cursor: pointer;
 
@@ -1777,110 +1760,147 @@ body.modal-open {
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.3s ease,
     color 0.3s ease,
-    border-color 0.3s ease;
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 
 .photography-arrow svg {
   width: 21px;
   height: 21px;
+
+  pointer-events: none;
 }
 
 
 .photography-arrow:hover {
-  background-color:
-    var(--accent);
+  background-color: var(--accent);
+  border-color: var(--accent);
 
-  border-color:
-    var(--accent);
+  color: var(--bg-main);
 
-  color:
-    var(--bg-main);
+  transform: scale(1.08);
 
-  transform:
-    scale(1.08);
+  box-shadow:
+    0 8px 20px
+    rgba(109, 3, 3, 0.14);
 }
 
 
 .photography-arrow:active {
-  transform:
-    scale(0.94);
+  transform: scale(0.94);
 }
 
 
+.photography-arrow:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+
+/* ==========================================================================
+   CONTADOR
+   ========================================================================== */
+
 .photography-counter {
-  min-width: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.32rem;
+
+  min-width: 62px;
 
   font-size: 0.7rem;
   font-weight: 600;
 
+  line-height: 1;
+
   letter-spacing: 0.08em;
 
-  text-align: center;
-
-  color:
-    rgba(28, 20, 16, 0.5);
+  color: rgba(28, 20, 16, 0.42);
 }
 
 
 .photography-current {
-  color:
-    var(--text-dark);
+  color: var(--text-dark);
 }
 
 
+/*
+ * Funciona también aunque el segundo número
+ * todavía no tenga la clase photography-total.
+ */
+
+.photography-total,
+.photography-counter span:last-child {
+  color: rgba(28, 20, 16, 0.42);
+}
+
 
 /* ==========================================================================
-   ESCENARIO
+   CARRUSEL
    ========================================================================== */
 
 .photography-carousel {
   position: relative;
 
   width: 100%;
+
+  overflow: visible;
 }
 
+
+/*
+ * El escenario ocupa prácticamente todo el viewport.
+ *
+ * IMPORTANTE:
+ * overflow queda en visible para que la sombra de la
+ * fotografía central nunca se corte en la parte inferior.
+ *
+ * El body ya controla el desbordamiento horizontal del sitio.
+ */
 
 .photography-carousel-stage {
   position: relative;
 
   left: 50%;
 
-  width:
-    min(100vw, 1500px);
+  width: min(100vw, 1500px);
 
-  height:
-    clamp(420px, 48vw, 650px);
+  height: clamp(470px, 52vw, 700px);
 
-  margin-left:
-    -50vw;
+  margin-left: -50vw;
 
-  overflow: hidden;
+  overflow: visible;
 
-  perspective:
-    1600px;
+  perspective: 1600px;
+  perspective-origin: center center;
 
-  transform-style:
-    preserve-3d;
+  transform-style: preserve-3d;
+
+  isolation: isolate;
+
+  touch-action: pan-y;
+
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 
 /*
- * Corrige el centrado cuando el viewport
- * es más ancho de 1500px.
+ * Cuando el monitor supera los 1500px,
+ * mantenemos el escenario centrado.
  */
 
 @media (min-width: 1500px) {
 
   .photography-carousel-stage {
     left: 50%;
-
-    margin-left:
-      -750px;
+    margin-left: -750px;
   }
 
 }
-
 
 
 /* ==========================================================================
@@ -1893,31 +1913,27 @@ body.modal-open {
   top: 50%;
   left: 50%;
 
-  width:
-    clamp(250px, 31vw, 430px);
+  width: clamp(250px, 31vw, 430px);
 
-  aspect-ratio:
-    4 / 5;
+  aspect-ratio: 4 / 5;
 
   margin: 0;
 
   overflow: hidden;
 
-  border-radius:
-    1.6rem;
+  border-radius: 1.6rem;
 
-  background-color:
-    var(--bg-tertiary);
+  background-color: var(--bg-tertiary);
 
   box-shadow:
-    0 20px 60px
+    0 24px 55px
     rgba(28, 20, 16, 0.12);
 
-  transform-style:
-    preserve-3d;
+  transform-origin: center center;
+  transform-style: preserve-3d;
 
-  transform-origin:
-    center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
   cursor: pointer;
 
@@ -1926,8 +1942,11 @@ body.modal-open {
     filter,
     opacity;
 
-  backface-visibility:
-    hidden;
+  /*
+   * No añadimos transition aquí.
+   * GSAP controla toda la interpolación para
+   * evitar que CSS y JS compitan entre sí.
+   */
 }
 
 
@@ -1938,19 +1957,32 @@ body.modal-open {
   height: 100%;
 
   object-fit: cover;
+  object-position: center;
+
+  pointer-events: none;
 
   transition: none;
 }
 
 
+/* ==========================================================================
+   FOTOGRAFÍA CENTRAL
+   ========================================================================== */
+
 .photography-slide.is-active {
   cursor: default;
 
   box-shadow:
-    0 35px 90px
-    rgba(28, 20, 16, 0.22);
+    0 38px 85px
+    rgba(28, 20, 16, 0.2);
 }
 
+
+/*
+ * El shadow se aplica sobre el propio slide.
+ * Como el escenario tiene overflow visible,
+ * puede expandirse libremente hacia abajo.
+ */
 
 
 /* ==========================================================================
@@ -1959,19 +1991,36 @@ body.modal-open {
 
 @media (max-width: 1024px) {
 
+  .photography-showcase {
+    margin-top: 6rem;
+    margin-bottom: 5rem;
+  }
+
+
+  .photography-showcase-header {
+    margin-bottom: 2.5rem;
+  }
+
+
   .photography-carousel-stage {
-    height:
-      clamp(410px, 61vw, 590px);
+    height: clamp(450px, 65vw, 620px);
   }
 
 
   .photography-slide {
-    width:
-      clamp(245px, 37vw, 350px);
+    width: clamp(245px, 37vw, 350px);
+
+    border-radius: 1.45rem;
+  }
+
+
+  .photography-slide.is-active {
+    box-shadow:
+      0 30px 70px
+      rgba(28, 20, 16, 0.18);
   }
 
 }
-
 
 
 /* ==========================================================================
@@ -1981,77 +2030,157 @@ body.modal-open {
 @media (max-width: 767px) {
 
   .photography-showcase {
-    margin-top:
-      5rem;
+    margin-top: 5rem;
+    margin-bottom: 4rem;
   }
 
 
+  /* CABECERA */
+
   .photography-showcase-header {
-    align-items:
-      flex-end;
+    align-items: flex-end;
 
-    gap:
-      1rem;
+    gap: 1rem;
 
-    margin-bottom:
-      1.5rem;
+    margin-bottom: 1.75rem;
   }
 
 
   .photography-kicker {
-    margin-bottom:
-      0.5rem;
+    margin-bottom: 0.5rem;
 
-    font-size:
-      0.6rem;
+    font-size: 0.6rem;
   }
 
 
   .photography-heading {
-    font-size:
-      clamp(2rem, 9vw, 2.75rem);
+    max-width: 100%;
+
+    font-size: clamp(2rem, 9vw, 2.75rem);
+
+    line-height: 0.96;
   }
 
 
+  /* CONTROLES */
+
   .photography-controls {
-    gap:
-      0.4rem;
+    gap: 0.4rem;
   }
 
 
   .photography-arrow {
-    width:
-      42px;
-
-    height:
-      42px;
+    width: 42px;
+    height: 42px;
   }
 
+
+  .photography-arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+
+  /*
+   * En móvil dejamos solo las flechas.
+   * El contador sigue funcionando internamente.
+   */
 
   .photography-counter {
     display: none;
   }
 
 
-  .photography-carousel-stage {
-    width:
-      100vw;
+  /* ESCENARIO */
 
-    height:
-      clamp(370px, 115vw, 500px);
+  .photography-carousel-stage {
+    left: 50%;
+
+    width: 100vw;
+
+    height: clamp(410px, 120vw, 535px);
+
+    margin-left: -50vw;
+
+    overflow: visible;
+
+    perspective: 1200px;
   }
 
 
-  .photography-slide {
-    width:
-      min(70vw, 310px);
+  /* FOTOGRAFÍAS */
 
-    border-radius:
-      1.25rem;
+  .photography-slide {
+    width: min(70vw, 310px);
+
+    border-radius: 1.25rem;
+
+    box-shadow:
+      0 18px 40px
+      rgba(28, 20, 16, 0.1);
+  }
+
+
+  .photography-slide.is-active {
+    box-shadow:
+      0 28px 58px
+      rgba(28, 20, 16, 0.18);
   }
 
 }
 
+
+/* ==========================================================================
+   MÓVIL PEQUEÑO
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+  .photography-showcase-header {
+    gap: 0.75rem;
+  }
+
+
+  .photography-heading {
+    font-size: clamp(1.85rem, 8.5vw, 2.35rem);
+  }
+
+
+  .photography-arrow {
+    width: 39px;
+    height: 39px;
+  }
+
+
+  .photography-carousel-stage {
+    height: clamp(385px, 124vw, 485px);
+  }
+
+
+  .photography-slide {
+    width: min(69vw, 285px);
+  }
+
+}
+
+
+/* ==========================================================================
+   ACCESIBILIDAD · REDUCIR MOVIMIENTO
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .photography-arrow,
+  .photography-slide {
+    transition: none !important;
+  }
+
+}
+
+
+/* ==========================================================================
+   12. CONTACTO
+   ========================================================================== */
 
 /* ==========================================================================
    12. CONTACTO

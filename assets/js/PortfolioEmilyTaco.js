@@ -28,7 +28,10 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
   });
 
   lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
+
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
 }
 
 
@@ -37,14 +40,17 @@ if (!prefersReducedMotion && typeof Lenis !== "undefined") {
    ========================================================================== */
 
 function setup3D() {
-  if (!document.querySelector(".tilt-stage")) return;
+  const tiltStage = document.querySelector(".tilt-stage");
+  const tiltCard = document.querySelector("#tiltCard");
 
-  gsap.set(".tilt-stage", {
+  if (!tiltStage || !tiltCard) return;
+
+  gsap.set(tiltStage, {
     perspective: 1600,
     transformStyle: "preserve-3d",
   });
 
-  gsap.set("#tiltCard", {
+  gsap.set(tiltCard, {
     transformStyle: "preserve-3d",
     transformOrigin: "50% 50%",
     force3D: true,
@@ -84,35 +90,20 @@ function updateActiveNav(id) {
    ========================================================================== */
 
 function initMasterScroll() {
-  const stage =
-    document.querySelector("#master-stage");
+  const stage = document.querySelector("#master-stage");
+  const card = document.querySelector("#tiltCard");
+  const heroText = document.querySelector("#heroText");
+  const servicesText = document.querySelector("#servicesText");
 
-  const card =
-    document.querySelector("#tiltCard");
-
-  const heroText =
-    document.querySelector("#heroText");
-
-  const servicesText =
-    document.querySelector("#servicesText");
-
-
-  if (
-    !stage ||
-    !card ||
-    !heroText ||
-    !servicesText
-  ) {
+  if (!stage || !card || !heroText || !servicesText) {
     return;
   }
-
 
   const mainElements = [
     card,
     heroText,
     servicesText,
   ];
-
 
   const heroElements = [
     ".hero-ref-left",
@@ -131,129 +122,76 @@ function initMasterScroll() {
        ====================================================================== */
 
     "(min-width: 1025px)": function () {
+      gsap.set(mainElements, {
+        clearProps: "transform,opacity",
+      });
 
-      gsap.set(
-        mainElements,
-        {
-          clearProps:
-            "transform,opacity",
-        }
-      );
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage,
+          start: "top top",
+          end: "+=150%",
+          scrub: 1,
+          pin: true,
 
-
-      const timeline =
-        gsap.timeline({
-
-          scrollTrigger: {
-
-            trigger:
-              stage,
-
-            start:
-              "top top",
-
-            end:
-              "+=150%",
-
-            scrub:
-              1,
-
-            pin:
-              true,
-
-            onUpdate:
-              (self) => {
-
-                updateActiveNav(
-                  self.progress > 0.4
-                    ? "#services-layer"
-                    : "#master-stage"
-                );
-
-              },
-
+          onUpdate: (self) => {
+            updateActiveNav(
+              self.progress > 0.4
+                ? "#services-layer"
+                : "#master-stage"
+            );
           },
-
-        });
-
+        },
+      });
 
       timeline
 
         .to(
-
           heroText,
-
           {
             y: -100,
             opacity: 0,
             duration: 1,
           },
-
           "start"
-
         )
 
         .to(
-
           card,
-
           {
             rotationY: -180,
-
-            x: () =>
-              window.innerWidth * 0.25,
-
+            x: () => window.innerWidth * 0.25,
             scale: 0.85,
-
             duration: 1.5,
           },
-
           "start"
-
         )
 
         .fromTo(
-
           servicesText,
-
           {
             y: 100,
             opacity: 0,
           },
-
           {
             y: 0,
             opacity: 1,
             duration: 1.5,
           },
-
           "start+=0.2"
-
         );
 
-
       return () => {
-
-        if (
-          timeline.scrollTrigger
-        ) {
+        if (timeline.scrollTrigger) {
           timeline.scrollTrigger.kill();
         }
 
-
         timeline.kill();
 
-
-        gsap.set(
-          mainElements,
-          {
-            clearProps:
-              "transform,opacity",
-          }
-        );
-
+        gsap.set(mainElements, {
+          clearProps: "transform,opacity",
+        });
       };
-
     },
 
 
@@ -262,155 +200,94 @@ function initMasterScroll() {
        ====================================================================== */
 
     "(max-width: 1024px)": function () {
+      gsap.set(mainElements, {
+        clearProps: "transform,opacity",
+      });
 
-      gsap.set(
-        mainElements,
-        {
-          clearProps:
-            "transform,opacity",
-        }
-      );
+      gsap.set(heroElements, {
+        clearProps: "transform,opacity,visibility",
+      });
 
+      gsap.set(heroText, {
+        opacity: 1,
+        y: 0,
+      });
 
-      gsap.set(
-        heroElements,
-        {
-          clearProps:
-            "transform,opacity,visibility",
-        }
-      );
+      gsap.set(heroElements, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        visibility: "visible",
+      });
 
+      gsap.set(card, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        rotationY: 0,
+        scale: 1,
+      });
 
-      gsap.set(
-        heroText,
-        {
-          opacity: 1,
-          y: 0,
-        }
-      );
+      gsap.set(servicesText, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+      });
 
+      const servicesTrigger = ScrollTrigger.create({
+        trigger: "#services-layer",
+        start: "top 20%",
 
-      gsap.set(
-        heroElements,
-        {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          visibility: "visible",
-        }
-      );
-
-
-      gsap.set(
-        card,
-        {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          rotationY: 0,
-          scale: 1,
-        }
-      );
-
-
-      gsap.set(
-        servicesText,
-        {
-          opacity: 1,
-          x: 0,
-          y: 0,
-        }
-      );
-
-
-      const servicesTrigger =
-        ScrollTrigger.create({
-
-          trigger:
-            "#services-layer",
-
-          start:
-            "top 20%",
-
-          onToggle:
-            (self) => {
-
-              if (
-                self.isActive
-              ) {
-
-                updateActiveNav(
-                  "#services-layer"
-                );
-
-              }
-
-            },
-
-        });
-
+        onToggle: (self) => {
+          if (self.isActive) {
+            updateActiveNav("#services-layer");
+          }
+        },
+      });
 
       return () => {
-
         servicesTrigger.kill();
 
-
-        gsap.set(
-          mainElements,
-          {
-            clearProps:
-              "transform,opacity",
-          }
-        );
-
+        gsap.set(mainElements, {
+          clearProps: "transform,opacity",
+        });
       };
-
     },
-
   });
 
+
+  /* ========================================================================
+     NAVEGACIÓN DEL RESTO DE SECCIONES
+     ======================================================================== */
 
   [
     "#about",
     "#projects",
     "#contact",
   ].forEach((id) => {
-
-    if (
-      !document.querySelector(id)
-    ) {
+    if (!document.querySelector(id)) {
       return;
     }
 
-
     ScrollTrigger.create({
+      trigger: id,
+      start: "top 40%",
+      end: "bottom 40%",
 
-      trigger:
-        id,
+      onEnter: () => {
+        updateActiveNav(id);
+      },
 
-      start:
-        "top 40%",
-
-      end:
-        "bottom 40%",
-
-      onEnter:
-        () =>
-          updateActiveNav(id),
-
-      onEnterBack:
-        () =>
-          updateActiveNav(id),
-
+      onEnterBack: () => {
+        updateActiveNav(id);
+      },
     });
-
   });
 
 
-  requestAnimationFrame(
-    () =>
-      ScrollTrigger.refresh()
-  );
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+  });
 }
 
 
@@ -419,52 +296,34 @@ function initMasterScroll() {
    ========================================================================== */
 
 function intro() {
-  const tiltCard =
-    document.querySelector("#tiltCard");
-
+  const tiltCard = document.querySelector("#tiltCard");
 
   if (!tiltCard) {
-
     revealRestOfSite();
-
     return;
-
   }
 
+  const timeline = gsap.timeline({
+    onComplete: () => {
+      if (lenis) {
+        lenis.start();
+      }
 
-  const timeline =
-    gsap.timeline({
-
-      onComplete: () => {
-
-        if (lenis) {
-          lenis.start();
-        }
-
-
-        initMasterScroll();
-
-        revealRestOfSite();
-
-        ScrollTrigger.refresh();
-
-      },
-
-    });
-
+      initMasterScroll();
+      revealRestOfSite();
+      ScrollTrigger.refresh();
+    },
+  });
 
   timeline
 
     .fromTo(
-
       "#tiltCard",
-
       {
         opacity: 0,
         scale: 0.8,
         y: 50,
       },
-
       {
         opacity: 1,
         scale: 1,
@@ -472,61 +331,45 @@ function intro() {
         duration: 1.2,
         ease: "expo.out",
       }
-
     )
 
     .fromTo(
-
       ".hero-ref-big",
-
       {
         y: 40,
         opacity: 0,
       },
-
       {
         y: 0,
         opacity: 1,
         stagger: 0.1,
         duration: 1,
       },
-
       "-=0.8"
-
     )
 
     .fromTo(
-
       ".hero-ref-name, .hero-ref-sub",
-
       {
         opacity: 0,
       },
-
       {
         opacity: 1,
       },
-
       "-=0.5"
-
     )
 
     .fromTo(
-
       ".wave-badge",
-
       {
         scale: 0,
       },
-
       {
         scale: 1,
         duration: 0.5,
         ease: "back.out",
       },
-
       "-=0.5"
-
     );
 }
 
@@ -536,20 +379,15 @@ function intro() {
    ========================================================================== */
 
 function revealRestOfSite() {
-
   gsap.utils
     .toArray(".gsap-reveal")
     .forEach((element) => {
-
       gsap.fromTo(
-
         element,
-
         {
           opacity: 0,
           y: 50,
         },
-
         {
           opacity: 1,
           y: 0,
@@ -557,24 +395,13 @@ function revealRestOfSite() {
           ease: "power2.out",
 
           scrollTrigger: {
-
-            trigger:
-              element,
-
-            start:
-              "top 95%",
-
-            toggleActions:
-              "play none none none",
-
+            trigger: element,
+            start: "top 95%",
+            toggleActions: "play none none none",
           },
-
         }
-
       );
-
     });
-
 }
 
 
@@ -583,133 +410,85 @@ function revealRestOfSite() {
    ========================================================================== */
 
 function initNavLogic() {
-  const navbar =
-    document.getElementById("navbar");
+  const navbar = document.getElementById("navbar");
+  const navCollapse = document.getElementById("navbarNav");
 
-  const navCollapse =
-    document.getElementById("navbarNav");
-
-  const navLinks =
-    document.querySelectorAll(
-      ".navbar-nav .nav-link, .navbar-brand"
-    );
+  const navLinks = document.querySelectorAll(
+    ".navbar-nav .nav-link, .navbar-brand"
+  );
 
 
-  if (
-    navbar &&
-    navCollapse
-  ) {
-
+  if (navbar && navCollapse) {
     navCollapse.addEventListener(
       "show.bs.collapse",
       () => {
-
-        navbar.classList.add(
-          "menu-open"
-        );
-
+        navbar.classList.add("menu-open");
       }
     );
-
 
     navCollapse.addEventListener(
       "hide.bs.collapse",
       () => {
-
-        navbar.classList.remove(
-          "menu-open"
-        );
-
+        navbar.classList.remove("menu-open");
       }
     );
-
   }
 
 
   navLinks.forEach((link) => {
-
     link.addEventListener(
       "click",
       (event) => {
-
         const targetId =
           link.getAttribute("href") || "";
 
-
-        if (
-          targetId.includes("#")
-        ) {
-
+        if (targetId.includes("#")) {
           event.preventDefault();
-
 
           const pureId =
             targetId.includes(".html")
               ? targetId.split("#")[1]
               : targetId.replace("#", "");
 
-
           const targetElement =
-            document.getElementById(
-              pureId
-            );
-
+            document.getElementById(pureId);
 
           let scrollTarget = 0;
-
 
           if (
             pureId !== "master-stage" &&
             targetElement
           ) {
-
-            scrollTarget =
-              targetElement;
-
+            scrollTarget = targetElement;
 
             if (
               pureId === "services-layer" &&
               window.innerWidth >= 1025
             ) {
-
               scrollTarget =
                 window.innerHeight * 1.2;
-
             }
-
           }
 
 
           if (lenis) {
-
             lenis.scrollTo(
               scrollTarget,
               {
                 offset: -80,
               }
             );
-
           } else {
-
             const top =
-              typeof scrollTarget ===
-              "number"
+              typeof scrollTarget === "number"
                 ? scrollTarget
-                : scrollTarget.offsetTop -
-                  80;
-
+                : scrollTarget.offsetTop - 80;
 
             window.scrollTo({
-
               top,
-
-              behavior:
-                "smooth",
-
+              behavior: "smooth",
             });
-
           }
-
         }
 
 
@@ -718,18 +497,12 @@ function initNavLogic() {
             "show"
           )
         ) {
-
           bootstrap.Collapse
-            .getInstance(
-              navCollapse
-            )
+            .getInstance(navCollapse)
             ?.hide();
-
         }
-
       }
     );
-
   });
 }
 
@@ -739,7 +512,6 @@ function initNavLogic() {
    ========================================================================== */
 
 function initAccordion() {
-
   const accordions = [
     ...document.querySelectorAll(
       ".services-accordion details"
@@ -747,215 +519,132 @@ function initAccordion() {
   ];
 
 
-  accordions.forEach(
-    (details) => {
+  accordions.forEach((details) => {
+    const summary =
+      details.querySelector("summary");
 
-      const summary =
-        details.querySelector(
-          "summary"
-        );
+    const content =
+      details.querySelector(
+        ".accordion-content"
+      );
 
-      const content =
-        details.querySelector(
-          ".accordion-content"
-        );
-
-
-      if (
-        !summary ||
-        !content
-      ) {
-        return;
-      }
+    if (!summary || !content) {
+      return;
+    }
 
 
-      summary.addEventListener(
-        "click",
-        (event) => {
+    summary.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
 
-          event.preventDefault();
+        gsap.killTweensOf(content);
 
 
-          gsap.killTweensOf(
-            content
+        /* CERRAR EL ACTUAL */
+
+        if (details.hasAttribute("open")) {
+          gsap.to(content, {
+            height: 0,
+            opacity: 0,
+            duration: 0.45,
+            ease: "power2.inOut",
+
+            onComplete: () => {
+              details.removeAttribute("open");
+
+              gsap.set(content, {
+                clearProps: "height,opacity",
+              });
+            },
+          });
+
+          return;
+        }
+
+
+        /* CERRAR OTRO ACORDEÓN */
+
+        const previousOpen =
+          accordions.find(
+            (item) =>
+              item !== details &&
+              item.hasAttribute("open")
           );
 
+        const timeline =
+          gsap.timeline();
 
-          /* CERRAR EL ACTUAL */
+        if (previousOpen) {
+          const previousContent =
+            previousOpen.querySelector(
+              ".accordion-content"
+            );
 
-          if (
-            details.hasAttribute(
-              "open"
-            )
-          ) {
+          if (previousContent) {
+            gsap.killTweensOf(
+              previousContent
+            );
 
-            gsap.to(
-              content,
+            timeline.to(
+              previousContent,
               {
-
                 height: 0,
                 opacity: 0,
-
                 duration: 0.45,
-
-                ease:
-                  "power2.inOut",
+                ease: "power2.inOut",
 
                 onComplete: () => {
-
-                  details.removeAttribute(
-                    "open"
-                  );
-
+                  previousOpen
+                    .removeAttribute("open");
 
                   gsap.set(
-                    content,
+                    previousContent,
                     {
                       clearProps:
                         "height,opacity",
                     }
                   );
-
                 },
-
-              }
-            );
-
-
-            return;
-
-          }
-
-
-          /* CERRAR OTRO ACORDEÓN ABIERTO */
-
-          const previousOpen =
-            accordions.find(
-
-              (item) =>
-                item !== details &&
-                item.hasAttribute(
-                  "open"
-                )
-
-            );
-
-
-          const timeline =
-            gsap.timeline();
-
-
-          if (previousOpen) {
-
-            const previousContent =
-              previousOpen.querySelector(
-                ".accordion-content"
-              );
-
-
-            if (previousContent) {
-
-              gsap.killTweensOf(
-                previousContent
-              );
-
-
-              timeline.to(
-
-                previousContent,
-
-                {
-                  height: 0,
-                  opacity: 0,
-
-                  duration: 0.45,
-
-                  ease:
-                    "power2.inOut",
-
-                  onComplete: () => {
-
-                    previousOpen
-                      .removeAttribute(
-                        "open"
-                      );
-
-
-                    gsap.set(
-                      previousContent,
-                      {
-                        clearProps:
-                          "height,opacity",
-                      }
-                    );
-
-                  },
-
-                },
-
-                0
-
-              );
-
-            }
-
-          }
-
-
-          /* ABRIR EL NUEVO */
-
-          details.setAttribute(
-            "open",
-            ""
-          );
-
-
-          gsap.set(
-            content,
-            {
-              height: 0,
-              opacity: 0,
-            }
-          );
-
-
-          timeline.to(
-
-            content,
-
-            {
-              height: "auto",
-              opacity: 1,
-
-              duration: 0.45,
-
-              ease:
-                "power2.inOut",
-
-              onComplete: () => {
-
-                gsap.set(
-                  content,
-                  {
-                    clearProps:
-                      "height,opacity",
-                  }
-                );
-
               },
-
-            },
-
-            0
-
-          );
-
+              0
+            );
+          }
         }
-      );
 
-    }
-  );
 
+        /* ABRIR EL NUEVO */
+
+        details.setAttribute(
+          "open",
+          ""
+        );
+
+        gsap.set(content, {
+          height: 0,
+          opacity: 0,
+        });
+
+        timeline.to(
+          content,
+          {
+            height: "auto",
+            opacity: 1,
+            duration: 0.45,
+            ease: "power2.inOut",
+
+            onComplete: () => {
+              gsap.set(content, {
+                clearProps:
+                  "height,opacity",
+              });
+            },
+          },
+          0
+        );
+      }
+    );
+  });
 }
 
 
@@ -964,12 +653,10 @@ function initAccordion() {
    ========================================================================== */
 
 function initExperienceHover() {
-
   const supportsHover =
     window.matchMedia(
       "(hover: hover) and (pointer: fine)"
     ).matches;
-
 
   if (
     prefersReducedMotion ||
@@ -984,7 +671,6 @@ function initExperienceHover() {
       ".experience-card"
     )
     .forEach((card) => {
-
       let targetX = 0;
       let targetY = 0;
 
@@ -996,15 +682,13 @@ function initExperienceHover() {
 
       let stretch = 1;
       let squash = 1;
-
       let angle = 0;
 
       let animationFrame = null;
       let resetTimer = null;
 
 
-      const setPosition = () => {
-
+      function setBlobProperties() {
         card.style.setProperty(
           "--trail-x",
           `${currentX}px`
@@ -1029,28 +713,22 @@ function initExperienceHover() {
           "--blob-squash",
           squash.toFixed(3)
         );
-
-      };
+      }
 
 
       function updateBlob() {
-
         currentX +=
-          (targetX - currentX) *
-          0.12;
+          (targetX - currentX) * 0.12;
 
         currentY +=
-          (targetY - currentY) *
-          0.12;
+          (targetY - currentY) * 0.12;
 
 
         const velocityX =
-          currentX -
-          previousX;
+          currentX - previousX;
 
         const velocityY =
-          currentY -
-          previousY;
+          currentY - previousY;
 
 
         const speed =
@@ -1080,28 +758,21 @@ function initExperienceHover() {
 
 
         stretch +=
-          (targetStretch -
-            stretch) *
+          (targetStretch - stretch) *
           0.2;
-
 
         squash +=
-          (targetSquash -
-            squash) *
+          (targetSquash - squash) *
           0.2;
 
 
-        if (
-          speed > 0.05
-        ) {
-
+        if (speed > 0.05) {
           const targetAngle =
             Math.atan2(
               velocityY,
               velocityX
             ) *
             (180 / Math.PI);
-
 
           const angleDifference =
             (
@@ -1114,97 +785,67 @@ function initExperienceHover() {
             ) -
             180;
 
-
           angle +=
             angleDifference *
             0.18;
-
         }
 
 
-        setPosition();
+        setBlobProperties();
 
-
-        previousX =
-          currentX;
-
-        previousY =
-          currentY;
+        previousX = currentX;
+        previousY = currentY;
 
 
         const positionIsMoving =
           Math.abs(
-            targetX -
-              currentX
-          ) >
-            0.1 ||
+            targetX - currentX
+          ) > 0.1 ||
           Math.abs(
-            targetY -
-              currentY
-          ) >
-            0.1;
+            targetY - currentY
+          ) > 0.1;
 
 
         const shapeIsMoving =
           Math.abs(
             stretch - 1
-          ) >
-            0.002 ||
+          ) > 0.002 ||
           Math.abs(
             squash - 1
-          ) >
-            0.002;
+          ) > 0.002;
 
 
         if (
           positionIsMoving ||
           shapeIsMoving
         ) {
-
           animationFrame =
             requestAnimationFrame(
               updateBlob
             );
-
         } else {
-
-          animationFrame =
-            null;
-
+          animationFrame = null;
         }
-
       }
 
 
       function startAnimation() {
-
-        if (
-          animationFrame ===
-          null
-        ) {
-
+        if (animationFrame === null) {
           animationFrame =
             requestAnimationFrame(
               updateBlob
             );
-
         }
-
       }
 
 
       card.addEventListener(
         "pointerenter",
         (event) => {
-
-          clearTimeout(
-            resetTimer
-          );
-
+          clearTimeout(resetTimer);
 
           const rect =
             card.getBoundingClientRect();
-
 
           targetX =
             event.clientX -
@@ -1214,40 +855,17 @@ function initExperienceHover() {
             event.clientY -
             rect.top;
 
+          currentX = targetX;
+          currentY = targetY;
 
-          currentX =
-            targetX;
-
-          currentY =
-            targetY;
-
-
-          previousX =
-            currentX;
-
-          previousY =
-            currentY;
-
+          previousX = currentX;
+          previousY = currentY;
 
           stretch = 1;
           squash = 1;
 
-
-          card.style.setProperty(
-            "--blob-stretch",
-            "1"
-          );
-
-          card.style.setProperty(
-            "--blob-squash",
-            "1"
-          );
-
-
-          setPosition();
-
+          setBlobProperties();
           startAnimation();
-
         }
       );
 
@@ -1255,10 +873,8 @@ function initExperienceHover() {
       card.addEventListener(
         "pointermove",
         (event) => {
-
           const rect =
             card.getBoundingClientRect();
-
 
           targetX =
             event.clientX -
@@ -1268,9 +884,7 @@ function initExperienceHover() {
             event.clientY -
             rect.top;
 
-
           startAnimation();
-
         }
       );
 
@@ -1278,58 +892,37 @@ function initExperienceHover() {
       card.addEventListener(
         "pointerleave",
         () => {
-
           resetTimer =
             setTimeout(
               () => {
-
                 if (
-                  animationFrame !==
-                  null
+                  animationFrame !== null
                 ) {
-
                   cancelAnimationFrame(
                     animationFrame
                   );
 
-                  animationFrame =
-                    null;
-
+                  animationFrame = null;
                 }
 
-
                 const centerX =
-                  card.clientWidth /
-                  2;
+                  card.clientWidth / 2;
 
                 const centerY =
-                  card.clientHeight /
-                  2;
+                  card.clientHeight / 2;
 
+                targetX = centerX;
+                targetY = centerY;
 
-                targetX =
-                  centerX;
+                currentX = centerX;
+                currentY = centerY;
 
-                targetY =
-                  centerY;
-
-                currentX =
-                  centerX;
-
-                currentY =
-                  centerY;
-
-                previousX =
-                  centerX;
-
-                previousY =
-                  centerY;
-
+                previousX = centerX;
+                previousY = centerY;
 
                 stretch = 1;
                 squash = 1;
                 angle = 0;
-
 
                 card.style.setProperty(
                   "--trail-x",
@@ -1355,18 +948,12 @@ function initExperienceHover() {
                   "--blob-squash",
                   "1"
                 );
-
               },
-
               500
-
             );
-
         }
       );
-
     });
-
 }
 
 
@@ -1375,28 +962,23 @@ function initExperienceHover() {
    ========================================================================== */
 
 function initContactCopy() {
-
   document
     .querySelectorAll(
       ".btn-contact-copy"
     )
     .forEach((button) => {
-
       button.addEventListener(
         "click",
-        () => {
-
+        async () => {
           const textToCopy =
             button.getAttribute(
               "data-copy-text"
             );
 
-
           const buttonText =
             button.querySelector(
               ".btn-text"
             );
-
 
           if (
             !textToCopy ||
@@ -1406,19 +988,19 @@ function initContactCopy() {
           }
 
 
-          navigator.clipboard
-            .writeText(
-              textToCopy
-            );
+          try {
+            await navigator.clipboard
+              .writeText(textToCopy);
+          } catch {
+            return;
+          }
 
 
           const originalText =
             buttonText.innerText;
 
-
           buttonText.innerText =
             "¡Copiado!";
-
 
           button.classList.add(
             "copied"
@@ -1427,26 +1009,18 @@ function initContactCopy() {
 
           setTimeout(
             () => {
-
               buttonText.innerText =
                 originalText;
-
 
               button.classList.remove(
                 "copied"
               );
-
             },
-
             2000
-
           );
-
         }
       );
-
     });
-
 }
 
 
@@ -1455,50 +1029,28 @@ function initContactCopy() {
    ========================================================================== */
 
 function initErrorPage() {
-
   const errorContainer =
     document.querySelector(
       ".error-container"
     );
 
-
   if (!errorContainer) {
     return;
   }
 
+  gsap.from(errorContainer, {
+    opacity: 0,
+    y: 30,
+    duration: 1,
+    ease: "power2.out",
+  });
 
-  gsap.from(
-    errorContainer,
-    {
-
-      opacity: 0,
-
-      y: 30,
-
-      duration: 1,
-
-      ease:
-        "power2.out",
-
-    }
-  );
-
-
-  gsap.to(
-    ".gsap-reveal",
-    {
-
-      opacity: 1,
-
-      y: 0,
-
-      duration: 1,
-
-      delay: 0.5,
-
-    }
-  );
-
+  gsap.to(".gsap-reveal", {
+    opacity: 1,
+    y: 0,
+    duration: 1,
+    delay: 0.5,
+  });
 }
 
 
@@ -1507,24 +1059,18 @@ function initErrorPage() {
    ========================================================================== */
 
 function initProjectModals() {
-
   document
-    .querySelectorAll(
-      ".modal"
-    )
+    .querySelectorAll(".modal")
     .forEach((modal) => {
-
       const modalBody =
         modal.querySelector(
           ".modal-body"
         );
 
-
       const carouselElement =
         modal.querySelector(
           ".project-modal-carousel"
         );
-
 
       const modalVideos =
         modal.querySelectorAll(
@@ -1533,128 +1079,88 @@ function initProjectModals() {
 
 
       if (modalBody) {
-
         modalBody.setAttribute(
           "data-lenis-prevent",
           ""
         );
-
       }
 
 
-      /* ====================================================================
-         CONTROLES DE VÍDEO
-         ==================================================================== */
+      /* CONTROLES DE VÍDEO */
 
-      modalVideos.forEach(
-        (video) => {
-
-          const wrapper =
-            video.closest(
-              ".project-video-wrapper"
-            );
-
-
-          const toggleButton =
-            wrapper?.querySelector(
-              ".project-video-toggle"
-            );
-
-
-          if (!toggleButton) {
-            return;
-          }
-
-
-          const updateVideoButton =
-            () => {
-
-              const isPlaying =
-                !video.paused &&
-                !video.ended;
-
-
-              toggleButton
-                .classList
-                .toggle(
-                  "is-playing",
-                  isPlaying
-                );
-
-
-              toggleButton.setAttribute(
-
-                "aria-label",
-
-                isPlaying
-                  ? "Pausar vídeo"
-                  : "Reproducir vídeo"
-
-              );
-
-            };
-
-
-          toggleButton.addEventListener(
-
-            "click",
-
-            (event) => {
-
-              event.preventDefault();
-
-              event.stopPropagation();
-
-
-              if (
-                video.paused
-              ) {
-
-                video.play();
-
-              } else {
-
-                video.pause();
-
-              }
-
-            }
-
+      modalVideos.forEach((video) => {
+        const wrapper =
+          video.closest(
+            ".project-video-wrapper"
           );
 
-
-          [
-            "play",
-            "pause",
-            "ended",
-          ].forEach(
-            (eventName) => {
-
-              video.addEventListener(
-                eventName,
-                updateVideoButton
-              );
-
-            }
+        const toggleButton =
+          wrapper?.querySelector(
+            ".project-video-toggle"
           );
 
-
-          updateVideoButton();
-
+        if (!toggleButton) {
+          return;
         }
-      );
 
 
-      /* ====================================================================
-         RUEDA FUERA DEL BODY DEL MODAL
-         ==================================================================== */
+        function updateVideoButton() {
+          const isPlaying =
+            !video.paused &&
+            !video.ended;
+
+          toggleButton
+            .classList
+            .toggle(
+              "is-playing",
+              isPlaying
+            );
+
+          toggleButton.setAttribute(
+            "aria-label",
+            isPlaying
+              ? "Pausar vídeo"
+              : "Reproducir vídeo"
+          );
+        }
+
+
+        toggleButton.addEventListener(
+          "click",
+          (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (video.paused) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          }
+        );
+
+
+        [
+          "play",
+          "pause",
+          "ended",
+        ].forEach((eventName) => {
+          video.addEventListener(
+            eventName,
+            updateVideoButton
+          );
+        });
+
+
+        updateVideoButton();
+      });
+
+
+      /* SCROLL */
 
       modal.addEventListener(
-
         "wheel",
-
         (event) => {
-
           if (
             !modalBody ||
             event.target.closest(
@@ -1664,34 +1170,25 @@ function initProjectModals() {
             return;
           }
 
-
           event.preventDefault();
-
 
           modalBody.scrollTop +=
             event.deltaY;
-
         },
-
         {
           passive: false,
         }
-
       );
 
 
-      /* ====================================================================
-         APERTURA
-         ==================================================================== */
+      /* ABRIR */
 
       modal.addEventListener(
         "show.bs.modal",
         () => {
-
           if (lenis) {
             lenis.stop();
           }
-
         }
       );
 
@@ -1699,92 +1196,68 @@ function initProjectModals() {
       modal.addEventListener(
         "shown.bs.modal",
         () => {
-
           if (modalBody) {
-
-            modalBody.scrollTop =
-              0;
-
+            modalBody.scrollTop = 0;
           }
-
 
           if (!carouselElement) {
             return;
           }
 
-
           const carousel =
             bootstrap.Carousel
               .getOrCreateInstance(
-
                 carouselElement,
-
                 {
                   interval: false,
                   pause: true,
                   touch: true,
                   wrap: true,
                 }
-
               );
 
-
           carousel.pause();
-
         }
       );
 
 
-      /* ====================================================================
-         CAMBIO DE SLIDE
-         ==================================================================== */
+      /* CAMBIO DE SLIDE */
 
       if (carouselElement) {
-
         carouselElement
           .addEventListener(
-
             "slide.bs.carousel",
-
             () => {
-
               modalVideos.forEach(
-                (video) =>
-                  video.pause()
+                (video) => {
+                  video.pause();
+                }
               );
-
             }
-
           );
-
       }
 
 
-      /* ====================================================================
-         CIERRE
-         ==================================================================== */
+      /* CERRAR */
 
       modal.addEventListener(
         "hide.bs.modal",
         () => {
-
           modalVideos.forEach(
-            (video) =>
-              video.pause()
+            (video) => {
+              video.pause();
+            }
           );
-
 
           if (!carouselElement) {
             return;
           }
-
 
           bootstrap.Carousel
             .getInstance(
               carouselElement
             )
             ?.pause();
-
         }
       );
 
@@ -1792,49 +1265,29 @@ function initProjectModals() {
       modal.addEventListener(
         "hidden.bs.modal",
         () => {
-
-          if (
-            carouselElement
-          ) {
-
+          if (carouselElement) {
             const carousel =
               bootstrap.Carousel
                 .getInstance(
                   carouselElement
                 );
 
-
             if (carousel) {
-
               carousel.to(0);
-
               carousel.pause();
-
             }
-
           }
 
 
           modalVideos.forEach(
             (video) => {
-
               video.pause();
 
-
               try {
-
-                video.currentTime =
-                  0;
-
+                video.currentTime = 0;
               } catch {
-
-                /*
-                 * Puede ocurrir si el navegador
-                 * aún no ha cargado los metadatos.
-                 */
-
+                /* Sin acción */
               }
-
             }
           );
 
@@ -1842,64 +1295,61 @@ function initProjectModals() {
           if (lenis) {
             lenis.start();
           }
-
         }
       );
-
     });
-
 }
 
 
 /* ==========================================================================
-   FOTOGRAFÍA · CARRUSEL 3D
+   13. FOTOGRAFÍA · CARRUSEL 3D
    ========================================================================== */
 
 function initPhotographyCarousel() {
-
-  const carousel =
+  const showcase =
     document.querySelector(
-      ".photography-carousel"
+      ".photography-showcase"
     );
 
-
-  if (!carousel) {
+  if (!showcase) {
     return;
   }
 
 
+  const carousel =
+    showcase.querySelector(
+      ".photography-carousel"
+    );
+
   const stage =
-    carousel.querySelector(
+    showcase.querySelector(
       ".photography-carousel-stage"
     );
 
-
   const slides = [
-    ...carousel.querySelectorAll(
+    ...showcase.querySelectorAll(
       ".photography-slide"
     ),
   ];
 
-
   const previousButton =
-    document.querySelector(
+    showcase.querySelector(
       ".photography-prev"
     );
 
-
   const nextButton =
-    document.querySelector(
+    showcase.querySelector(
       ".photography-next"
     );
 
-
-  const currentCounter =
-    document.querySelector(
-      ".photography-current"
+  const counter =
+    showcase.querySelector(
+      ".photography-counter"
     );
 
 
   if (
+    !carousel ||
     !stage ||
     slides.length < 2
   ) {
@@ -1911,10 +1361,45 @@ function initPhotographyCarousel() {
     slides.length;
 
 
-  const reduceMotion =
-    window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+  /*
+   * Funciona tanto con:
+   *
+   * .photography-current
+   * .photography-total
+   *
+   * como con el HTML inicial donde el segundo
+   * número todavía no tenía clase.
+   */
+
+  const counterSpans =
+    counter
+      ? counter.querySelectorAll("span")
+      : [];
+
+
+  const currentCounter =
+    showcase.querySelector(
+      ".photography-current"
+    ) ||
+    counterSpans[0] ||
+    null;
+
+
+  const totalCounter =
+    showcase.querySelector(
+      ".photography-total"
+    ) ||
+    counterSpans[1] ||
+    null;
+
+
+  if (totalCounter) {
+    totalCounter.textContent =
+      String(total).padStart(
+        2,
+        "0"
+      );
+  }
 
 
   let activeIndex = 0;
@@ -1922,52 +1407,53 @@ function initPhotographyCarousel() {
   let autoplayTimer = null;
 
   let isVisible = true;
-
   let isInteracting = false;
 
   let pointerStartX = null;
 
+  let resizeTimer = null;
+
 
 
   /* ========================================================================
-     POSICIÓN RELATIVA
+     POSICIÓN RELATIVA EN LOOP
      ======================================================================== */
 
   function getRelativePosition(index) {
-
     let position =
-      index -
-      activeIndex;
-
+      index - activeIndex;
 
     const half =
-      Math.floor(
-        total / 2
-      );
+      total / 2;
 
 
-    if (
-      position > half
-    ) {
-
-      position -=
-        total;
-
+    if (position > half) {
+      position -= total;
     }
 
 
+    if (position < -half) {
+      position += total;
+    }
+
+
+    /*
+     * Con 6 fotografías existe una fotografía
+     * exactamente opuesta al centro.
+     *
+     * La colocamos siempre en el extremo derecho
+     * para que el orden del loop sea estable.
+     */
+
     if (
-      position < -half
+      total % 2 === 0 &&
+      position === -half
     ) {
-
-      position +=
-        total;
-
+      position = half;
     }
 
 
     return position;
-
   }
 
 
@@ -1977,14 +1463,11 @@ function initPhotographyCarousel() {
      ======================================================================== */
 
   function getVisualState(position) {
-
     const distance =
       Math.abs(position);
 
-
     const stageWidth =
       stage.clientWidth;
-
 
     const isMobile =
       window.innerWidth <= 767;
@@ -1994,8 +1477,8 @@ function initPhotographyCarousel() {
       isMobile
 
         ? Math.min(
-            stageWidth * 0.48,
-            210
+            stageWidth * 0.5,
+            205
           )
 
         : Math.min(
@@ -2004,131 +1487,147 @@ function initPhotographyCarousel() {
           );
 
 
-    if (
-      distance === 0
-    ) {
+    /* CENTRO */
 
+    if (distance === 0) {
       return {
+        x: 0,
+        y: 0,
+        z: 0,
 
-        x:
-          0,
+        scale: 1,
 
-        y:
-          0,
+        rotationY: 0,
 
-        z:
-          0,
-
-        scale:
-          1,
-
-        rotationY:
-          0,
-
-        opacity:
-          1,
+        opacity: 1,
 
         filter:
           "blur(0px) brightness(1) saturate(1)",
 
-        zIndex:
-          10,
-
+        zIndex: 10,
       };
-
     }
 
 
-    if (
-      distance === 1
-    ) {
+    /* PRIMER NIVEL LATERAL */
 
+    if (distance === 1) {
       return {
-
         x:
           position *
           spacing,
 
-        y:
-          20,
+        y: 20,
 
-        z:
-          -120,
+        z: -120,
 
-        scale:
-          0.8,
+        scale: 0.8,
 
         rotationY:
-          position *
-          -7,
+          position * -6,
 
-        opacity:
-          0.72,
+        opacity: 0.68,
 
         filter:
           "blur(2.5px) brightness(0.82) saturate(0.9)",
 
-        zIndex:
-          5,
-
+        zIndex: 6,
       };
-
     }
 
 
-    return {
+    /* SEGUNDO NIVEL LATERAL */
 
+    if (distance === 2) {
+      return {
+        x:
+          position *
+          spacing,
+
+        y: 42,
+
+        z: -230,
+
+        scale: 0.63,
+
+        rotationY:
+          position * -9,
+
+        opacity: 0.3,
+
+        filter:
+          "blur(6px) brightness(0.7) saturate(0.75)",
+
+        zIndex: 3,
+      };
+    }
+
+
+    /* IMAGEN OPUESTA · 6 FOTOS */
+
+    return {
       x:
         position *
         spacing,
 
-      y:
-        46,
+      y: 60,
 
-      z:
-        -230,
+      z: -320,
 
-      scale:
-        0.63,
+      scale: 0.52,
 
       rotationY:
-        position *
-        -10,
+        position * -11,
 
-      opacity:
-        0.32,
+      opacity: 0,
 
       filter:
-        "blur(7px) brightness(0.68) saturate(0.72)",
+        "blur(10px) brightness(0.6) saturate(0.65)",
 
-      zIndex:
-        2,
-
+      zIndex: 1,
     };
-
   }
 
 
 
   /* ========================================================================
-     ACTUALIZAR CARRUSEL
+     CONTADOR
+     ======================================================================== */
+
+  function updateCounter() {
+    if (currentCounter) {
+      currentCounter.textContent =
+        String(
+          activeIndex + 1
+        ).padStart(
+          2,
+          "0"
+        );
+    }
+
+
+    if (totalCounter) {
+      totalCounter.textContent =
+        String(total).padStart(
+          2,
+          "0"
+        );
+    }
+  }
+
+
+
+  /* ========================================================================
+     DIBUJAR POSICIONES
      ======================================================================== */
 
   function renderCarousel(
     animate = true
   ) {
-
     slides.forEach(
-      (
-        slide,
-        index
-      ) => {
-
+      (slide, index) => {
         const position =
-          getRelativePosition(
-            index
-          );
-
+          getRelativePosition(index);
 
         const previousPosition =
           Number(
@@ -2136,18 +1635,16 @@ function initPhotographyCarousel() {
             position
           );
 
-
         const state =
-          getVisualState(
-            position
-          );
+          getVisualState(position);
 
 
-        const isLoopJump =
+        const loopJump =
           Math.abs(
             previousPosition -
             position
-          ) > 2;
+          ) >
+          total / 2;
 
 
         slide.dataset.position =
@@ -2170,109 +1667,30 @@ function initPhotographyCarousel() {
 
         const duration =
           animate &&
-          !reduceMotion
+          !prefersReducedMotion
             ? 1.15
             : 0;
 
 
         /*
-         * Cuando una imagen salta del extremo
-         * derecho al izquierdo del loop,
-         * la recolocamos mientras está oculta.
-         *
-         * Así nunca atraviesa todo el carrusel.
+         * En el salto del loop recolocamos
+         * la fotografía cuando está prácticamente
+         * oculta para evitar que atraviese
+         * toda la pantalla.
          */
 
         if (
-          isLoopJump &&
+          loopJump &&
           animate &&
-          !reduceMotion
+          !prefersReducedMotion
         ) {
+          gsap.set(slide, {
+            xPercent: -50,
+            yPercent: -50,
 
-          gsap.set(
-            slide,
-            {
-
-              xPercent:
-                -50,
-
-              yPercent:
-                -50,
-
-              x:
-                state.x,
-
-              y:
-                state.y,
-
-              z:
-                state.z,
-
-              scale:
-                state.scale,
-
-              rotationY:
-                state.rotationY,
-
-              opacity:
-                0,
-
-              filter:
-                state.filter,
-
-              zIndex:
-                state.zIndex,
-
-            }
-          );
-
-
-          gsap.to(
-            slide,
-            {
-
-              opacity:
-                state.opacity,
-
-              duration:
-                0.55,
-
-              delay:
-                0.3,
-
-              ease:
-                "power2.out",
-
-              overwrite:
-                true,
-
-            }
-          );
-
-
-          return;
-
-        }
-
-
-        gsap.to(
-          slide,
-          {
-
-            xPercent:
-              -50,
-
-            yPercent:
-              -50,
-
-            x:
-              state.x,
-
-            y:
-              state.y,
-
-            z:
-              state.z,
+            x: state.x,
+            y: state.y,
+            z: state.z,
 
             scale:
               state.scale,
@@ -2280,44 +1698,70 @@ function initPhotographyCarousel() {
             rotationY:
               state.rotationY,
 
-            opacity:
-              state.opacity,
+            opacity: 0,
 
             filter:
               state.filter,
 
             zIndex:
               state.zIndex,
+          });
 
-            duration,
+
+          gsap.to(slide, {
+            opacity:
+              state.opacity,
+
+            duration: 0.45,
+
+            delay: 0.25,
 
             ease:
-              "power4.inOut",
+              "power2.out",
 
-            overwrite:
-              true,
+            overwrite: true,
+          });
 
-          }
-        );
 
+          return;
+        }
+
+
+        gsap.to(slide, {
+          xPercent: -50,
+          yPercent: -50,
+
+          x: state.x,
+          y: state.y,
+          z: state.z,
+
+          scale:
+            state.scale,
+
+          rotationY:
+            state.rotationY,
+
+          opacity:
+            state.opacity,
+
+          filter:
+            state.filter,
+
+          zIndex:
+            state.zIndex,
+
+          duration,
+
+          ease:
+            "power4.inOut",
+
+          overwrite: true,
+        });
       }
     );
 
 
-    if (
-      currentCounter
-    ) {
-
-      currentCounter.textContent =
-        String(
-          activeIndex + 1
-        ).padStart(
-          2,
-          "0"
-        );
-
-    }
-
+    updateCounter();
   }
 
 
@@ -2326,10 +1770,7 @@ function initPhotographyCarousel() {
      CAMBIAR FOTOGRAFÍA
      ======================================================================== */
 
-  function moveCarousel(
-    direction
-  ) {
-
+  function moveCarousel(direction) {
     activeIndex =
       (
         activeIndex +
@@ -2339,10 +1780,7 @@ function initPhotographyCarousel() {
       total;
 
 
-    renderCarousel(
-      true
-    );
-
+    renderCarousel(true);
   }
 
 
@@ -2352,31 +1790,24 @@ function initPhotographyCarousel() {
      ======================================================================== */
 
   function stopAutoplay() {
-
-    if (
-      autoplayTimer
-    ) {
-
-      clearInterval(
-        autoplayTimer
-      );
-
-
-      autoplayTimer =
-        null;
-
+    if (!autoplayTimer) {
+      return;
     }
 
+    clearInterval(
+      autoplayTimer
+    );
+
+    autoplayTimer = null;
   }
 
 
   function startAutoplay() {
-
     stopAutoplay();
 
 
     if (
-      reduceMotion ||
+      prefersReducedMotion ||
       !isVisible ||
       isInteracting
     ) {
@@ -2387,26 +1818,16 @@ function initPhotographyCarousel() {
     autoplayTimer =
       setInterval(
         () => {
-
-          moveCarousel(
-            1
-          );
-
+          moveCarousel(1);
         },
-
         4200
-
       );
-
   }
 
 
   function restartAutoplay() {
-
     stopAutoplay();
-
     startAutoplay();
-
   }
 
 
@@ -2418,13 +1839,8 @@ function initPhotographyCarousel() {
   previousButton?.addEventListener(
     "click",
     () => {
-
-      moveCarousel(
-        -1
-      );
-
+      moveCarousel(-1);
       restartAutoplay();
-
     }
   );
 
@@ -2432,13 +1848,8 @@ function initPhotographyCarousel() {
   nextButton?.addEventListener(
     "click",
     () => {
-
-      moveCarousel(
-        1
-      );
-
+      moveCarousel(1);
       restartAutoplay();
-
     }
   );
 
@@ -2449,55 +1860,47 @@ function initPhotographyCarousel() {
      ======================================================================== */
 
   slides.forEach(
-    (
-      slide,
-      index
-    ) => {
-
+    (slide, index) => {
       slide.addEventListener(
         "click",
         () => {
-
           if (
-            index ===
-            activeIndex
+            index === activeIndex
           ) {
             return;
           }
 
 
-          activeIndex =
-            index;
+          const position =
+            getRelativePosition(index);
 
 
-          renderCarousel(
-            true
-          );
+          /*
+           * Avanzamos siguiendo el sentido
+           * natural más corto del carrusel,
+           * en vez de saltar directamente.
+           */
 
+          activeIndex = index;
 
+          renderCarousel(true);
           restartAutoplay();
-
         }
       );
-
     }
   );
 
 
 
   /* ========================================================================
-     PAUSAR AL INTERACTUAR
+     PAUSA EN HOVER / FOCO
      ======================================================================== */
 
   carousel.addEventListener(
     "mouseenter",
     () => {
-
-      isInteracting =
-        true;
-
+      isInteracting = true;
       stopAutoplay();
-
     }
   );
 
@@ -2505,12 +1908,8 @@ function initPhotographyCarousel() {
   carousel.addEventListener(
     "mouseleave",
     () => {
-
-      isInteracting =
-        false;
-
+      isInteracting = false;
       startAutoplay();
-
     }
   );
 
@@ -2518,12 +1917,8 @@ function initPhotographyCarousel() {
   carousel.addEventListener(
     "focusin",
     () => {
-
-      isInteracting =
-        true;
-
+      isInteracting = true;
       stopAutoplay();
-
     }
   );
 
@@ -2531,28 +1926,30 @@ function initPhotographyCarousel() {
   carousel.addEventListener(
     "focusout",
     () => {
-
-      isInteracting =
-        false;
-
+      isInteracting = false;
       startAutoplay();
-
     }
   );
 
 
 
   /* ========================================================================
-     SWIPE EN MÓVIL
+     SWIPE · TABLET Y MÓVIL
      ======================================================================== */
 
   stage.addEventListener(
     "pointerdown",
     (event) => {
-
       pointerStartX =
         event.clientX;
+    }
+  );
 
+
+  stage.addEventListener(
+    "pointercancel",
+    () => {
+      pointerStartX = null;
     }
   );
 
@@ -2560,10 +1957,8 @@ function initPhotographyCarousel() {
   stage.addEventListener(
     "pointerup",
     (event) => {
-
       if (
-        pointerStartX ===
-        null
+        pointerStartX === null
       ) {
         return;
       }
@@ -2574,8 +1969,7 @@ function initPhotographyCarousel() {
         pointerStartX;
 
 
-      pointerStartX =
-        null;
+      pointerStartX = null;
 
 
       if (
@@ -2595,53 +1989,36 @@ function initPhotographyCarousel() {
 
 
       restartAutoplay();
-
     }
   );
 
 
 
   /* ========================================================================
-     PAUSAR CUANDO NO ESTÁ EN PANTALLA
+     PAUSA CUANDO SALE DE PANTALLA
      ======================================================================== */
 
   const observer =
     new IntersectionObserver(
-
-      (
-        entries
-      ) => {
-
+      (entries) => {
         isVisible =
           entries[0]
             .isIntersecting;
 
 
-        if (
-          isVisible
-        ) {
-
+        if (isVisible) {
           startAutoplay();
-
         } else {
-
           stopAutoplay();
-
         }
-
       },
-
       {
-        threshold:
-          0.25,
+        threshold: 0.25,
       }
-
     );
 
 
-  observer.observe(
-    carousel
-  );
+  observer.observe(carousel);
 
 
 
@@ -2649,13 +2026,9 @@ function initPhotographyCarousel() {
      RESPONSIVE
      ======================================================================== */
 
-  let resizeTimer;
-
-
   window.addEventListener(
     "resize",
     () => {
-
       clearTimeout(
         resizeTimer
       );
@@ -2664,17 +2037,10 @@ function initPhotographyCarousel() {
       resizeTimer =
         setTimeout(
           () => {
-
-            renderCarousel(
-              false
-            );
-
+            renderCarousel(false);
           },
-
           120
-
         );
-
     }
   );
 
@@ -2684,20 +2050,18 @@ function initPhotographyCarousel() {
      INICIO
      ======================================================================== */
 
-  renderCarousel(
-    false
-  );
-
+  renderCarousel(false);
+  startAutoplay();
 }
 
+
 /* ==========================================================================
-   13. INICIALIZACIÓN
+   14. INICIALIZACIÓN
    ========================================================================== */
 
 window.addEventListener(
   "DOMContentLoaded",
   () => {
-
     setup3D();
 
     initNavLogic();
@@ -2711,10 +2075,9 @@ window.addEventListener(
     initErrorPage();
 
     initProjectModals();
-    
+
     initPhotographyCarousel();
 
     intro();
-
   }
 );
