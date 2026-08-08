@@ -5529,3 +5529,645 @@ body.modal-open {
   }
 
 }
+
+
+/* ==========================================================================
+   RESPONSIVE V3.2 · CORRECCIÓN HERO TABLET HORIZONTAL
+   ========================================================================== */
+
+@media
+  (min-width: 768px)
+  and (max-width: 1024px)
+  and (orientation: landscape) {
+
+
+  /* ========================================================================
+     GRID DEL HERO
+     ======================================================================== */
+
+  #heroText,
+  .hero-text {
+    display: grid !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      var(--tablet-card-width)
+      minmax(0, 1fr)
+      !important;
+
+    align-items: center !important;
+
+    width: 100% !important;
+
+    overflow: visible !important;
+  }
+
+
+
+  /* ========================================================================
+     DISEÑO · IZQUIERDA
+     ======================================================================== */
+
+  .hero-ref-left {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    /*
+     * Neutraliza el "order: 1"
+     * del responsive antiguo.
+     */
+    order: 0 !important;
+
+    justify-self: end !important;
+
+    width: auto !important;
+
+    align-items: flex-end !important;
+    text-align: right !important;
+
+    padding: 0 !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+
+    z-index: 12;
+  }
+
+
+
+  /* ========================================================================
+     HUECO CENTRAL · RESERVA EL ESPACIO DE LA FOTO
+     ======================================================================== */
+
+  .hero-ghost-center {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+
+    order: 0 !important;
+
+    display: block !important;
+
+    width:
+      var(--tablet-card-width)
+      !important;
+
+    height: 1px !important;
+
+    min-height: 0 !important;
+
+    visibility: hidden !important;
+  }
+
+
+
+  /* ========================================================================
+     GRÁFICO · DERECHA
+     ======================================================================== */
+
+  .hero-ref-right {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+
+    /*
+     * Neutraliza el "order: 3"
+     * del responsive antiguo.
+     */
+    order: 0 !important;
+
+    justify-self: start !important;
+
+    width: auto !important;
+
+    align-items: flex-start !important;
+    text-align: left !important;
+
+    padding-top: 1.7rem !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+
+    z-index: 12;
+  }
+
+
+
+  /* ========================================================================
+     TÍTULOS
+     ======================================================================== */
+
+  .hero-ref-left .hero-ref-big,
+  .hero-ref-right .hero-ref-big {
+    width: auto !important;
+
+    margin: 0 !important;
+
+    font-size:
+      clamp(
+        2.6rem,
+        6vw,
+        4.25rem
+      )
+      !important;
+
+    line-height: 0.9;
+
+    white-space: nowrap;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+
+
+
+  /* ========================================================================
+     TEXTOS PEQUEÑOS
+     ======================================================================== */
+
+  .hero-ref-name {
+    width: auto !important;
+
+    margin:
+      0
+      0
+      0.45rem
+      0
+      !important;
+
+    padding: 0 !important;
+
+    font-size: 0.92rem;
+
+    text-align: right !important;
+  }
+
+
+  .hero-ref-sub {
+    width: auto !important;
+
+    margin:
+      0.65rem
+      0
+      0
+      0
+      !important;
+
+    padding: 0 !important;
+
+    font-size: 0.86rem;
+
+    text-align: left !important;
+
+    white-space: nowrap;
+  }
+
+}
+
+
+/* ==========================================================================
+   RESPONSIVE · CORRECCIONES V3.3
+   Hero tablet + portátil pequeño + navbar estable
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. EVITAR DESPLAZAMIENTOS HORIZONTALES AL APARECER EL SCROLL
+   ========================================================================== */
+
+html {
+  scrollbar-gutter: stable;
+}
+
+
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+
+.navbar-custom {
+  width: 100%;
+  max-width: 100vw;
+
+  left: 0;
+  right: 0;
+
+  overflow-x: clip;
+}
+
+
+
+/* ==========================================================================
+   2. TABLET HORIZONTAL
+   768px — 1024px
+   ========================================================================== */
+
+@media
+  (min-width: 768px)
+  and (max-width: 1024px)
+  and (orientation: landscape) {
+
+
+  /* ========================================================================
+     EMILY TACO + DISEÑO
+     Ambos comienzan exactamente en el mismo punto
+     ======================================================================== */
+
+  .hero-ref-left {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    order: 0 !important;
+
+    justify-self: end !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    /*
+     * Antes estaba flex-end.
+     * Ahora nombre y DISEÑO comparten
+     * el mismo borde izquierdo.
+     */
+    align-items: flex-start !important;
+
+    width: max-content !important;
+
+    padding: 0 !important;
+
+    text-align: left !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    transform: none !important;
+
+    z-index: 12;
+  }
+
+
+  .hero-ref-name {
+    width: 100% !important;
+
+    margin:
+      0
+      0
+      0.45rem
+      0
+      !important;
+
+    padding: 0 !important;
+
+    text-align: left !important;
+
+    font-size: 0.92rem;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+
+  .hero-ref-left .hero-ref-big {
+    width: auto !important;
+
+    margin: 0 !important;
+
+    text-align: left !important;
+  }
+
+
+
+  /* ========================================================================
+     GRÁFICO
+     ======================================================================== */
+
+  .hero-ref-right {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+
+    order: 0 !important;
+
+    justify-self: start !important;
+
+    width: max-content !important;
+
+    align-items: flex-start !important;
+
+    padding-top:
+      1.7rem
+      !important;
+
+    text-align: left !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    transform: none !important;
+
+    z-index: 12;
+  }
+
+
+
+  /* ========================================================================
+     TAMAÑO SEGURO DE DISEÑO / GRÁFICO
+     ======================================================================== */
+
+  .hero-ref-left .hero-ref-big,
+  .hero-ref-right .hero-ref-big {
+    font-size:
+      clamp(
+        2.5rem,
+        5.8vw,
+        4rem
+      )
+      !important;
+
+    line-height: 0.9;
+
+    white-space: nowrap;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+}
+
+
+
+/* ==========================================================================
+   3. PORTÁTIL PEQUEÑO / VENTANAS ENTRE 1025px Y 1399px
+   ========================================================================== */
+
+/*
+ * Este es el rango que se estaba rompiendo
+ * en tu captura de 1249 × 877.
+ *
+ * La regla general del portfolio utilizaba 10vw,
+ * demasiado grande para tener:
+ *
+ * DISEÑO + FOTO + GRÁFICO
+ *
+ * en la misma fila.
+ */
+
+@media
+  (min-width: 1025px)
+  and (max-width: 1399px) {
+
+
+  /* ========================================================================
+     HERO
+     ======================================================================== */
+
+  .hero-text {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto
+      minmax(0, 1fr)
+      !important;
+
+    column-gap:
+      clamp(
+        1.25rem,
+        2.5vw,
+        2.5rem
+      )
+      !important;
+
+    overflow: visible !important;
+  }
+
+
+
+  /* ========================================================================
+     FOTO
+     ======================================================================== */
+
+  .tilt-card {
+    height:
+      clamp(
+        430px,
+        60vh,
+        540px
+      )
+      !important;
+
+    width:
+      calc(
+        clamp(
+          430px,
+          60vh,
+          540px
+        )
+        * 0.68
+      )
+      !important;
+
+    min-height: 0 !important;
+  }
+
+
+
+  /* ========================================================================
+     HUECO QUE RESERVA LA FOTO
+     ======================================================================== */
+
+  .hero-ghost-center {
+    width:
+      calc(
+        clamp(
+          430px,
+          60vh,
+          540px
+        )
+        * 0.68
+      )
+      !important;
+
+    height:
+      1px
+      !important;
+
+    min-height:
+      0
+      !important;
+  }
+
+
+
+  /* ========================================================================
+     DISEÑO / GRÁFICO
+     ======================================================================== */
+
+  .hero-ref-big {
+    font-size:
+      clamp(
+        4.2rem,
+        6.5vw,
+        5.5rem
+      )
+      !important;
+
+    line-height: 0.9;
+
+    white-space: nowrap;
+  }
+
+
+
+  /* ========================================================================
+     EMILY TACO
+     Alineado al inicio de DISEÑO
+     ======================================================================== */
+
+  .hero-ref-left {
+    align-items: flex-start !important;
+
+    text-align: left !important;
+  }
+
+
+  .hero-ref-name {
+    width: 100% !important;
+
+    margin:
+      0
+      0
+      0.45rem
+      0
+      !important;
+
+    text-align: left !important;
+  }
+
+}
+
+
+
+/* ==========================================================================
+   4. NAVBAR · ESCRITORIO COMPACTO
+   992px — 1350px
+   ========================================================================== */
+
+/*
+ * Evita que cuando el viewport está en esa zona
+ * intermedia la navegación ocupe más ancho
+ * del disponible y CONTACTO se salga por la derecha.
+ */
+
+@media
+  (min-width: 992px)
+  and (max-width: 1350px) {
+
+
+  .navbar-custom .container {
+    width:
+      calc(100% - 2.5rem)
+      !important;
+
+    max-width:
+      1140px
+      !important;
+
+    margin-left:
+      auto
+      !important;
+
+    margin-right:
+      auto
+      !important;
+
+    padding-left:
+      0
+      !important;
+
+    padding-right:
+      0
+      !important;
+
+    flex-wrap:
+      nowrap
+      !important;
+  }
+
+
+  .navbar-collapse {
+    min-width: 0;
+  }
+
+
+  .navbar-nav {
+    flex-wrap:
+      nowrap
+      !important;
+
+    align-items:
+      center;
+  }
+
+
+  .navbar-nav .nav-link {
+    padding-left:
+      0.55rem;
+
+    padding-right:
+      0.55rem;
+
+    font-size:
+      0.78rem;
+  }
+
+
+  .btn-navbar-cta {
+    margin-left:
+      0.8rem;
+
+    padding:
+      0.58rem
+      1.35rem
+      !important;
+
+    white-space:
+      nowrap;
+  }
+
+}
+
+
+
+/* ==========================================================================
+   5. ENTRE 1025px Y 1150px
+   NAVBAR TODAVÍA MÁS COMPACTO
+   ========================================================================== */
+
+@media
+  (min-width: 992px)
+  and (max-width: 1150px) {
+
+
+  .navbar-nav .nav-link {
+    padding-left:
+      0.4rem;
+
+    padding-right:
+      0.4rem;
+
+    font-size:
+      0.72rem;
+  }
+
+
+  .btn-navbar-cta {
+    margin-left:
+      0.55rem;
+
+    padding:
+      0.55rem
+      1rem
+      !important;
+  }
+
+}
