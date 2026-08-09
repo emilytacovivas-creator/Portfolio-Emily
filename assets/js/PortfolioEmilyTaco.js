@@ -674,55 +674,132 @@ function initExperienceInteraction() {
 
 
   /* ==========================================================================
-     TOUCH · ACTIVACIÓN MEDIANTE SCROLL
-     ========================================================================== */
+   TOUCH · SELECCIÓN MEDIANTE SCROLL
+   ========================================================================== */
 
-  if (!supportsHover) {
+if (!supportsHover) {
+
+  const experienceSection =
+    document.querySelector(
+      ".experience-section"
+    );
+
+
+  if (!experienceSection) {
+    return;
+  }
+
+
+  /*
+   * Selecciona siempre la tarjeta cuyo centro
+   * esté más cerca del centro de la pantalla.
+   *
+   * Así el efecto funciona de manera progresiva
+   * y no depende de una zona demasiado pequeña.
+   */
+
+  function updateActiveExperienceCard() {
+
+    const viewportCenter =
+      window.innerHeight * 0.52;
+
+
+    let closestCard = null;
+
+    let closestDistance =
+      Infinity;
+
 
     cards.forEach((card) => {
 
-      ScrollTrigger.create({
-
-        trigger:
-          card,
+      const rect =
+        card.getBoundingClientRect();
 
 
-        /*
-         * La línea empieza a activarse cuando
-         * el centro de la tarjeta entra en la
-         * zona central de la pantalla.
-         */
-
-        start:
-          "center 62%",
+      const cardCenter =
+        rect.top +
+        rect.height / 2;
 
 
-        /*
-         * Se desactiva cuando ese centro sale
-         * de la zona central.
-         */
-
-        end:
-          "center 38%",
+      const distance =
+        Math.abs(
+          cardCenter -
+          viewportCenter
+        );
 
 
-        onToggle:
-          (self) => {
+      if (
+        distance <
+        closestDistance
+      ) {
 
-            card.classList.toggle(
-              "is-scroll-active",
-              self.isActive
-            );
+        closestDistance =
+          distance;
 
-          },
+        closestCard =
+          card;
 
-      });
+      }
 
     });
 
 
-    return;
+    cards.forEach((card) => {
+
+      card.classList.toggle(
+        "is-scroll-active",
+        card === closestCard
+      );
+
+    });
+
   }
+
+
+  function clearActiveExperienceCard() {
+
+    cards.forEach((card) => {
+
+      card.classList.remove(
+        "is-scroll-active"
+      );
+
+    });
+
+  }
+
+
+  ScrollTrigger.create({
+
+    trigger:
+      experienceSection,
+
+    start:
+      "top 85%",
+
+    end:
+      "bottom 15%",
+
+    onEnter:
+      updateActiveExperienceCard,
+
+    onEnterBack:
+      updateActiveExperienceCard,
+
+    onUpdate:
+      updateActiveExperienceCard,
+
+    onLeave:
+      clearActiveExperienceCard,
+
+    onLeaveBack:
+      clearActiveExperienceCard,
+
+  });
+
+
+  return;
+}
 
 
 

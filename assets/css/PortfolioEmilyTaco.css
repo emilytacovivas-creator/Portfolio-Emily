@@ -1058,29 +1058,22 @@ details[open] .accordion-icon::after {
 
 
 /* ==========================================================================
-   TOUCH · DISPOSITIVOS SIN HOVER
+   SELECCIÓN MEDIANTE SCROLL
+   ========================================================================== */
+
+.experience-card.is-scroll-active::after {
+  transform: scaleX(1);
+}
+
+
+/* ==========================================================================
+   TOUCH · SIN LUZ ELÁSTICA
    ========================================================================== */
 
 @media (any-hover: none) {
 
-  /*
-   * En móvil no existe la mancha granate.
-   */
-
   .experience-card::before {
     display: none;
-  }
-
-
-  /*
-   * Al pasar la tarjeta por la zona activa
-   * durante el scroll aparece únicamente
-   * la línea inferior.
-   */
-
-  .experience-card.is-scroll-active::after {
-    transform:
-      scaleX(1);
   }
 
 }
