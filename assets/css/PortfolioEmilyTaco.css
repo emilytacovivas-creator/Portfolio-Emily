@@ -1035,6 +1035,14 @@ details[open] .accordion-icon::after {
    9. PROYECTOS
    ========================================================================== */
 
+
+   #projects {
+  position: relative;
+
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
