@@ -1,0 +1,19 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+>
+  <rect
+    width="64"
+    height="64"
+    rx="16"
+    fill="#6d0303"
+  />
+
+  <path
+    d="M32 13V51 M13 32H51 M18.5 18.5L45.5 45.5 M18.5 45.5L45.5 18.5"
+    fill="none"
+    stroke="#eee7d6"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+</svg>
