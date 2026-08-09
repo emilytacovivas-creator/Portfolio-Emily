@@ -993,12 +993,11 @@ details[open] .accordion-icon::after {
       cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
 /* ==========================================================================
-   HOVER · ÚNICAMENTE RATÓN / TRACKPAD
+   HOVER · RATÓN / TRACKPAD DISPONIBLE
    ========================================================================== */
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
 
   .experience-card:hover {
     transform:
@@ -1012,6 +1011,14 @@ details[open] .accordion-icon::after {
       rgba(28, 20, 16, 0.1);
   }
 
+
+  /*
+   * La luz elástica aparece al entrar
+   * con un dispositivo que permite hover.
+   *
+   * La posición, deformación y dirección
+   * siguen controladas por JavaScript.
+   */
 
   .experience-card:hover::before {
     opacity: 1;
@@ -1051,14 +1058,13 @@ details[open] .accordion-icon::after {
 
 
 /* ==========================================================================
-   TOUCH · ACTIVACIÓN MEDIANTE SCROLL
+   TOUCH · DISPOSITIVOS SIN HOVER
    ========================================================================== */
 
-@media (hover: none), (pointer: coarse) {
+@media (any-hover: none) {
 
   /*
-   * La luz elástica no existe en dispositivos
-   * sin hover.
+   * En móvil no existe la mancha granate.
    */
 
   .experience-card::before {
@@ -1067,8 +1073,9 @@ details[open] .accordion-icon::after {
 
 
   /*
-   * La tarjeta activa al pasar por el centro
-   * de la pantalla llena la línea inferior.
+   * Al pasar la tarjeta por la zona activa
+   * durante el scroll aparece únicamente
+   * la línea inferior.
    */
 
   .experience-card.is-scroll-active::after {

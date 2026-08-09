@@ -667,9 +667,9 @@ function initExperienceInteraction() {
 
 
   const supportsHover =
-    window.matchMedia(
-      "(hover: hover) and (pointer: fine)"
-    ).matches;
+  window.matchMedia(
+    "(any-hover: hover) and (any-pointer: fine)"
+  ).matches;
 
 
 
