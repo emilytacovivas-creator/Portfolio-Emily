@@ -649,311 +649,542 @@ function initAccordion() {
 
 
 /* ==========================================================================
-   9. EXPERIENCIA · LUZ ELÁSTICA
+   9. EXPERIENCIA · INTERACCIONES
    ========================================================================== */
 
-function initExperienceHover() {
+function initExperienceInteraction() {
+
+  const cards = [
+    ...document.querySelectorAll(
+      ".experience-card"
+    ),
+  ];
+
+
+  if (!cards.length) {
+    return;
+  }
+
+
   const supportsHover =
     window.matchMedia(
       "(hover: hover) and (pointer: fine)"
     ).matches;
 
-  if (
-    prefersReducedMotion ||
-    !supportsHover
-  ) {
+
+
+  /* ==========================================================================
+     TOUCH · ACTIVACIÓN MEDIANTE SCROLL
+     ========================================================================== */
+
+  if (!supportsHover) {
+
+    cards.forEach((card) => {
+
+      ScrollTrigger.create({
+
+        trigger:
+          card,
+
+
+        /*
+         * La línea empieza a activarse cuando
+         * el centro de la tarjeta entra en la
+         * zona central de la pantalla.
+         */
+
+        start:
+          "center 62%",
+
+
+        /*
+         * Se desactiva cuando ese centro sale
+         * de la zona central.
+         */
+
+        end:
+          "center 38%",
+
+
+        onToggle:
+          (self) => {
+
+            card.classList.toggle(
+              "is-scroll-active",
+              self.isActive
+            );
+
+          },
+
+      });
+
+    });
+
+
     return;
   }
 
 
-  document
-    .querySelectorAll(
-      ".experience-card"
-    )
-    .forEach((card) => {
-      let targetX = 0;
-      let targetY = 0;
 
-      let currentX = 0;
-      let currentY = 0;
+  /* ==========================================================================
+     ESCRITORIO · LUZ ELÁSTICA
+     ========================================================================== */
 
-      let previousX = 0;
-      let previousY = 0;
-
-      let stretch = 1;
-      let squash = 1;
-      let angle = 0;
-
-      let animationFrame = null;
-      let resetTimer = null;
+  if (prefersReducedMotion) {
+    return;
+  }
 
 
-      function setBlobProperties() {
-        card.style.setProperty(
-          "--trail-x",
-          `${currentX}px`
+  cards.forEach((card) => {
+
+    let targetX = 0;
+    let targetY = 0;
+
+    let currentX = 0;
+    let currentY = 0;
+
+    let previousX = 0;
+    let previousY = 0;
+
+    let stretch = 1;
+    let squash = 1;
+
+    let angle = 0;
+
+    let animationFrame = null;
+    let resetTimer = null;
+
+
+
+    /* ========================================================================
+       VARIABLES CSS
+       ======================================================================== */
+
+    function setBlobProperties() {
+
+      card.style.setProperty(
+        "--trail-x",
+        `${currentX}px`
+      );
+
+
+      card.style.setProperty(
+        "--trail-y",
+        `${currentY}px`
+      );
+
+
+      card.style.setProperty(
+        "--blob-angle",
+        `${angle}deg`
+      );
+
+
+      card.style.setProperty(
+        "--blob-stretch",
+        stretch.toFixed(3)
+      );
+
+
+      card.style.setProperty(
+        "--blob-squash",
+        squash.toFixed(3)
+      );
+
+    }
+
+
+
+    /* ========================================================================
+       ANIMACIÓN
+       ======================================================================== */
+
+    function updateBlob() {
+
+      currentX +=
+        (targetX - currentX) *
+        0.12;
+
+
+      currentY +=
+        (targetY - currentY) *
+        0.12;
+
+
+      const velocityX =
+        currentX -
+        previousX;
+
+
+      const velocityY =
+        currentY -
+        previousY;
+
+
+      const speed =
+        Math.min(
+
+          Math.hypot(
+            velocityX,
+            velocityY
+          ),
+
+          28
+
         );
 
-        card.style.setProperty(
-          "--trail-y",
-          `${currentY}px`
+
+      const targetStretch =
+        1 +
+        Math.min(
+          speed * 0.09,
+          1.2
         );
 
-        card.style.setProperty(
-          "--blob-angle",
-          `${angle}deg`
+
+      const targetSquash =
+        1 -
+        Math.min(
+          speed * 0.024,
+          0.27
         );
 
-        card.style.setProperty(
-          "--blob-stretch",
-          stretch.toFixed(3)
-        );
 
-        card.style.setProperty(
-          "--blob-squash",
-          squash.toFixed(3)
-        );
+      stretch +=
+        (
+          targetStretch -
+          stretch
+        ) *
+        0.2;
+
+
+      squash +=
+        (
+          targetSquash -
+          squash
+        ) *
+        0.2;
+
+
+
+      /* ======================================================================
+         DIRECCIÓN
+         ====================================================================== */
+
+      if (speed > 0.05) {
+
+        const targetAngle =
+          Math.atan2(
+            velocityY,
+            velocityX
+          ) *
+          (180 / Math.PI);
+
+
+        const angleDifference =
+          (
+            (
+              targetAngle -
+              angle +
+              540
+            ) %
+            360
+          ) -
+          180;
+
+
+        angle +=
+          angleDifference *
+          0.18;
+
       }
 
 
-      function updateBlob() {
-        currentX +=
-          (targetX - currentX) * 0.12;
-
-        currentY +=
-          (targetY - currentY) * 0.12;
+      setBlobProperties();
 
 
-        const velocityX =
-          currentX - previousX;
-
-        const velocityY =
-          currentY - previousY;
+      previousX =
+        currentX;
 
 
-        const speed =
-          Math.min(
-            Math.hypot(
-              velocityX,
-              velocityY
-            ),
-            28
+      previousY =
+        currentY;
+
+
+
+      /* ======================================================================
+         CONTINUAR / DETENER
+         ====================================================================== */
+
+      const positionIsMoving =
+
+        Math.abs(
+          targetX -
+          currentX
+        ) >
+        0.1
+
+        ||
+
+        Math.abs(
+          targetY -
+          currentY
+        ) >
+        0.1;
+
+
+      const shapeIsMoving =
+
+        Math.abs(
+          stretch - 1
+        ) >
+        0.002
+
+        ||
+
+        Math.abs(
+          squash - 1
+        ) >
+        0.002;
+
+
+      if (
+        positionIsMoving ||
+        shapeIsMoving
+      ) {
+
+        animationFrame =
+          requestAnimationFrame(
+            updateBlob
           );
 
+      } else {
 
-        const targetStretch =
-          1 +
-          Math.min(
-            speed * 0.09,
-            1.2
-          );
+        animationFrame =
+          null;
 
+      }
 
-        const targetSquash =
-          1 -
-          Math.min(
-            speed * 0.024,
-            0.27
-          );
+    }
 
 
-        stretch +=
-          (targetStretch - stretch) *
-          0.2;
 
-        squash +=
-          (targetSquash - squash) *
-          0.2;
+    /* ========================================================================
+       INICIAR ANIMACIÓN
+       ======================================================================== */
+
+    function startAnimation() {
+
+      if (
+        animationFrame !==
+        null
+      ) {
+        return;
+      }
 
 
-        if (speed > 0.05) {
-          const targetAngle =
-            Math.atan2(
-              velocityY,
-              velocityX
-            ) *
-            (180 / Math.PI);
+      animationFrame =
+        requestAnimationFrame(
+          updateBlob
+        );
 
-          const angleDifference =
-            (
-              (
-                targetAngle -
-                angle +
-                540
-              ) %
-              360
-            ) -
-            180;
+    }
 
-          angle +=
-            angleDifference *
-            0.18;
-        }
+
+
+    /* ========================================================================
+       ENTRAR
+       ======================================================================== */
+
+    card.addEventListener(
+      "pointerenter",
+      (event) => {
+
+        clearTimeout(
+          resetTimer
+        );
+
+
+        const rect =
+          card.getBoundingClientRect();
+
+
+        targetX =
+          event.clientX -
+          rect.left;
+
+
+        targetY =
+          event.clientY -
+          rect.top;
+
+
+        currentX =
+          targetX;
+
+
+        currentY =
+          targetY;
+
+
+        previousX =
+          currentX;
+
+
+        previousY =
+          currentY;
+
+
+        stretch = 1;
+        squash = 1;
 
 
         setBlobProperties();
 
-        previousX = currentX;
-        previousY = currentY;
+        startAnimation();
 
-
-        const positionIsMoving =
-          Math.abs(
-            targetX - currentX
-          ) > 0.1 ||
-          Math.abs(
-            targetY - currentY
-          ) > 0.1;
-
-
-        const shapeIsMoving =
-          Math.abs(
-            stretch - 1
-          ) > 0.002 ||
-          Math.abs(
-            squash - 1
-          ) > 0.002;
-
-
-        if (
-          positionIsMoving ||
-          shapeIsMoving
-        ) {
-          animationFrame =
-            requestAnimationFrame(
-              updateBlob
-            );
-        } else {
-          animationFrame = null;
-        }
       }
+    );
 
 
-      function startAnimation() {
-        if (animationFrame === null) {
-          animationFrame =
-            requestAnimationFrame(
-              updateBlob
-            );
-        }
+
+    /* ========================================================================
+       MOVER
+       ======================================================================== */
+
+    card.addEventListener(
+      "pointermove",
+      (event) => {
+
+        const rect =
+          card.getBoundingClientRect();
+
+
+        targetX =
+          event.clientX -
+          rect.left;
+
+
+        targetY =
+          event.clientY -
+          rect.top;
+
+
+        startAnimation();
+
       }
+    );
 
 
-      card.addEventListener(
-        "pointerenter",
-        (event) => {
-          clearTimeout(resetTimer);
 
-          const rect =
-            card.getBoundingClientRect();
+    /* ========================================================================
+       SALIR
+       ======================================================================== */
 
-          targetX =
-            event.clientX -
-            rect.left;
+    card.addEventListener(
+      "pointerleave",
+      () => {
 
-          targetY =
-            event.clientY -
-            rect.top;
+        resetTimer =
+          setTimeout(
+            () => {
 
-          currentX = targetX;
-          currentY = targetY;
+              if (
+                animationFrame !==
+                null
+              ) {
 
-          previousX = currentX;
-          previousY = currentY;
-
-          stretch = 1;
-          squash = 1;
-
-          setBlobProperties();
-          startAnimation();
-        }
-      );
-
-
-      card.addEventListener(
-        "pointermove",
-        (event) => {
-          const rect =
-            card.getBoundingClientRect();
-
-          targetX =
-            event.clientX -
-            rect.left;
-
-          targetY =
-            event.clientY -
-            rect.top;
-
-          startAnimation();
-        }
-      );
-
-
-      card.addEventListener(
-        "pointerleave",
-        () => {
-          resetTimer =
-            setTimeout(
-              () => {
-                if (
-                  animationFrame !== null
-                ) {
-                  cancelAnimationFrame(
-                    animationFrame
-                  );
-
-                  animationFrame = null;
-                }
-
-                const centerX =
-                  card.clientWidth / 2;
-
-                const centerY =
-                  card.clientHeight / 2;
-
-                targetX = centerX;
-                targetY = centerY;
-
-                currentX = centerX;
-                currentY = centerY;
-
-                previousX = centerX;
-                previousY = centerY;
-
-                stretch = 1;
-                squash = 1;
-                angle = 0;
-
-                card.style.setProperty(
-                  "--trail-x",
-                  "50%"
+                cancelAnimationFrame(
+                  animationFrame
                 );
 
-                card.style.setProperty(
-                  "--trail-y",
-                  "50%"
-                );
 
-                card.style.setProperty(
-                  "--blob-angle",
-                  "0deg"
-                );
+                animationFrame =
+                  null;
 
-                card.style.setProperty(
-                  "--blob-stretch",
-                  "1"
-                );
+              }
 
-                card.style.setProperty(
-                  "--blob-squash",
-                  "1"
-                );
-              },
-              500
-            );
-        }
-      );
-    });
+
+              const centerX =
+                card.clientWidth /
+                2;
+
+
+              const centerY =
+                card.clientHeight /
+                2;
+
+
+              targetX =
+                centerX;
+
+
+              targetY =
+                centerY;
+
+
+              currentX =
+                centerX;
+
+
+              currentY =
+                centerY;
+
+
+              previousX =
+                centerX;
+
+
+              previousY =
+                centerY;
+
+
+              stretch = 1;
+              squash = 1;
+
+              angle = 0;
+
+
+              card.style.setProperty(
+                "--trail-x",
+                "50%"
+              );
+
+
+              card.style.setProperty(
+                "--trail-y",
+                "50%"
+              );
+
+
+              card.style.setProperty(
+                "--blob-angle",
+                "0deg"
+              );
+
+
+              card.style.setProperty(
+                "--blob-stretch",
+                "1"
+              );
+
+
+              card.style.setProperty(
+                "--blob-squash",
+                "1"
+              );
+
+            },
+
+            500
+
+          );
+
+      }
+    );
+
+  });
+
 }
 
 
@@ -2253,7 +2484,7 @@ window.addEventListener(
 
     initAccordion();
 
-    initExperienceHover();
+    initExperienceInteraction();
 
     initContactCopy();
 

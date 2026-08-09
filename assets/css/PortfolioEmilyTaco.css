@@ -788,248 +788,602 @@ details[open] .accordion-icon::after {
   }
 }
 
-
 /* ==========================================================================
    8. EXPERIENCIA
    ========================================================================== */
 
 .experience-section {
   position: relative;
-  padding-block: clamp(6rem, 10vw, 10rem);
+
+  padding-block:
+    clamp(6rem, 10vw, 10rem);
+
   overflow: hidden;
 }
 
+
+/* ==========================================================================
+   CABECERA
+   ========================================================================== */
+
 .experience-heading {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+
+  grid-template-columns:
+    minmax(0, 1.2fr)
+    minmax(280px, 0.8fr);
+
   align-items: end;
-  gap: clamp(2rem, 6vw, 7rem);
-  margin-bottom: clamp(3rem, 7vw, 6rem);
+
+  gap:
+    clamp(2rem, 6vw, 7rem);
+
+  margin-bottom:
+    clamp(3rem, 7vw, 6rem);
 }
+
 
 .experience-title {
   line-height: 0.95;
+
   letter-spacing: -0.075em;
 }
 
+
+/* ==========================================================================
+   GRID
+   ========================================================================== */
+
 .experience-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
   gap: 1.5rem;
 }
+
+
+/* ==========================================================================
+   TARJETA
+   ========================================================================== */
 
 .experience-card {
   --trail-x: 50%;
   --trail-y: 50%;
+
   --blob-angle: 0deg;
+
   --blob-stretch: 1;
   --blob-squash: 1;
 
+
   position: relative;
+
   min-height: 360px;
-  padding: clamp(1.75rem, 3vw, 3rem);
+
+  padding:
+    clamp(1.75rem, 3vw, 3rem);
+
   overflow: hidden;
+
   isolation: isolate;
-  border: 1px solid transparent;
-  border-radius: 2rem;
-  background-color: var(--bg-tertiary);
-  box-shadow: 0 15px 50px rgba(28, 20, 16, 0.04);
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.35s ease,
-    box-shadow 0.45s ease;
+
+  border:
+    1px solid transparent;
+
+  border-radius:
+    2rem;
+
+  background-color:
+    var(--bg-tertiary);
+
+  box-shadow:
+    0 15px 50px
+    rgba(28, 20, 16, 0.04);
+
+  transition:
+    transform
+      0.45s
+      cubic-bezier(0.22, 1, 0.36, 1),
+
+    border-color
+      0.35s
+      ease,
+
+    box-shadow
+      0.45s
+      ease;
 }
+
+
+/* ==========================================================================
+   LUZ ELÁSTICA
+   ========================================================================== */
 
 .experience-card::before {
   content: "";
+
   position: absolute;
-  left: var(--trail-x);
-  top: var(--trail-y);
+
+  left:
+    var(--trail-x);
+
+  top:
+    var(--trail-y);
+
   z-index: -1;
+
   width: 170px;
   height: 170px;
+
   border-radius: 50%;
+
   pointer-events: none;
-  background: radial-gradient(
-    circle at center,
-    rgba(109, 3, 3, 0.32) 0%,
-    rgba(109, 3, 3, 0.15) 38%,
-    rgba(109, 3, 3, 0.06) 58%,
-    transparent 78%
-  );
-  filter: blur(8px);
+
+  background:
+    radial-gradient(
+      circle at center,
+
+      rgba(109, 3, 3, 0.32) 0%,
+
+      rgba(109, 3, 3, 0.15) 38%,
+
+      rgba(109, 3, 3, 0.06) 58%,
+
+      transparent 78%
+    );
+
+  filter:
+    blur(8px);
+
   opacity: 0;
-  transform: translate(-50%, -50%)
+
+  transform:
+    translate(-50%, -50%)
     rotate(var(--blob-angle))
     scaleX(var(--blob-stretch))
     scaleY(var(--blob-squash));
-  transform-origin: center;
-  transition: opacity 0.45s ease;
-  will-change: left, top, transform, opacity;
+
+  transform-origin:
+    center;
+
+  transition:
+    opacity 0.45s ease;
+
+  will-change:
+    left,
+    top,
+    transform,
+    opacity;
 }
+
+
+/* ==========================================================================
+   LÍNEA INFERIOR
+   ========================================================================== */
 
 .experience-card::after {
   content: "";
+
   position: absolute;
+
   left: 2rem;
   right: 2rem;
+
   bottom: 0;
+
   height: 3px;
-  border-radius: 999px 999px 0 0;
-  background-color: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+  border-radius:
+    999px 999px 0 0;
+
+  background-color:
+    var(--accent);
+
+  transform:
+    scaleX(0);
+
+  transform-origin:
+    left center;
+
+  transition:
+    transform
+      0.8s
+      cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.experience-card:hover {
-  transform: translateY(-8px);
-  border-color: rgba(109, 3, 3, 0.18);
-  box-shadow: 0 28px 65px rgba(28, 20, 16, 0.1);
+
+/* ==========================================================================
+   HOVER · ÚNICAMENTE RATÓN / TRACKPAD
+   ========================================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .experience-card:hover {
+    transform:
+      translateY(-8px);
+
+    border-color:
+      rgba(109, 3, 3, 0.18);
+
+    box-shadow:
+      0 28px 65px
+      rgba(28, 20, 16, 0.1);
+  }
+
+
+  .experience-card:hover::before {
+    opacity: 1;
+  }
+
+
+  .experience-card:hover::after {
+    transform:
+      scaleX(1);
+  }
+
+
+  .experience-card:hover
+  .experience-card-number {
+    color:
+      rgba(109, 3, 3, 0.075);
+
+    transform:
+      translateY(-0.05em)
+      rotate(-3deg);
+  }
+
+
+  .experience-external-link:hover {
+    color:
+      var(--accent);
+  }
+
+
+  .experience-external-link:hover span {
+    transform:
+      translate(0.2em, -0.2em)
+      rotate(8deg);
+  }
+
 }
 
-.experience-card:hover::before {
-  opacity: 1;
+
+/* ==========================================================================
+   TOUCH · ACTIVACIÓN MEDIANTE SCROLL
+   ========================================================================== */
+
+@media (hover: none), (pointer: coarse) {
+
+  /*
+   * La luz elástica no existe en dispositivos
+   * sin hover.
+   */
+
+  .experience-card::before {
+    display: none;
+  }
+
+
+  /*
+   * La tarjeta activa al pasar por el centro
+   * de la pantalla llena la línea inferior.
+   */
+
+  .experience-card.is-scroll-active::after {
+    transform:
+      scaleX(1);
+  }
+
 }
 
-.experience-card:hover::after {
-  transform: scaleX(1);
-}
+
+/* ==========================================================================
+   TARJETA DESTACADA
+   ========================================================================== */
 
 .experience-card-featured {
-  grid-column: 1 / -1;
+  grid-column:
+    1 / -1;
+
   min-height: auto;
-  background: var(--bg-tertiary);
+
+  background:
+    var(--bg-tertiary);
 }
+
+
+/* ==========================================================================
+   NÚMERO DECORATIVO
+   ========================================================================== */
 
 .experience-card-number {
   position: absolute;
+
   right: 1.75rem;
+
   bottom: -0.12em;
+
   z-index: -1;
-  color: rgba(109, 3, 3, 0.045);
-  font-family: var(--font-serif);
-  font-size: clamp(7rem, 15vw, 13rem);
+
+  color:
+    rgba(109, 3, 3, 0.045);
+
+  font-family:
+    var(--font-serif);
+
+  font-size:
+    clamp(7rem, 15vw, 13rem);
+
   font-style: italic;
+
   font-weight: 500;
+
   line-height: 1;
+
   letter-spacing: -0.08em;
+
   pointer-events: none;
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.4s ease;
+
+  transition:
+    transform
+      0.6s
+      cubic-bezier(0.22, 1, 0.36, 1),
+
+    color
+      0.4s
+      ease;
 }
 
-.experience-card:hover .experience-card-number {
-  color: rgba(109, 3, 3, 0.075);
-  transform: translateY(-0.05em) rotate(-3deg);
-}
+
+/* ==========================================================================
+   CABECERA DE TARJETA
+   ========================================================================== */
 
 .experience-card-top {
   position: relative;
+
   z-index: 2;
+
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+
+  align-items:
+    flex-start;
+
+  justify-content:
+    space-between;
+
   gap: 2rem;
+
   margin-bottom: 2rem;
 }
 
+
+/* ==========================================================================
+   FECHA
+   ========================================================================== */
+
 .experience-date {
   display: block;
-  margin-bottom: 0.75rem;
-  color: var(--accent);
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+
+  margin-bottom:
+    0.75rem;
+
+  color:
+    var(--accent);
+
+  font-family:
+    var(--font-sans);
+
+  font-size:
+    0.72rem;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.12em;
+
+  text-transform:
+    uppercase;
 }
+
+
+/* ==========================================================================
+   EMPRESA
+   ========================================================================== */
 
 .experience-company {
   margin: 0;
-  font-family: var(--font-sans);
-  font-size: clamp(2rem, 4vw, 4rem);
-  font-weight: 600;
-  line-height: 0.95;
-  letter-spacing: -0.065em;
+
+  font-family:
+    var(--font-sans);
+
+  font-size:
+    clamp(2rem, 4vw, 4rem);
+
+  font-weight:
+    600;
+
+  line-height:
+    0.95;
+
+  letter-spacing:
+    -0.065em;
 }
 
-.experience-card:not(.experience-card-featured) .experience-company {
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
+
+.experience-card:not(
+  .experience-card-featured
+)
+.experience-company {
+  font-size:
+    clamp(1.8rem, 3vw, 2.8rem);
 }
+
+
+/* ==========================================================================
+   PUESTO
+   ========================================================================== */
 
 .experience-role {
-  margin: 0.8rem 0 0;
-  color: rgba(28, 20, 16, 0.65);
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  font-style: italic;
+  margin:
+    0.8rem 0 0;
+
+  color:
+    rgba(28, 20, 16, 0.65);
+
+  font-family:
+    var(--font-serif);
+
+  font-size:
+    1.15rem;
+
+  font-style:
+    italic;
 }
+
+
+/* ==========================================================================
+   ETIQUETA
+   ========================================================================== */
 
 .experience-tag {
   flex-shrink: 0;
-  padding: 0.55rem 0.9rem;
-  border: 1px solid rgba(109, 3, 3, 0.16);
-  border-radius: 999px;
-  background-color: rgba(255, 250, 239, 0.55);
-  color: var(--accent);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+
+  padding:
+    0.55rem 0.9rem;
+
+  border:
+    1px solid
+    rgba(109, 3, 3, 0.16);
+
+  border-radius:
+    999px;
+
+  background-color:
+    rgba(255, 250, 239, 0.55);
+
+  color:
+    var(--accent);
+
+  font-size:
+    0.7rem;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.08em;
+
+  text-transform:
+    uppercase;
 }
+
+
+/* ==========================================================================
+   ENLACE
+   ========================================================================== */
 
 .experience-external-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-  color: var(--text-dark);
-  text-decoration: none;
+  display:
+    inline-flex;
+
+  align-items:
+    center;
+
+  gap:
+    0.25em;
+
+  color:
+    var(--text-dark);
+
+  text-decoration:
+    none;
 }
+
 
 .experience-external-link span {
-  display: inline-block;
-  font-family: var(--font-sans);
-  font-size: 0.5em;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  display:
+    inline-block;
+
+  font-family:
+    var(--font-sans);
+
+  font-size:
+    0.5em;
+
+  transition:
+    transform
+      0.35s
+      cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.experience-external-link:hover {
-  color: var(--accent);
-}
 
-.experience-external-link:hover span {
-  transform: translate(0.2em, -0.2em) rotate(8deg);
-}
+/* ==========================================================================
+   ETAPAS
+   ========================================================================== */
 
 .experience-stages {
   position: relative;
+
   z-index: 2;
+
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2rem, 5vw, 5rem);
-  padding-top: 1rem;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap:
+    clamp(2rem, 5vw, 5rem);
+
+  padding-top:
+    1rem;
 }
 
+
 .experience-stage-date {
-  display: block;
-  margin-bottom: 0.8rem;
-  color: var(--text-dark);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  display:
+    block;
+
+  margin-bottom:
+    0.8rem;
+
+  color:
+    var(--text-dark);
+
+  font-size:
+    0.78rem;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.04em;
 }
+
 
 .experience-stage p,
 .experience-description {
   position: relative;
-  z-index: 2;
-  max-width: 630px;
-  margin: 0;
-  color: rgba(28, 20, 16, 0.72);
-  font-size: 1rem;
-  line-height: 1.55;
-}
 
+  z-index: 2;
+
+  max-width:
+    630px;
+
+  margin: 0;
+
+  color:
+    rgba(28, 20, 16, 0.72);
+
+  font-size:
+    1rem;
+
+  line-height:
+    1.55;
+}
 
 /* ==========================================================================
    9. PROYECTOS
@@ -3195,13 +3549,23 @@ body.modal-open {
    ========================================================================== */
 
 @media (max-width: 991px) {
+
+  .navbar-nav .nav-item:last-child {
+  width: 100%;
+}
   .btn-navbar-cta {
-    display: block;
-    width: 100%;
-    margin-top: 1rem;
-    margin-left: 0;
-    padding: 0.8rem 0 !important;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  margin: 1rem 0 0;
+
+  padding: 0.8rem 1.5rem !important;
+
+  text-align: center;
+}
 
   .experience-heading {
     grid-template-columns: 1fr;
