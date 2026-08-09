@@ -1307,45 +1307,29 @@ function initProjectModals() {
 
 function initPhotographyCarousel() {
   const showcase =
-    document.querySelector(
-      ".photography-showcase"
-    );
+    document.querySelector(".photography-showcase");
 
-  if (!showcase) {
-    return;
-  }
+  if (!showcase) return;
 
 
   const carousel =
-    showcase.querySelector(
-      ".photography-carousel"
-    );
+    showcase.querySelector(".photography-carousel");
 
   const stage =
-    showcase.querySelector(
-      ".photography-carousel-stage"
-    );
+    showcase.querySelector(".photography-carousel-stage");
 
   const slides = [
-    ...showcase.querySelectorAll(
-      ".photography-slide"
-    ),
+    ...showcase.querySelectorAll(".photography-slide"),
   ];
 
   const previousButton =
-    showcase.querySelector(
-      ".photography-prev"
-    );
+    showcase.querySelector(".photography-prev");
 
   const nextButton =
-    showcase.querySelector(
-      ".photography-next"
-    );
+    showcase.querySelector(".photography-next");
 
   const counter =
-    showcase.querySelector(
-      ".photography-counter"
-    );
+    showcase.querySelector(".photography-counter");
 
 
   if (
@@ -1357,19 +1341,12 @@ function initPhotographyCarousel() {
   }
 
 
-  const total =
-    slides.length;
+  const total = slides.length;
 
 
-  /*
-   * Funciona tanto con:
-   *
-   * .photography-current
-   * .photography-total
-   *
-   * como con el HTML inicial donde el segundo
-   * número todavía no tenía clase.
-   */
+  /* ==========================================================================
+     CONTADOR
+     ========================================================================== */
 
   const counterSpans =
     counter
@@ -1378,29 +1355,37 @@ function initPhotographyCarousel() {
 
 
   const currentCounter =
-    showcase.querySelector(
-      ".photography-current"
-    ) ||
+    showcase.querySelector(".photography-current") ||
     counterSpans[0] ||
     null;
 
 
   const totalCounter =
-    showcase.querySelector(
-      ".photography-total"
-    ) ||
+    showcase.querySelector(".photography-total") ||
     counterSpans[1] ||
     null;
 
 
-  if (totalCounter) {
-    totalCounter.textContent =
-      String(total).padStart(
-        2,
-        "0"
-      );
+  function updateCounter() {
+    if (currentCounter) {
+      currentCounter.textContent =
+        String(activeIndex + 1)
+          .padStart(2, "0");
+    }
+
+
+    if (totalCounter) {
+      totalCounter.textContent =
+        String(total)
+          .padStart(2, "0");
+    }
   }
 
+
+
+  /* ==========================================================================
+     ESTADO
+     ========================================================================== */
 
   let activeIndex = 0;
 
@@ -1410,18 +1395,18 @@ function initPhotographyCarousel() {
   let isInteracting = false;
 
   let pointerStartX = null;
-
   let resizeTimer = null;
 
 
 
-  /* ========================================================================
-     POSICIÓN RELATIVA EN LOOP
-     ======================================================================== */
+  /* ==========================================================================
+     POSICIÓN RELATIVA
+     ========================================================================== */
 
   function getRelativePosition(index) {
     let position =
       index - activeIndex;
+
 
     const half =
       total / 2;
@@ -1438,11 +1423,11 @@ function initPhotographyCarousel() {
 
 
     /*
-     * Con 6 fotografías existe una fotografía
-     * exactamente opuesta al centro.
+     * Con 6 fotografías existe una imagen
+     * exactamente opuesta a la central.
      *
-     * La colocamos siempre en el extremo derecho
-     * para que el orden del loop sea estable.
+     * Esa sexta fotografía permanece escondida
+     * en el extremo derecho esperando a entrar.
      */
 
     if (
@@ -1458,33 +1443,41 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
-     ESTADO VISUAL
-     ======================================================================== */
+  /* ==========================================================================
+     ESPACIADO
+     ========================================================================== */
+
+  function getSpacing() {
+    const stageWidth =
+      stage.clientWidth;
+
+
+    if (window.innerWidth <= 767) {
+      return Math.min(
+        stageWidth * 0.5,
+        205
+      );
+    }
+
+
+    return Math.min(
+      stageWidth * 0.27,
+      360
+    );
+  }
+
+
+
+  /* ==========================================================================
+     ESTADOS VISUALES
+     ========================================================================== */
 
   function getVisualState(position) {
     const distance =
       Math.abs(position);
 
-    const stageWidth =
-      stage.clientWidth;
-
-    const isMobile =
-      window.innerWidth <= 767;
-
-
     const spacing =
-      isMobile
-
-        ? Math.min(
-            stageWidth * 0.5,
-            205
-          )
-
-        : Math.min(
-            stageWidth * 0.27,
-            360
-          );
+      getSpacing();
 
 
     /* CENTRO */
@@ -1509,13 +1502,12 @@ function initPhotographyCarousel() {
     }
 
 
-    /* PRIMER NIVEL LATERAL */
+    /* PRIMER NIVEL */
 
     if (distance === 1) {
       return {
         x:
-          position *
-          spacing,
+          position * spacing,
 
         y: 20,
 
@@ -1536,13 +1528,12 @@ function initPhotographyCarousel() {
     }
 
 
-    /* SEGUNDO NIVEL LATERAL */
+    /* SEGUNDO NIVEL */
 
     if (distance === 2) {
       return {
         x:
-          position *
-          spacing,
+          position * spacing,
 
         y: 42,
 
@@ -1563,21 +1554,20 @@ function initPhotographyCarousel() {
     }
 
 
-    /* IMAGEN OPUESTA · 6 FOTOS */
+    /* POSICIÓN OCULTA DEL LOOP */
 
     return {
       x:
-        position *
-        spacing,
+        position * spacing,
 
-      y: 60,
+      y: 58,
 
       z: -320,
 
-      scale: 0.52,
+      scale: 0.5,
 
       rotationY:
-        position * -11,
+        position * -10,
 
       opacity: 0,
 
@@ -1590,36 +1580,76 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
-     CONTADOR
-     ======================================================================== */
+  /* ==========================================================================
+     POSICIÓN DE SALIDA
+     ========================================================================== */
 
-  function updateCounter() {
-    if (currentCounter) {
-      currentCounter.textContent =
-        String(
-          activeIndex + 1
-        ).padStart(
-          2,
-          "0"
-        );
-    }
+  function getExitState(side) {
+    const spacing =
+      getSpacing();
 
 
-    if (totalCounter) {
-      totalCounter.textContent =
-        String(total).padStart(
-          2,
-          "0"
-        );
-    }
+    return {
+      x:
+        side * spacing * 2.9,
+
+      y: 58,
+
+      z: -300,
+
+      scale: 0.52,
+
+      rotationY:
+        side * -11,
+
+      opacity: 0,
+
+      filter:
+        "blur(10px) brightness(0.62) saturate(0.68)",
+
+      zIndex: 1,
+    };
   }
 
 
 
-  /* ========================================================================
-     DIBUJAR POSICIONES
-     ======================================================================== */
+  /* ==========================================================================
+     APLICAR ESTADO
+     ========================================================================== */
+
+  function setSlideState(
+    slide,
+    state
+  ) {
+    gsap.set(slide, {
+      xPercent: -50,
+      yPercent: -50,
+
+      x: state.x,
+      y: state.y,
+      z: state.z,
+
+      scale: state.scale,
+
+      rotationY:
+        state.rotationY,
+
+      opacity:
+        state.opacity,
+
+      filter:
+        state.filter,
+
+      zIndex:
+        state.zIndex,
+    });
+  }
+
+
+
+  /* ==========================================================================
+     RENDER
+     ========================================================================== */
 
   function renderCarousel(
     animate = true
@@ -1629,26 +1659,15 @@ function initPhotographyCarousel() {
         const position =
           getRelativePosition(index);
 
+
         const previousPosition =
-          Number(
-            slide.dataset.position ??
-            position
-          );
+          slide.dataset.position !== undefined
+            ? Number(slide.dataset.position)
+            : position;
+
 
         const state =
           getVisualState(position);
-
-
-        const loopJump =
-          Math.abs(
-            previousPosition -
-            position
-          ) >
-          total / 2;
-
-
-        slide.dataset.position =
-          position;
 
 
         slide.classList.toggle(
@@ -1673,24 +1692,174 @@ function initPhotographyCarousel() {
 
 
         /*
-         * En el salto del loop recolocamos
-         * la fotografía cuando está prácticamente
-         * oculta para evitar que atraviese
-         * toda la pantalla.
+         * ================================================================
+         * SALIDA POR LA IZQUIERDA
+         *
+         * Antes:
+         * -2 → +3
+         *
+         * La imagen desaparecía inmediatamente.
+         *
+         * Ahora:
+         * -2 → sale suavemente por la izquierda
+         *     → después se coloca invisible a la derecha.
+         * ================================================================
          */
 
         if (
-          loopJump &&
           animate &&
-          !prefersReducedMotion
+          previousPosition === -2 &&
+          position === 3
         ) {
-          gsap.set(slide, {
-            xPercent: -50,
-            yPercent: -50,
+          const exitState =
+            getExitState(-1);
 
-            x: state.x,
-            y: state.y,
-            z: state.z,
+
+          gsap.to(slide, {
+            x:
+              exitState.x,
+
+            y:
+              exitState.y,
+
+            z:
+              exitState.z,
+
+            scale:
+              exitState.scale,
+
+            rotationY:
+              exitState.rotationY,
+
+            opacity: 0,
+
+            filter:
+              exitState.filter,
+
+            zIndex: 1,
+
+            duration: 1.05,
+
+            ease:
+              "power4.inOut",
+
+            overwrite: true,
+
+            onComplete: () => {
+              setSlideState(
+                slide,
+                state
+              );
+            },
+          });
+
+
+          slide.dataset.position =
+            position;
+
+
+          return;
+        }
+
+
+        /*
+         * ================================================================
+         * SALIDA POR LA DERECHA
+         * ================================================================
+         */
+
+        if (
+          animate &&
+          previousPosition === 2 &&
+          position === 3
+        ) {
+          const exitState =
+            getExitState(1);
+
+
+          gsap.to(slide, {
+            x:
+              exitState.x,
+
+            y:
+              exitState.y,
+
+            z:
+              exitState.z,
+
+            scale:
+              exitState.scale,
+
+            rotationY:
+              exitState.rotationY,
+
+            opacity: 0,
+
+            filter:
+              exitState.filter,
+
+            zIndex: 1,
+
+            duration: 1.05,
+
+            ease:
+              "power4.inOut",
+
+            overwrite: true,
+
+            onComplete: () => {
+              setSlideState(
+                slide,
+                state
+              );
+            },
+          });
+
+
+          slide.dataset.position =
+            position;
+
+
+          return;
+        }
+
+
+        /*
+         * ================================================================
+         * ENTRADA DESDE EL EXTREMO IZQUIERDO
+         *
+         * La imagen estaba escondida en +3.
+         * Antes cruzaba o aparecía de golpe.
+         *
+         * Ahora nace fuera del escenario izquierdo
+         * y entra suavemente hacia -2.
+         * ================================================================
+         */
+
+        if (
+          animate &&
+          previousPosition === 3 &&
+          position === -2
+        ) {
+          const entryState =
+            getExitState(-1);
+
+
+          setSlideState(
+            slide,
+            entryState
+          );
+
+
+          gsap.to(slide, {
+            x:
+              state.x,
+
+            y:
+              state.y,
+
+            z:
+              state.z,
 
             scale:
               state.scale,
@@ -1698,42 +1867,50 @@ function initPhotographyCarousel() {
             rotationY:
               state.rotationY,
 
-            opacity: 0,
+            opacity:
+              state.opacity,
 
             filter:
               state.filter,
 
             zIndex:
               state.zIndex,
-          });
 
-
-          gsap.to(slide, {
-            opacity:
-              state.opacity,
-
-            duration: 0.45,
-
-            delay: 0.25,
+            duration: 1.15,
 
             ease:
-              "power2.out",
+              "power4.inOut",
 
             overwrite: true,
           });
+
+
+          slide.dataset.position =
+            position;
 
 
           return;
         }
 
 
+        /*
+         * ================================================================
+         * MOVIMIENTO NORMAL
+         * ================================================================
+         */
+
         gsap.to(slide, {
           xPercent: -50,
           yPercent: -50,
 
-          x: state.x,
-          y: state.y,
-          z: state.z,
+          x:
+            state.x,
+
+          y:
+            state.y,
+
+          z:
+            state.z,
 
           scale:
             state.scale,
@@ -1757,6 +1934,10 @@ function initPhotographyCarousel() {
 
           overwrite: true,
         });
+
+
+        slide.dataset.position =
+          position;
       }
     );
 
@@ -1766,9 +1947,9 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
+  /* ==========================================================================
      CAMBIAR FOTOGRAFÍA
-     ======================================================================== */
+     ========================================================================== */
 
   function moveCarousel(direction) {
     activeIndex =
@@ -1785,18 +1966,18 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
+  /* ==========================================================================
      AUTOPLAY
-     ======================================================================== */
+     ========================================================================== */
 
   function stopAutoplay() {
-    if (!autoplayTimer) {
-      return;
-    }
+    if (!autoplayTimer) return;
+
 
     clearInterval(
       autoplayTimer
     );
+
 
     autoplayTimer = null;
   }
@@ -1832,9 +2013,9 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
+  /* ==========================================================================
      FLECHAS
-     ======================================================================== */
+     ========================================================================== */
 
   previousButton?.addEventListener(
     "click",
@@ -1855,9 +2036,9 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
-     CLICK EN FOTOGRAFÍA LATERAL
-     ======================================================================== */
+  /* ==========================================================================
+     CLICK EN FOTOGRAFÍA
+     ========================================================================== */
 
   slides.forEach(
     (slide, index) => {
@@ -1871,19 +2052,25 @@ function initPhotographyCarousel() {
           }
 
 
-          const position =
+          const relativePosition =
             getRelativePosition(index);
 
 
           /*
-           * Avanzamos siguiendo el sentido
-           * natural más corto del carrusel,
-           * en vez de saltar directamente.
+           * Al clicar una fotografía lateral,
+           * avanzamos un paso en su dirección.
+           *
+           * Esto conserva el flujo natural del
+           * carrusel y evita saltos bruscos.
            */
 
-          activeIndex = index;
+          moveCarousel(
+            relativePosition > 0
+              ? 1
+              : -1
+          );
 
-          renderCarousel(true);
+
           restartAutoplay();
         }
       );
@@ -1892,9 +2079,9 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
+  /* ==========================================================================
      PAUSA EN HOVER / FOCO
-     ======================================================================== */
+     ========================================================================== */
 
   carousel.addEventListener(
     "mouseenter",
@@ -1933,9 +2120,9 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
-     SWIPE · TABLET Y MÓVIL
-     ======================================================================== */
+  /* ==========================================================================
+     SWIPE · TABLET / MÓVIL
+     ========================================================================== */
 
   stage.addEventListener(
     "pointerdown",
@@ -1973,9 +2160,7 @@ function initPhotographyCarousel() {
 
 
       if (
-        Math.abs(
-          difference
-        ) < 45
+        Math.abs(difference) < 45
       ) {
         return;
       }
@@ -1994,16 +2179,15 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
-     PAUSA CUANDO SALE DE PANTALLA
-     ======================================================================== */
+  /* ==========================================================================
+     VISIBILIDAD
+     ========================================================================== */
 
   const observer =
     new IntersectionObserver(
       (entries) => {
         isVisible =
-          entries[0]
-            .isIntersecting;
+          entries[0].isIntersecting;
 
 
         if (isVisible) {
@@ -2018,13 +2202,15 @@ function initPhotographyCarousel() {
     );
 
 
-  observer.observe(carousel);
+  observer.observe(
+    carousel
+  );
 
 
 
-  /* ========================================================================
+  /* ==========================================================================
      RESPONSIVE
-     ======================================================================== */
+     ========================================================================== */
 
   window.addEventListener(
     "resize",
@@ -2046,14 +2232,13 @@ function initPhotographyCarousel() {
 
 
 
-  /* ========================================================================
+  /* ==========================================================================
      INICIO
-     ======================================================================== */
+     ========================================================================== */
 
   renderCarousel(false);
   startAutoplay();
 }
-
 
 /* ==========================================================================
    14. INICIALIZACIÓN
